@@ -1,5 +1,8 @@
 package ru.geek.news_portal.base.entities;//package ru.geek.news_portal.newsportal.entities;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -9,6 +12,8 @@ import java.util.List;
  * v1.0
  */
 
+@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "tags")
 public class Tag {
@@ -26,31 +31,4 @@ public class Tag {
             joinColumns = @JoinColumn(name = "tag_id"),
             inverseJoinColumns = @JoinColumn(name = "article_id"))
     private List<Article> articles;
-
-    public Tag() {
-    }
-
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
-//
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-
-//    public List<Article> getArticles() {
-//        return articles;
-//    }
-//
-//    public void setArticles(List<Article> articles) {
-//        this.articles = articles;
-//    }
 }

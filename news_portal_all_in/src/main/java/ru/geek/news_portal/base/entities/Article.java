@@ -48,23 +48,21 @@ public class Article {
 
   @JsonManagedReference
   @ManyToOne(optional = false)
-  private ArticleCategory status;
+  private Status status;
 
   @JsonBackReference
   @OneToMany(mappedBy = "article",
           fetch = FetchType.LAZY,
-          cascade = CascadeType.ALL,
-          orphanRemoval = true
+          cascade = CascadeType.ALL
   )
-  private List<Comment> comments = new ArrayList<>();
+  private List<Comment> comments;
 
   @JsonBackReference
   @OneToMany(mappedBy = "article",
           fetch = FetchType.LAZY,
-          cascade = CascadeType.ALL,
-          orphanRemoval = true
+          cascade = CascadeType.ALL
   )
-  private List<ArticleLike> likes = new ArrayList<>();
+  private List<ArticleLike> likes;
 
   @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinTable(name = "articles_tags",
@@ -75,11 +73,9 @@ public class Article {
   @JsonBackReference
   @OneToMany(mappedBy = "article",
           fetch = FetchType.LAZY,
-          cascade = CascadeType.ALL,
-          orphanRemoval = true
+          cascade = CascadeType.ALL
   )
   private List<ArticleRating> ratings = new ArrayList<>();
-
 
   public void addLike(ArticleLike like) {
     likes.add(like);
@@ -97,107 +93,4 @@ public class Article {
     comments.remove(comment);
   }
 
-  public LocalDateTime getCreated() {
-    return created;
-  }
-
-  public void setCreated(LocalDateTime created) {
-    this.created = created;
-  }
-
-//  public List<Tag> getTags() {
-//    return tags;
-//  }
-//
-//  public void setTags(List<Tag> tags) {
-//    this.tags = tags;
-//  }
-//
-//  public List<ArticleRating> getRatings() {
-//    return ratings;
-//  }
-//
-//  public void setRatings(List<ArticleRating> ratings) {
-//    this.ratings = ratings;
-//  }
-//
-//  public ArticleCategory getCategory() {
-//    return category;
-//  }
-//
-//  public void setCategory(ArticleCategory category) {
-//    this.category = category;
-//  }
-//
-//  public LocalDateTime getPublished() {
-//    return published;
-//  }
-//
-//  public void setPublished(LocalDateTime published) {
-//    this.published = published;
-//  }
-//
-//  public Long getTotalViews() {
-//    return totalViews;
-//  }
-//
-//  public void setTotalViews(Long totalViews) {
-//    this.totalViews = totalViews;
-//  }
-//
-//  public LocalDateTime getLastViewDate() {
-//    return lastViewDate;
-//  }
-//
-//  public void setLastViewDate(LocalDateTime lastViewDate) {
-//    this.lastViewDate = lastViewDate;
-//  }
-//
-//  public String getMainPictureUrl() {
-//    return mainPictureUrl;
-//  }
-//
-//  public void setMainPictureUrl(String mainPictureUrl) {
-//    this.mainPictureUrl = mainPictureUrl;
-//  }
-//
-//  public Long getId() {
-//    return id;
-//  }
-//
-//  public void setId(Long id) {
-//    this.id = id;
-//  }
-
-//  public String getTitle() {
-//    return title;
-//  }
-//
-//  public void setTitle(String title) {
-//    this.title = title;
-//  }
-//
-//  public String getText() {
-//    return text;
-//  }
-//
-//  public void setText(String text) {
-//    this.text = text;
-//  }
-//
-//  public List<ArticleLike> getLikes() {
-//    return likes;
-//  }
-//
-//  public void setLikes(List<ArticleLike> likes) {
-//    this.likes = likes;
-//  }
-//
-//  public List<Comment> getComments() {
-//    return comments;
-//  }
-//
-//  public void setComments(List<Comment> comments) {
-//    this.comments = comments;
-//  }
 }

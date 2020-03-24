@@ -60,13 +60,13 @@ CREATE TABLE statuses (
   PRIMARY KEY (id)
 );
 
-ALTER TABLE articles
-ADD COLUMN published timestamp NULL,
-ADD COLUMN category_id bigint NULL,
-ADD COLUMN total_views bigint NULL,
-ADD COLUMN last_view_date timestamp NULL,
-ADD COLUMN main_picture_url VARCHAR(300) NULL,
-ADD COLUMN status_id bigint NULL;
+-- ALTER TABLE articles
+-- ADD COLUMN published timestamp NULL,
+-- ADD COLUMN category_id bigint NULL,
+-- ADD COLUMN total_views bigint NULL,
+-- ADD COLUMN last_view_date timestamp NULL,
+-- ADD COLUMN main_picture_url VARCHAR(300) NULL,
+-- ADD COLUMN status_id bigint NULL;
 
 ALTER TABLE articles
 ADD CONSTRAINT fk_categories

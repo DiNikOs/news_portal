@@ -2,6 +2,7 @@ package ru.geek.news_portal.base.entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -14,9 +15,10 @@ import javax.persistence.*;
  * like = -1 if an user dislikes a comment
  */
 
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "comment_likes")
-@Data
 public class CommentLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,38 +36,4 @@ public class CommentLike {
     @Column(name = "value")
     int value;
 
-    public CommentLike() {
-    }
-
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
-//
-//    public Comment getComment() {
-//        return comment;
-//    }
-//
-//    public void setComment(Comment comment) {
-//        this.comment = comment;
-//    }
-//
-//    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
-//
-//    public int getValue() {
-//        return value;
-//    }
-//
-//    public void setValue(int value) {
-//        this.value = value;
-//    }
 }

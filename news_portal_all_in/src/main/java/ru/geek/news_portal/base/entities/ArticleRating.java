@@ -1,6 +1,8 @@
 package ru.geek.news_portal.base.entities;//package ru.geek.news_portal.newsportal.entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -11,7 +13,8 @@ import javax.persistence.*;
  * A table for storage values of articles by authorized users.
  * value from 1 to 5
  */
-
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "article_rating")
 public class ArticleRating {
@@ -30,39 +33,4 @@ public class ArticleRating {
 
     @Column(name = "value")
     int value;
-
-    public ArticleRating() {
-    }
-
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
-//
-//    public Article getArticle() {
-//        return article;
-//    }
-//
-//    public void setArticle(Article article) {
-//        this.article = article;
-//    }
-//
-//    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
-//
-//    public int getValue() {
-//        return value;
-//    }
-//
-//    public void setValue(int value) {
-//        this.value = value;
-//    }
 }

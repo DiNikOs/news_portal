@@ -39,47 +39,6 @@
 										    placeholder="password (*)" th:field="*{password}">
 <!--									th:value= "${systemUser?.password}"-->
 								</div>
-									<!--							<form th:action="@{/register/process}" method="post" th:object="${systemUser}">-->
-									<!--                <div class="form-group">-->
-									<!--                  <div class="col-xs-15">-->
-									<!--                    <div th:if="${registrationError != null}">-->
-									<!--                      <div class="alert alert-danger col-xs-offset-1 col-xs-10" th:text="${registrationError}">-->
-									<!--                      </div>-->
-									<!--                    </div>-->
-									<!--                  </div>-->
-									<!--                </div>-->
-									<!--                Username-->
-									<!--								<div class="form-group">-->
-									<!--									<label>Имя пользователя</label>-->
-									<!--									<input  type="text" name="name" class="form-control" th:field="*{username}">-->
-									<!--                  <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>-->
-									<!--								</div>-->
-									<!--                Email-->
-									<!--									<label>Email</label>-->
-									<!--									<input  type="email" name="email" class="form-control" th:field="*{email}">-->
-									<!--                  <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>-->
-									<!--                Password-->
-									<!--                  <label>Пароль</label>-->
-									<!--									<input  type="password" name="password" class="form-control" th:field="*{password}">-->
-
-									<!--                  <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>-->
-									<!--                MatchingPassword-->
-									<!--									<label class="fw">Пароль еще раз</label>-->
-									<!--									<input type="password" name="matchingPassword" class="form-control" th:field="*{matchingPassword}">-->
-									<!--                  <div class="error" th:if="${#fields.hasErrors('matchingPassword')}" th:errors="*{matchingPassword}"></div>-->
-									<!--&lt;!&ndash;                FirstName&ndash;&gt;-->
-									<!--                <div class="form-group">-->
-									<!--                  <label class="fw">Ваше имя</label>-->
-									<!--                  <input type="text" name="firstName" class="form-control" th:field="*{firstName}">-->
-									<!--                  <div class="error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>-->
-									<!--                </div>-->
-									<!--&lt;!&ndash;                LastName&ndash;&gt;-->
-									<!--                <div class="form-group">-->
-									<!--                  <label class="fw">Ваша фамилия</label>-->
-									<!--                  <input type="text" name="lasName" class="form-control" th:field="*{lastName}">-->
-									<!--                  <div class="error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>-->
-									<!--                </div>-->
-									<!--									<button type="submit" class="btn btn-primary btn-block">Регистрация</button>-->
 								<div class="form-group">
 									<label class="fw" th:if="${#fields.hasErrors('matchingPassword')}" th:errors="*{matchingPassword}">Repeat password</label>
 									<input type="password" class="form-control" name="matchingPassword"
@@ -98,6 +57,48 @@
 										    placeholder="last name (*)" th:field="*{lastName}">
 								<!--th:value= "${systemUser?.lastName}"-->
 								</div>
+
+								<!--							<form th:action="@{/register/process}" method="post" th:object="${systemUser}">-->
+								<!--                <div class="form-group">-->
+								<!--                  <div class="col-xs-15">-->
+								<!--                    <div th:if="${registrationError != null}">-->
+								<!--                      <div class="alert alert-danger col-xs-offset-1 col-xs-10" th:text="${registrationError}">-->
+								<!--                      </div>-->
+								<!--                    </div>-->
+								<!--                  </div>-->
+								<!--                </div>-->
+								<!--                Username-->
+								<!--								<div class="form-group">-->
+								<!--									<label>Имя пользователя</label>-->
+								<!--									<input  type="text" name="name" class="form-control" th:field="*{username}">-->
+								<!--                  <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>-->
+								<!--								</div>-->
+								<!--                Email-->
+								<!--									<label>Email</label>-->
+								<!--									<input  type="email" name="email" class="form-control" th:field="*{email}">-->
+								<!--                  <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>-->
+								<!--                Password-->
+								<!--                  <label>Пароль</label>-->
+								<!--									<input  type="password" name="password" class="form-control" th:field="*{password}">-->
+
+								<!--                  <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>-->
+								<!--                MatchingPassword-->
+								<!--									<label class="fw">Пароль еще раз</label>-->
+								<!--									<input type="password" name="matchingPassword" class="form-control" th:field="*{matchingPassword}">-->
+								<!--                  <div class="error" th:if="${#fields.hasErrors('matchingPassword')}" th:errors="*{matchingPassword}"></div>-->
+								<!--&lt;!&ndash;                FirstName&ndash;&gt;-->
+								<!--                <div class="form-group">-->
+								<!--                  <label class="fw">Ваше имя</label>-->
+								<!--                  <input type="text" name="firstName" class="form-control" th:field="*{firstName}">-->
+								<!--                  <div class="error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>-->
+								<!--                </div>-->
+								<!--&lt;!&ndash;                LastName&ndash;&gt;-->
+								<!--                <div class="form-group">-->
+								<!--                  <label class="fw">Ваша фамилия</label>-->
+								<!--                  <input type="text" name="lasName" class="form-control" th:field="*{lastName}">-->
+								<!--                  <div class="error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>-->
+								<!--                </div>-->
+								<!--									<button type="submit" class="btn btn-primary btn-block">Регистрация</button>-->
 
 								<div class="form-group text-right">
 									<button type="submit" class="btn btn-primary btn-block" name="submit" value="Submit">Register</button>
