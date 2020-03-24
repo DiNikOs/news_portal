@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+
+<head th:replace="fragments/header.html :: head"></head>
+
+<body class="skin-orange">
+
+	<header class="primary" th:insert="fragments/header.html :: firstbar"></header>
+
+	<section class="login first grey" id="registerbox">
+		<div class="container">
+				<div class="box-wrapper">
+					<div class="box box-border">
+						<div class="box-body">
+							<h4>Register</h4>
+							<form th:action="@{/register/process}" method="post" th:object="${systemUser}">
+<!--								th:object="${systemUser}"-->
+								<div class="form-group" >
+												<label th:if="${registrationError != null}" th:text="${registrationError}"></label>
+								</div>
+								<div class="form-group">
+									<label th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username</label>
+									<input  type="text" class="form-control"  name="username"
+										    placeholder="username (*)" th:field="*{username}">
+<!--									th:value= "${systemUser?.username}"-->
+								</div>
+								<div class="form-group">
+									<label th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email</label>
+									<input  type="text" class="form-control" name="email"
+										   placeholder="email (*)" th:field="*{email}">
+<!--									th:value= "${systemUser?.email}"-->
+								</div>
+								<div class="form-group">
+									<label class="fw" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password</label>
+									<input type="password" class="form-control" name="password"
+										    placeholder="password (*)" th:field="*{password}">
+<!--									th:value= "${systemUser?.password}"-->
+								</div>
+									<!--							<form th:action="@{/register/process}" method="post" th:object="${systemUser}">-->
+									<!--                <div class="form-group">-->
+									<!--                  <div class="col-xs-15">-->
+									<!--                    <div th:if="${registrationError != null}">-->
+									<!--                      <div class="alert alert-danger col-xs-offset-1 col-xs-10" th:text="${registrationError}">-->
+									<!--                      </div>-->
+									<!--                    </div>-->
+									<!--                  </div>-->
+									<!--                </div>-->
+									<!--                Username-->
+									<!--								<div class="form-group">-->
+									<!--									<label>Имя пользователя</label>-->
+									<!--									<input  type="text" name="name" class="form-control" th:field="*{username}">-->
+									<!--                  <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>-->
+									<!--								</div>-->
+									<!--                Email-->
+									<!--									<label>Email</label>-->
+									<!--									<input  type="email" name="email" class="form-control" th:field="*{email}">-->
+									<!--                  <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>-->
+									<!--                Password-->
+									<!--                  <label>Пароль</label>-->
+									<!--									<input  type="password" name="password" class="form-control" th:field="*{password}">-->
+
+									<!--                  <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>-->
+									<!--                MatchingPassword-->
+									<!--									<label class="fw">Пароль еще раз</label>-->
+									<!--									<input type="password" name="matchingPassword" class="form-control" th:field="*{matchingPassword}">-->
+									<!--                  <div class="error" th:if="${#fields.hasErrors('matchingPassword')}" th:errors="*{matchingPassword}"></div>-->
+									<!--&lt;!&ndash;                FirstName&ndash;&gt;-->
+									<!--                <div class="form-group">-->
+									<!--                  <label class="fw">Ваше имя</label>-->
+									<!--                  <input type="text" name="firstName" class="form-control" th:field="*{firstName}">-->
+									<!--                  <div class="error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>-->
+									<!--                </div>-->
+									<!--&lt;!&ndash;                LastName&ndash;&gt;-->
+									<!--                <div class="form-group">-->
+									<!--                  <label class="fw">Ваша фамилия</label>-->
+									<!--                  <input type="text" name="lasName" class="form-control" th:field="*{lastName}">-->
+									<!--                  <div class="error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>-->
+									<!--                </div>-->
+									<!--									<button type="submit" class="btn btn-primary btn-block">Регистрация</button>-->
+								<div class="form-group">
+									<label class="fw" th:if="${#fields.hasErrors('matchingPassword')}" th:errors="*{matchingPassword}">Repeat password</label>
+									<input type="password" class="form-control" name="matchingPassword"
+										    placeholder="confirm password (*)" th:field="*{matchingPassword}">
+								<!--th:value= "${systemUser?.matchingPassword}"-->
+								</div>
+								<div class="form-group">
+									<label th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First name</label>
+									<input type="text" class="form-control" name="firstName"
+										   placeholder="first name (*)" th:field="*{firstName}">
+								<!--th:value= "${systemUser?.firstName}"-->
+								</div>
+								<div class="form-group">
+									<label th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last name</label>
+									<input type="text" class="form-control" name="lastName"
+										    placeholder="last name (*)" th:field="*{lastName}">
+								<!--th:value= "${systemUser?.lastName}"-->
+								</div>
+
+								<div class="form-group text-right">
+									<button type="submit" class="btn btn-primary btn-block" name="submit" value="Submit">Register</button>
+								</div>
+								<div class="form-group text-center">
+									<span class="text-muted">Already have an account?</span> <a href="../ui/login.html" th:href="@{/login}">Login</a>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+	<!-- FOOTER -->
+	<footer th:replace="fragments/footer.html :: footer"></footer>
+	<!-- /FOOTER -->
+
+	<!-- JS -->
+	<script th:remove="tag" th:replace="fragments/scripts.html :: scripts"> </script>
+
+</body>
+</html>

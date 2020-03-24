@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/header.html :: head"></head>
+
+<body class="skin-orange">
+<!-- HEADER-->
+	<header class="primary" th:insert="fragments/header.html :: firstbar"></header>
+<!--	<nav th:replace="fragments/header.html :: nav"></nav>-->
+<!-- /HEADER-->
+	<section class="login first grey" id="loginbox" >
+		<div class="container">
+			<div class="box-wrapper">
+				<div class="box box-border">
+					<div   class="box-body">
+						<h4>Login</h4>
+						<form th:action="@{/authenticateTheUser}" method="POST">
+							<div class="form-group">
+								<div class="col-xs-15">
+									<div>
+										<div th:if="${param.error} != null"><div class="alert alert-danger col-xs-offset-1 col-xs-10">
+											Invalid username and password.
+										</div>
+										</div>
+										<div th:if="${param.logout} != null">
+											<div class="alert alert-success col-xs-offset-1 col-xs-10">
+												You have been logged out.
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label>Username</label>
+								<input  class="form-control" type="text" name="username">
+							</div>
+							<div class="form-group">
+								<label class="fw">Password
+									<a th:href="@{/forgot}" class="pull-right">Forgot Password?</a>
+								</label>
+								<input class="form-control" type="password" name="password" >
+							</div>
+							<div class="form-group text-right">
+								<button  type="submit" class="btn btn-primary btn-block" name="submit" value="Submit">Login</button>
+							</div>
+							<div class="form-group text-center">
+								<span class="text-muted">Don't have an account?</span> <a th:href="@{/register}">Create one</a>
+							</div>
+							<div class="title-line">
+								or
+							</div>
+							<a href="#" class="btn btn-social btn-block facebook"><i class="ion-social-facebook"></i> Login with Facebook</a>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- FOOTER -->
+	<footer th:replace="fragments/footer.html :: footer"></footer>
+	<!-- /FOOTER -->
+
+	<!--JS-->
+	<script th:remove="tag" th:replace="fragments/scripts.html :: scripts"> </script>
+	</body>
+</html>

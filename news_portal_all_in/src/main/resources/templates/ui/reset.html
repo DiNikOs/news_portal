@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/header.html :: head"></head>
+
+<body class="skin-orange">
+<!-- HEADER -->
+<header class="primary" th:insert="fragments/header.html :: firstbar"></header>
+<!-- /HEADER -->
+
+		<section class="login first grey">
+			<div class="container">
+				<div class="box-wrapper">				
+					<div class="box box-border">
+						<div class="box-body">
+							<h4>Reset Password</h4>
+							<form>
+								<div class="form-group">
+									<label>Email</label>
+									<input type="email" name="email" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>New Password</label>
+									<input type="password" name="password" class="form-control">
+								</div>
+								<div class="form-group text-right">
+									<button class="btn btn-primary btn-block">Reset Password</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+	<!-- FOOTER -->
+	<footer th:replace="fragments/footer.html :: footer"></footer>
+	<!-- /FOOTER -->
+
+	<!-- JS -->
+	<script th:remove="tag" th:replace="fragments/scripts.html :: scripts"> </script>
+
+	</body>
+</html>
