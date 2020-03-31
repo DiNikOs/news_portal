@@ -9,4 +9,5 @@ import ru.geek.news_portal.base.entities.ArticleCategory;
  * v1.0
  */
 public interface ArticleCategoryRepository extends JpaRepository<ArticleCategory,Long> {
+
 }

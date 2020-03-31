@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:replace="fragments/header.html :: head"></head>
 
@@ -19,7 +20,7 @@
 						<aside>
 							<div class="aside-body">
 								<figure class="ads">
-									<img src="../../static/images/ad.png">
+									<img src="../images/ad.png" th:src="@{/images/ad.png}">
 									<figcaption>Advertisement</figcaption>
 								</figure>
 							</div>
@@ -27,75 +28,13 @@
 						<aside>
 							<h1 class="aside-title">Recent Post</h1>
 							<div class="aside-body">
-								<article class="article-fw">
-									<div class="inner">
-										<figure>
-											<a href="single.html">												
-												<img src="../../static/images/news/img16.jpg">
-											</a>
-										</figure>
-										<div class="details">
-											<h1><a href="single.html">Lorem Ipsum Dolor Sit Amet Consectetur Adipisicing Elit</a></h1>
-											<p>
-											Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-											tempor incididunt ut labore et dolore magna aliqua.
-											</p>
-											<div class="detail">
-												<div class="time">December 26, 2016</div>
-												<div class="category"><a href="category.html">Lifestyle</a></div>
-											</div>
-										</div>
-									</div>
-								</article>
+
+								<div th:replace="fragments/news :: resent_post"></div>
+
 								<div class="line"></div>
-								<article class="article-mini">
-									<div class="inner">
-										<figure>
-											<a href="single.html">
-												<img src="../../static/images/news/img05.jpg">
-											</a>
-										</figure>
-										<div class="padding">
-											<h1><a href="single.html">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
-											<div class="detail">
-												<div class="category"><a href="category.html">Lifestyle</a></div>
-												<div class="time">December 22, 2016</div>
-											</div>
-										</div>
+									<div class="body-col vertical-slider" data-max="3" data-nav="#hot-resent-post" data-item="article">
+										<div th:replace="fragments/news :: article_mini_three"></div>
 									</div>
-								</article>
-								<article class="article-mini">
-									<div class="inner">
-										<figure>
-											<a href="single.html">
-												<img src="../../static/images/news/img02.jpg">
-											</a>
-										</figure>
-										<div class="padding">
-											<h1><a href="single.html">Fusce ullamcorper elit at felis cursus suscipit</a></h1>
-											<div class="detail">
-												<div class="category"><a href="category.html">Travel</a></div>
-												<div class="time">December 21, 2016</div>
-											</div>
-										</div>
-									</div>
-								</article>
-								<article class="article-mini">
-									<div class="inner">
-										<figure>
-											<a href="single.html">
-												<img src="../../static/images/news/img13.jpg">
-											</a>
-										</figure>
-										<div class="padding">
-											<h1><a href="single.html">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
-											<div class="detail">
-												<div class="category"><a href="category.html">International</a></div>
-												<div class="time">December 20, 2016</div>
-											</div>
-										</div>
-									</div>
-								</article>
 							</div>
 						</aside>
 						<aside>
@@ -118,23 +57,22 @@
 					</div>
 					<div class="col-md-8">
 						<ol class="breadcrumb">
-						  <li><a href="#">Home</a></li>
-						  <li class="active">Film</li>
+						  <li><a href="#" th:href="@{/}">Home</a></li>
+						  <li class="active" th:utext="${article.category.name}">Film</li>
 						</ol>
 						<article class="article main-article">
 							<header>
-								<h1>Pellentesque elementum tellus id mauris faucibus</h1>
+								<h1 th:text="${article.title}">Title.</h1>
 								<ul class="details">
-									<li>Posted on 31 December, 2016</li>
-									<li><a>Film</a></li>
+									<li th:remove="tag" th:utext="${article.created}">Posted on 31 December, 2016</li>
+									<li><a  th:href="@{/category/{id}(id=${article.category.id})}" th:utext="${article.category.name}">Film</a></li>
 									<li>By <a href="#">John Doe</a></li>
 								</ul>
 							</header>
 							<div class="main">
-								<p>Pellentesque elementum tellus id mauris faucibus, id sagittis mauris rhoncus. Donec ac iaculis dui, id convallis mauris. Fusce faucibus purus eu risus pulvinar, vel rutrum velit hendrerit. Sed urna nunc, efficitur faucibus sollicitudin non.</p>
+								<p  th:remove="tag" th:utext="${article.text}">Text Article</p>
 								<div class="featured">
 									<figure>
-										<img src="../../static/images/news/img01.jpg">
 										<figcaption>Image by pexels.com</figcaption>
 									</figure>
 								</div>
@@ -205,7 +143,7 @@
 						</div>
 						<div class="author">
 							<figure>
-								<img src="../../static/images/img01.jpg">
+								<img src="../images/img01.jpg" th:src="@{/images/img01.jpg}">
 							</figure>
 							<div class="details">
 								<div class="job">Web Developer</div>
@@ -240,146 +178,68 @@
 							</div>
 						</div>
 						<div class="line"><div>You May Also Like</div></div>
-						<div class="row">
-							<article class="article related col-md-6 col-sm-6 col-xs-12">
-								<div class="inner">
-									<figure>
-										<a href="#">
-											<img src="../../static/images/news/img03.jpg">
-										</a>
-									</figure>
-									<div class="padding">
-										<h2><a href="#">Duis aute irure dolor in reprehenderit in voluptate</a></h2>
-										<div class="detail">
-											<div class="category"><a href="category.html">Lifestyle</a></div>
-											<div class="time">December 26, 2016</div>
-										</div>
-									</div>
-								</div>
-							</article>
-							<article class="article related col-md-6 col-sm-6 col-xs-12">
-								<div class="inner">
-									<figure>
-										<a href="#">
-											<img src="../../static/images/news/img08.jpg">
-										</a>
-									</figure>
-									<div class="padding">
-										<h2><a href="#">Duis aute irure dolor in reprehenderit in voluptate</a></h2>
-										<div class="detail">
-											<div class="category"><a href="category.html">Lifestyle</a></div>
-											<div class="time">December 26, 2016</div>
-										</div>
-									</div>
-								</div>
-							</article>
+						<div class="row" >
+
+							<div th:replace="fragments/news :: like_news"></div>
+
 						</div>
 						<div class="line thin"></div>
 						<div class="comments">
-							<h2 class="title">3 Responses <a href="#">Write a Response</a></h2>
-							<div class="comment-list">
-								<div class="item">
-									<div class="user">                                
+<!--							<div th:each="comm,iter : ${comments}">-->
+<!--								<div th:if="${iter.last}">-->
+									<h2 class="title" sec:authorize="isAnonymous()" ><span th:text="${comments.size()}"></span> Responses<a th:href="@{/login}" >Registered user write a Response</a></h2>
+									<h2 class="title" sec:authorize="isAuthenticated()" ><span th:text="${comments.size()}"></span> Responses <a href="#reply" >Write a Response</a></h2>
+<!--								</div>-->
+<!--							</div>-->
+
+							<div class="comment-list" th:each="comm : ${comments}">
+								<div class="item" >
+									<div class="user">
 										<figure>
-											<img src="../../static/images/img01.jpg">
+											<img src="../images/img01.jpg" th:src="@{/images/img01.jpg}">
 										</figure>
 										<div class="details">
-											<h5 class="name">Mark Otto</h5>
-											<div class="time">24 Hours</div>
-											<div class="description">
-												Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-												tempor incididunt ut labore et dolore <a href="#">magna</a> aliqua. Ut enim ad minim veniam,
-												quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.
-											</div>
+											<h5 class="name" th:text="${comm.user.getUsername()}">Mark Otto</h5>
+											<div class="time" th:text="${comm.created}">24 Hours</div>
+											<div class="text" th:text="${comm.text}">Text</div>
 											<footer>
-												<a href="#">Reply</a>
+												<a href="#rerly" sec:authorize="isAuthenticated()" >Reply</a>
 											</footer>
 										</div>
 									</div>
 								</div>
-								<div class="item">
-									<div class="user">                                
-										<figure>
-											<img src="../../static/images/img01.jpg">
-										</figure>
-										<div class="details">
-											<h5 class="name">Mark Otto</h5>
-											<div class="time">24 Hours</div>
-											<div class="description">
-												Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-												tempor incididunt ut labore et dolore <a href="#">magna</a> aliqua. Ut enim ad minim veniam,
-												quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.
-											</div>
-											<footer>
-												<a href="#">Reply</a>
-											</footer>
-										</div>
-									</div>
-									<div class="reply-list">
-										<div class="item">
-											<div class="user">                                
-												<figure>
-													<img src="../../static/images/img01.jpg">
-												</figure>
-												<div class="details">
-													<h5 class="name">Mark Otto</h5>
-													<div class="time">24 Hours</div>
-													<div class="description">
-														Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-														consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-														cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-														proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-													</div>
-													<footer>
-														<a href="#">Reply</a>
-													</footer>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="item">
-									<div class="user">                                
-										<figure>
-											<img src="../../static/images/img01.jpg">
-										</figure>
-										<div class="details">
-											<h5 class="name">Mark Otto</h5>
-											<div class="time">24 Hours</div>
-											<div class="description">
-												Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-												tempor incididunt ut labore et dolore <a href="#">magna</a> aliqua. Ut enim ad minim veniam,
-												quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.
-											</div>
-											<footer>
-												<a href="#">Reply</a>
-											</footer>
-										</div>
-									</div>
-								</div>
+<!--								<div class="reply-list" th:if="${comm.is_reply}">-->
+<!--									<div class="item">-->
+<!--										<div class="user">-->
+<!--											<figure>-->
+<!--												<img src="images/img01.jpg">-->
+<!--											</figure>-->
+<!--											<div class="details">-->
+<!--												<h5 class="name" th:text="${comm.user.getUsername()}">Mark Otto</h5>-->
+<!--												<div class="time" th:text="${comm.created}">24 Hours</div>-->
+<!--												<div class="description" th:text="${comm.text}">Text</div>-->
+<!--												<footer>-->
+<!--													<a href="#" sec:authorize="isAuthenticated()" >Reply</a>-->
+<!--												</footer>-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
 							</div>
-							<form class="row">
+							<form class="row" sec:authorize="isAuthenticated()"
+								  th:action="@{/single/articles/comment/{article_id}(article_id = ${article.id})}"
+								  th:object="${comment}" method="post" >
+								<a name="reply"></a>
 								<div class="col-md-12">
 									<h3 class="title">Leave Your Response</h3>
 								</div>
-								<div class="form-group col-md-4">
-									<label for="name">Name <span class="required"></span></label>
-									<input type="text" id="name" name="" class="form-control">
-								</div>
-								<div class="form-group col-md-4">
-									<label for="email">Email <span class="required"></span></label>
-									<input type="email" id="email" name="" class="form-control">
-								</div>
-								<div class="form-group col-md-4">
-									<label for="website">Website</label>
-									<input type="url" id="website" name="" class="form-control">
-								</div>
+
 								<div class="form-group col-md-12">
 									<label for="message">Response <span class="required"></span></label>
-									<textarea class="form-control" name="message" placeholder="Write your response ..."></textarea>
+									<textarea class="form-control" name="message" placeholder="Write your response ..." th:field="*{text}"></textarea>
 								</div>
 								<div class="form-group col-md-12">
-									<button class="btn btn-primary">Send Response</button>
+									<button type="submit" class="btn btn-primary">Send Response</button>
 								</div>
 							</form>
 						</div>

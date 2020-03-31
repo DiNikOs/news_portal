@@ -1,5 +1,8 @@
 package ru.geek.news_portal.base.entities;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 /**
@@ -8,6 +11,8 @@ import javax.persistence.*;
  * v1.0
  */
 
+@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "pictures")
 public class Picture {
@@ -23,30 +28,4 @@ public class Picture {
     @Column(name = "name")
     private String name;
 
-    public Picture() {
-    }
-
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
-//
-//    public String getUrl() {
-//        return url;
-//    }
-//
-//    public void setUrl(String url) {
-//        this.url = url;
-//    }
-//
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
 }

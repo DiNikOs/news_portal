@@ -5,6 +5,7 @@
 <body>
     <!-- FOOTER -->
     <footer class="footer"  th:fragment="footer"  xmlns:th="http://www.thymeleaf.org">
+
         <div class="container">
             <div class="row">
                 <div class="col-md-3 col-sm-6 col-xs-12">
@@ -23,7 +24,9 @@
                 </div>
                 <div class="col-md-3 col-sm-6 col-xs-12">
                     <div class="block">
-                        <h1 class="block-title">Popular Tags <div class="right"><a th:href="@{#}">See All <i class="ion-ios-arrow-thin-right"></i></a></div></h1>
+                        <h1 class="block-title">Popular Tags <div class="right">
+<!--                            <a th:href="@{#}">See All <i class="ion-ios-arrow-thin-right"></i></a>-->
+                        </div></h1>
                         <div class="block-body">
                             <ul class="tags">
                                 <li><a th:href="@{#}">HTML5</a></li>
@@ -57,55 +60,11 @@
                     <div class="block">
                         <h1 class="block-title">Latest News</h1>
                         <div class="block-body">
-                            <article class="article-mini">
-                                <div class="inner">
-                                    <figure>
-                                        <a th:href="@{/single}">
-                                            <img th:src="@{/images/news/img12.jpg}" alt="Sample Article">
-                                        </a>
-                                    </figure>
-                                    <div class="padding">
-                                        <h1><a th:href="@{/single}">Donec consequat lorem quis augue pharetra</a></h1>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="article-mini">
-                                <div class="inner">
-                                    <figure>
-                                        <a th:href="@{/single}">
-                                            <img th:src="@{/images/news/img14.jpg}" alt="Sample Article">
-                                        </a>
-                                    </figure>
-                                    <div class="padding">
-                                        <h1><a th:href="@{/single}">eu dapibus risus aliquam etiam ut venenatis</a></h1>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="article-mini">
-                                <div class="inner">
-                                    <figure>
-                                        <a th:href="@{/single}">
-                                            <img th:src="@{/images/news/img15.jpg}" alt="Sample Article">
-                                        </a>
-                                    </figure>
-                                    <div class="padding">
-                                        <h1><a th:href="@{/single}">Nulla facilisis odio quis gravida vestibulum </a></h1>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="article-mini">
-                                <div class="inner">
-                                    <figure>
-                                        <a th:href="@{/single}">
-                                            <img th:src="@{/images/news/img16.jpg}" alt="Sample Article">
-                                        </a>
-                                    </figure>
-                                    <div class="padding">
-                                        <h1><a th:href="@{/single}">Proin venenatis pellentesque arcu vitae </a></h1>
-                                    </div>
-                                </div>
-                            </article>
-                            <a th:href="@{#}" class="btn btn-magz white btn-block">See All <i class="ion-ios-arrow-thin-right"></i></a>
+                            <div class="body-col vertical-slider" data-max="4" data-nav="#hot-news-nav" data-item="article">
+                                <div th:replace="fragments/news :: article_mini"></div>
+                            </div>
+                            <br>
+                            <a th:href="@{/category}" class="btn btn-magz white btn-block">See All <i class="ion-ios-arrow-thin-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -116,63 +75,33 @@
                             <p>Follow us and stay in touch to get the latest news</p>
                             <ul class="social trp">
                                 <li>
-                                    <a href="#" class="facebook">
+                                    <a href="https://www.facebook.com" class="facebook">
                                         <svg><rect width="0" height="0"/></svg>
                                         <i class="ion-social-facebook"></i>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" class="twitter">
+                                    <a href="https://twitter.com/" class="twitter">
                                         <svg><rect width="0" height="0"/></svg>
                                         <i class="ion-social-twitter-outline"></i>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" class="youtube">
+                                    <a href="https://www.youtube.com/" class="youtube">
                                         <svg><rect width="0" height="0"/></svg>
                                         <i class="ion-social-youtube-outline"></i>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" class="googleplus">
-                                        <svg><rect width="0" height="0"/></svg>
-                                        <i class="ion-social-googleplus"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="instagram">
+                                    <a href="https://www.instagram.com" class="instagram">
                                         <svg><rect width="0" height="0"/></svg>
                                         <i class="ion-social-instagram-outline"></i>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" class="tumblr">
-                                        <svg><rect width="0" height="0"/></svg>
-                                        <i class="ion-social-tumblr"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="dribbble">
-                                        <svg><rect width="0" height="0"/></svg>
-                                        <i class="ion-social-dribbble"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="linkedin">
-                                        <svg><rect width="0" height="0"/></svg>
-                                        <i class="ion-social-linkedin"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="skype">
+                                    <a href="https://www.skype.com/" class="skype">
                                         <svg><rect width="0" height="0"/></svg>
                                         <i class="ion-social-skype"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="rss">
-                                        <svg><rect width="0" height="0"/></svg>
-                                        <i class="ion-social-rss"></i>
                                     </a>
                                 </li>
                             </ul>
@@ -183,7 +112,7 @@
                         <div class="block-body no-margin">
                             <ul class="footer-nav-horizontal">
                                 <li><a th:href="@{/}">Home</a></li>
-                                <li><a th:href="@{#}">Partner</a></li>
+<!--                                <li><a th:href="@{/partner}">Partner</a></li>-->
                                 <li><a th:href="@{/contact}">Contact</a></li>
                                 <li><a th:href="@{/page}">About</a></li>
                             </ul>
@@ -205,21 +134,5 @@
     </footer>
     <!-- /FOOTER -->
 
-    <th:block th:fragment="scripts"  xmlns:th="http://www.thymeleaf.org">
-        <!-- JS -->
-<!--        <script th:inline="javascript" type="text/javascript" src="../js/jquery.js" th:src="@{/js/jquery.js}"></script>-->
-<!--        <script th:inline="javascript" type="text/javascript" src="../js/jquery.migrate.js" th:src="@{/js/jquery.migrate.js}"></script>-->
-<!--        <script th:inline="javascript" type="text/javascript" src="../js/demo.js" th:src="@{/js/demo.js}"></script>-->
-<!--        <script th:inline="javascript" type="text/javascript" src="../js/e-magz.js" th:src="@{/js/e-magz.js}"></script>-->
-<!--        <script th:inline="javascript" type="text/javascript" src="../scripts/bootstrap/bootstrap.min.js" th:src="@{/scripts/bootstrap/bootstrap.min.js}"></script>-->
-<!--        <script th:inline="javascript" >var $target_end = $(".best-of-the-week");</script>-->
-<!--        <script th:inline="javascript" type="text/javascript" src="../scripts/jquery-number/jquery.number.min.js" th:src="@{/scripts/jquery-number/jquery.number.min.js}"></script>-->
-<!--        <script th:inline="javascript" type="text/javascript" src="../scripts/owlcarousel/dist/owl.carousel.min.js" th:src="@{/scripts/owlcarousel/dist/owl.carousel.min.js}"></script>-->
-<!--        <script th:inline="javascript" type="text/javascript" src="../scripts/magnific-popup/dist/jquery.magnific-popup.min.js" th:src="@{/scripts/magnific-popup/dist/jquery.magnific-popup.min.js}"></script>-->
-<!--        <script th:inline="javascript" type="text/javascript" src="../scripts/easescroll/jquery.easeScroll.js" th:src="@{/scripts/easescroll/jquery.easeScroll.js}"></script>-->
-<!--        <script th:inline="javascript" type="text/javascript" src="../scripts/sweetalert/dist/sweetalert.min.js" th:src="@{/scripts/sweetalert/dist/sweetalert.min.js}"></script>-->
-<!--        <script th:inline="javascript" type="text/javascript" src="../scripts/icheck/icheck.min.js" th:src="@{/scripts/icheck/icheck.min.js}"></script>-->
-<!--        <script th:inline="javascript" type="text/javascript" src="../scripts/toast/jquery.toast.min.js" th:src="@{/scripts/toast/jquery.toast.min.js}"></script>-->
-    </th:block>
 </body>
 </html>

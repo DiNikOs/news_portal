@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 
-<html  th:fragment="html" lang="en"  xmlns="http://www.w3.org/1999/xhtml"
-
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head  th:fragment="head" xmlns:th="http://www.thymeleaf.org">
@@ -47,7 +45,7 @@
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css}">
     <![endif]-->
 </head>
 
@@ -70,7 +68,7 @@
                                 <div class="input-group">
                                     <input type="text" name="q" class="form-control" placeholder="Type something here">
                                     <div class="input-group-btn">
-                                        <button class="btn btn-primary"><i class="ion-search"></i></button>
+                                        <button class="btn btn-primary" type="submit"><i class="ion-search"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -91,11 +89,13 @@
                             <li><a sec:authorize="!isAuthenticated()" th:href="@{/register}"><i class="ion-person-add"></i><div>Register</div></a></li>
                             <li><a sec:authorize="!isAuthenticated()" th:href="@{/login}"><i class="ion-person"></i><div>Login</div></a></li>
                             <li sec:authorize="isAuthenticated()">
-                              <form th:action="@{/logout}" method="POST">
-                                <button class="btn btn-primary" type="submit">Logout</button>
-                              </form>
+                                <a><i class="fa fa-user-o"></i>  Welcome, <span sec:authentication="name">Username</span>)))</a>
                             </li>
-                            <a sec:authorize="isAuthenticated()" ><i class="fa fa-user-o"></i>  Welcome, <span sec:authentication="name">Username</span>)))  </a>
+                            <li sec:authorize="isAuthenticated()">
+                                <form th:action="@{/logout}" method="POST">
+                                    <button class="btn btn-primary" type="submit">Logout</button>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -104,7 +104,6 @@
 
     <!-- NAVIGATION -->
     <nav class="menu" th:fragment="nav" xmlns:th="http://www.thymeleaf.org">
-<!--        <nav class="menu" th:fragment="navigation"  xmlns:th="http://www.thymeleaf.org">-->
         <!-- Start nav -->
         <div class="container">
             <div class="brand">
@@ -123,6 +122,7 @@
                     <li class="for-tablet nav-title"><a>Menu</a></li>
                     <li class="for-tablet"><a href="../ui/login.html" th:href="@{/login}">Login</a></li>
                     <li class="for-tablet"><a href="../ui/register.html" th:href="@{/register}">Register</a></li>
+
                     <li><a th:href="@{/category}">Standard</a></li>
                     <li class="dropdown magz-dropdown">
                         <a th:href="@{/category}">Pages <i class="ion-ios-arrow-right"></i></a>
@@ -137,20 +137,28 @@
                                     <li><a th:href="@{/reset}">Reset Password</a></li>
                                 </ul>
                             </li>
-                            <li><a th:href="@{/category}">Category</a></li>
-                            <li><a th:href="@{/single}">Single</a></li>
-                            <li><a th:href="@{/page}">Page</a></li>
-                            <li><a th:href="@{/search}">Search</a></li>
-                            <li><a th:href="@{/contact}">Contact</a></li>
                             <li class="dropdown magz-dropdown">
-                                <a th:href="@{#}">Error <i class="ion-ios-arrow-right"></i></a>
-                                <ul class="dropdown-menu">
-                                    <li><a th:href="@{/403}">403</a></li>
-                                    <li><a th:href="@{/404}">404</a></li>
-                                    <li><a th:href="@{/500}">500</a></li>
-                                    <li><a th:href="@{/503}">503</a></li>
+                                <a th:href="@{/category}">All categories<i class="ion-ios-arrow-right"></i></a>
+                                <ul class="dropdown-menu" >
+                                    <li th:each="category,iter : ${categories}">
+                                        <a th:href="@{/category/{id}(id=${iter.count})}"
+                                           th:text="${category.name}">Category</a>
+                                    </li>
                                 </ul>
                             </li>
+                            <!--                            <li><a th:href="@{/single}">Single</a></li>-->
+                            <!--                            <li><a th:href="@{/page}">Page</a></li>-->
+                            <li><a th:href="@{/search}">Search</a></li>
+                            <li><a th:href="@{/contact}">Contact</a></li>
+                            <!--                            <li class="dropdown magz-dropdown">-->
+                            <!--                                <a th:href="@{#}">Error <i class="ion-ios-arrow-right"></i></a>-->
+                            <!--                                <ul class="dropdown-menu">-->
+                            <!--                                    <li><a th:href="@{/403}">403</a></li>-->
+                            <!--                                    <li><a th:href="@{/404}">404</a></li>-->
+                            <!--                                    <li><a th:href="@{/500}">500</a></li>-->
+                            <!--                                    <li><a th:href="@{/503}">503</a></li>-->
+                            <!--                                </ul>-->
+                            <!--                            </li>-->
                         </ul>
                     </li>
                     <li class="dropdown magz-dropdown"><a th:href="@{#}">Dropdown <i class="ion-ios-arrow-right"></i></a>
@@ -216,120 +224,75 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <article class="article col-md-4 mini">
-                                                <div class="inner">
-                                                    <figure>
-                                                        <a th:href="@{/single}">
-                                                            <img th:src="@{/images/news/img10.jpg}" alt="Sample Article">
-                                                        </a>
-                                                    </figure>
-                                                    <div class="padding">
-                                                        <div class="detail">
-                                                            <div class="time">December 10, 2016</div>
-                                                            <div class="category"><a th:href="@{/category}">Healthy</a></div>
-                                                        </div>
-                                                        <h2><a th:href="@{/single}">Duis aute irure dolor in reprehenderit in voluptate</a></h2>
-                                                    </div>
-                                                </div>
-                                            </article>
-                                            <article class="article col-md-4 mini">
-                                                <div class="inner">
-                                                    <figure>
-                                                        <a th:href="@{/single}">
-                                                            <img th:src="@{/images/news/img11.jpg}" alt="Sample Article">
-                                                        </a>
-                                                    </figure>
-                                                    <div class="padding">
-                                                        <div class="detail">
-                                                            <div class="time">December 13, 2016</div>
-                                                            <div class="category"><a th:href="@{/category}">Lifestyle</a></div>
-                                                        </div>
-                                                        <h2><a th:href="@{/single}">Duis aute irure dolor in reprehenderit in voluptate</a></h2>
-                                                    </div>
-                                                </div>
-                                            </article>
-                                            <article class="article col-md-4 mini">
-                                                <div class="inner">
-                                                    <figure>
-                                                        <a th:href="@{/single}">
-                                                            <img th:src="@{/images/news/img14.jpg}" alt="Sample Article">
-                                                        </a>
-                                                    </figure>
-                                                    <div class="padding">
-                                                        <div class="detail">
-                                                            <div class="time">December 14, 2016</div>
-                                                            <div class="category"><a th:href="@{/category}">Travel</a></div>
-                                                        </div>
-                                                        <h2><a th:href="@{/single}">Duis aute irure dolor in reprehenderit in voluptate</a></h2>
-                                                    </div>
-                                                </div>
-                                            </article>
+                                            <div th:replace="fragments/news :: article_mini_three_horizont"></div>
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </li>
-                    <li class="dropdown magz-dropdown magz-dropdown-megamenu"><a th:href="@{#}">Column <i class="ion-ios-arrow-right"></i></a>
-                        <div class="dropdown-menu megamenu">
-                            <div class="megamenu-inner">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <h2 class="megamenu-title">Column 1</h2>
-                                        <ul class="vertical-menu">
-                                            <li><a th:href="@{#}">Example 1</a></li>
-                                            <li><a th:href="@{#}">Example 2</a></li>
-                                            <li><a th:href="@{#}">Example 3</a></li>
-                                            <li><a th:href="@{#}">Example 4</a></li>
-                                            <li><a th:href="@{#}">Example 5</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <h2 class="megamenu-title">Column 2</h2>
-                                        <ul class="vertical-menu">
-                                            <li><a th:href="@{#}">Example 6</a></li>
-                                            <li><a th:href="@{#}">Example 7</a></li>
-                                            <li><a th:href="@{#}">Example 8</a></li>
-                                            <li><a th:href="@{#}">Example 9</a></li>
-                                            <li><a th:href="@{#}">Example 10</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <h2 class="megamenu-title">Column 3</h2>
-                                        <ul class="vertical-menu">
-                                            <li><a th:href="@{#}">Example 11</a></li>
-                                            <li><a th:href="@{#}">Example 12</a></li>
-                                            <li><a th:href="@{#}">Example 13</a></li>
-                                            <li><a th:href="@{#}">Example 14</a></li>
-                                            <li><a th:href="@{#}">Example 15</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <h2 class="megamenu-title">Column 4</h2>
-                                        <ul class="vertical-menu">
-                                            <li><a th:href="@{#}">Example 16</a></li>
-                                            <li><a th:href="@{#}">Example 17</a></li>
-                                            <li><a th:href="@{#}">Example 18</a></li>
-                                            <li><a th:href="@{#}">Example 19</a></li>
-                                            <li><a th:href="@{#}">Example 20</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <!--                    <li class="dropdown magz-dropdown magz-dropdown-megamenu"><a th:href="@{#}">Column <i class="ion-ios-arrow-right"></i></a>-->
+                    <!--                        <div class="dropdown-menu megamenu">-->
+                    <!--                            <div class="megamenu-inner">-->
+                    <!--                                <div class="row">-->
+                    <!--                                    <div class="col-md-3">-->
+                    <!--                                        <h2 class="megamenu-title">Column 1</h2>-->
+                    <!--                                        <ul class="vertical-menu">-->
+                    <!--                                            <li><a th:href="@{#}">Example 1</a></li>-->
+                    <!--                                            <li><a th:href="@{#}">Example 2</a></li>-->
+                    <!--                                            <li><a th:href="@{#}">Example 3</a></li>-->
+                    <!--                                            <li><a th:href="@{#}">Example 4</a></li>-->
+                    <!--                                            <li><a th:href="@{#}">Example 5</a></li>-->
+                    <!--                                        </ul>-->
+                    <!--                                    </div>-->
+                    <!--                                    <div class="col-md-3">-->
+                    <!--                                        <h2 class="megamenu-title">Column 2</h2>-->
+                    <!--                                        <ul class="vertical-menu">-->
+                    <!--                                            <li><a th:href="@{#}">Example 6</a></li>-->
+                    <!--                                            <li><a th:href="@{#}">Example 7</a></li>-->
+                    <!--                                            <li><a th:href="@{#}">Example 8</a></li>-->
+                    <!--                                            <li><a th:href="@{#}">Example 9</a></li>-->
+                    <!--                                            <li><a th:href="@{#}">Example 10</a></li>-->
+                    <!--                                        </ul>-->
+                    <!--                                    </div>-->
+                    <!--                                    <div class="col-md-3">-->
+                    <!--                                        <h2 class="megamenu-title">Column 3</h2>-->
+                    <!--                                        <ul class="vertical-menu">-->
+                    <!--                                            <li><a th:href="@{#}">Example 11</a></li>-->
+                    <!--                                            <li><a th:href="@{#}">Example 12</a></li>-->
+                    <!--                                            <li><a th:href="@{#}">Example 13</a></li>-->
+                    <!--                                            <li><a th:href="@{#}">Example 14</a></li>-->
+                    <!--                                            <li><a th:href="@{#}">Example 15</a></li>-->
+                    <!--                                        </ul>-->
+                    <!--                                    </div>-->
+                    <!--                                    <div class="col-md-3">-->
+                    <!--                                        <h2 class="megamenu-title">Column 4</h2>-->
+                    <!--                                        <ul class="vertical-menu">-->
+                    <!--                                            <li><a th:href="@{#}">Example 16</a></li>-->
+                    <!--                                            <li><a th:href="@{#}">Example 17</a></li>-->
+                    <!--                                            <li><a th:href="@{#}">Example 18</a></li>-->
+                    <!--                                            <li><a th:href="@{#}">Example 19</a></li>-->
+                    <!--                                            <li><a th:href="@{#}">Example 20</a></li>-->
+                    <!--                                        </ul>-->
+                    <!--                                    </div>-->
+                    <!--                                </div>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </li>-->
+
+                    <li class="dropdown magz-dropdown right"><a sec:authorize="isAuthenticated()" th:href="@{#}" >Authorized user<i class="ion-ios-arrow-right"></i></a>
+                        <ul class="dropdown-menu" sec:authorize="isAuthenticated()">
+                            <li><a  th:href="@{/user/edituser/{username}(username=${#request.userPrincipal.name})}"><i class="icon ion-person"></i> My Account</a></li>
+                            <li><a th:href="@{/user/favorite/{username}(username=${#request.userPrincipal.name})}"><i class="icon ion-heart"></i> Favorite</a></li>
+                            <li><a th:href="@{/user/comment/{username}(username=${#request.userPrincipal.name})}"><i class="icon ion-chatbox"></i> Comments</a></li>
+                            <li><a th:href="@{/user/change_password/{username}(username=${#request.userPrincipal.name})}"><i class="icon ion-key"></i> Change Password</a></li>
+                            <li><a th:href="@{/user/setting/{username}(username=${#request.userPrincipal.name})}"><i class="icon ion-settings"></i> Settings</a></li>
+                            <li class="divider"></li>
+                            <li><a  th:if="${#request.userPrincipal != null}" th:href="@{/logout}"><i class="icon ion-log-out"></i> Logout</a></li>
+                        </ul>
                     </li>
 
-                        <li class="dropdown magz-dropdown"><a sec:authorize="isAuthenticated()" th:href="@{#}" >Authorized user<i class="ion-ios-arrow-right"></i></a>
-                            <ul class="dropdown-menu">
-                                <li><a sec:authorize="isAuthenticated()" th:href="@{/user/edituser/{username}(username=${#request.userPrincipal.getName()})}"><i class="icon ion-person"></i> My Account</a></li>
-                                <li><a th:href="@{#}"><i class="icon ion-heart"></i> Favorite</a></li>
-                                <li><a th:href="@{#}"><i class="icon ion-chatbox"></i> Comments</a></li>
-                                <li><a th:href="@{#}"><i class="icon ion-key"></i> Change Password</a></li>
-                                <li><a th:href="@{#}"><i class="icon ion-settings"></i> Settings</a></li>
-                                <li class="divider"></li>
-                                <li><a  th:if="${#request.userPrincipal != null}" th:href="@{/logout}"><i class="icon ion-log-out"></i> Logout</a></li>
-                            </ul>
-                        </li>
                 </ul>
             </div>
         </div>

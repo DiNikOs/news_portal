@@ -64,7 +64,19 @@ public class RegistrationController {
         return "redirect:/login";
   }
 
-//  @PostMapping("/forgot/process")
+    @PostMapping("/reset")
+    public String resetRegistrationForm(@Valid @ModelAttribute("systemUser") SystemUser systemUser,
+                                          BindingResult bindingResult, Model model) {
+        bindingResult.getAllErrors().forEach(System.out::println);
+        String username = systemUser.getUsername();
+        if (bindingResult.hasErrors()) {
+            return "ui/reset";
+        }
+        userService.save(systemUser);
+        return "redirect:/login";
+    }
+
+//  @PostMapping("/forgot")
 //  public String processForgotUser(@ModelAttribute("systemUser")
 //                                        @Valid SystemUser systemUser,
 //                                        BindingResult bindingResult,
