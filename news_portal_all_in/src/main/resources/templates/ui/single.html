@@ -99,8 +99,19 @@
 										<li><a href="#">Web Design</a></li>
 									</ul>
 								</div>
-								<div class="col">
-									<a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>1220</div></a>
+								<!--лайки и дизлайки-->
+								<div class="col" sec:authorize="isAuthenticated()">
+									<a class="love" th:href="@{/single/articles/add/like/{id}(id = ${article.id})}">
+										<i class="fa fa-thumbs-up" th:text="${articleLikes}">2333</i>
+									</a>&nbsp;&nbsp;&nbsp;
+									<a class="love" th:href="@{/single/articles/add/dislike/{id}(id = ${article.id})}">
+										<i class="fa fa-thumbs-down" th:text="${articleDislikes}">213</i>
+									</a>
+								</div>
+								<!--для неавторизованных пользователей кнопки с лайками должны быть недоступны-->
+								<div class="col" sec:authorize="isAnonymous()">
+									<i class="fa fa-thumbs-up" th:text="${articleLikes}">2333</i>
+									<i class="fa fa-thumbs-down" th:text="${articleDislikes}">213</i>
 								</div>
 							</footer>
 						</article>
@@ -199,11 +210,31 @@
 											<img src="../images/img01.jpg" th:src="@{/images/img01.jpg}">
 										</figure>
 										<div class="details">
-											<h5 class="name" th:text="${comm.user.getUsername()}">Mark Otto</h5>
+<!--											<h5 class="name" th:text="${comm.user.getUsername()}">Mark Otto</h5>-->
+											<h5 class="name" th:text="${comm.author}">Mark Otto</h5>
 											<div class="time" th:text="${comm.created}">24 Hours</div>
 											<div class="text" th:text="${comm.text}">Text</div>
 											<footer>
 												<a href="#rerly" sec:authorize="isAuthenticated()" >Reply</a>
+												<div class="col" sec:authorize="isAuthenticated()">
+													<a class="love"
+													   th:href="@{/single/articles/comment/add/like/{id}(id = ${comm.getId()})}">
+<!--														<i class="fa fa-thumbs-up" th:text="${@commentLikeService.getLikes(${comm.getId()})}">2333</i>-->
+														<i class="fa fa-thumbs-up" th:text="${comm.likes}">2333</i>
+													</a>&nbsp;&nbsp;&nbsp;
+													<a class="love"
+													   th:href="@{/single/articles/comment/add/dislike/{id}(id = ${comm.id})}">
+														<i class="fa fa-thumbs-down"
+														   th:text="${comm.dislikes}">213</i>
+													</a>
+												</div>
+
+<!--												для неавторизованных пользователей кнопки с лайками должны быть недоступны-->
+												<div class="col" sec:authorize="isAnonymous()" >
+														<i class="fa fa-thumbs-up" th:text="${comm.likes}">2333</i>
+														<i class="fa fa-thumbs-down"
+														   th:text="${comm.dislikes}">213</i>
+												</div>
 											</footer>
 										</div>
 									</div>
@@ -255,5 +286,7 @@
 	<!-- JS -->
 	<script th:remove="tag" th:replace="fragments/scripts.html :: scripts"> </script>
 
+<!--для отображения шрифтов для лайков и дизлайков-->
+<script src="https://use.fontawesome.com/2010e27091.js"></script>
 	</body>
 </html>

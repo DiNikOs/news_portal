@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -29,6 +30,7 @@ public class Comment {
   private Long id;
 
   @Column(name = "created")
+  @CreationTimestamp
   private LocalDateTime created;
 
   @Column(name = "text", length = 10000)
@@ -41,20 +43,5 @@ public class Comment {
   @JsonManagedReference
   @ManyToOne
   private Article article;
-
-  @JsonBackReference
-  @OneToMany(mappedBy = "comment",
-          cascade = CascadeType.ALL,
-          orphanRemoval = true
-  )
-  private List<CommentLike> likes;
-
-  public void addLike(CommentLike like) {
-    likes.add(like);
-  }
-
-  public void removeLike(CommentLike like) {
-    likes.remove(like);
-  }
 
 }

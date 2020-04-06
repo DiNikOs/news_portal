@@ -7,19 +7,32 @@
 package ru.geek.news_portal.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.geek.news_portal.base.entities.Article;
 import ru.geek.news_portal.base.entities.ArticleCategory;
 import ru.geek.news_portal.base.entities.Comment;
+import ru.geek.news_portal.base.entities.Tag;
+import ru.geek.news_portal.base.specifications.ArticleSpecifications;
+import ru.geek.news_portal.dto.ArticleDto;
 import ru.geek.news_portal.services.ArticleCategoryService;
 import ru.geek.news_portal.services.ArticleService;
 import ru.geek.news_portal.services.CommentService;
 import ru.geek.news_portal.services.ContactService;
+import ru.geek.news_portal.utils.ArticleFilter;
 import ru.geek.news_portal.utils.SystemUser;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class MainController {
@@ -52,10 +65,19 @@ public class MainController {
     }
 
     @GetMapping("/")
-    public String index(Model model, @PathVariable(value = "id", required = false) Long id) {
+    public String index(Model model, @PathVariable(value = "id", required = false) Long id,
+                        HttpServletRequest request,
+                        @RequestParam(name = "word", required = false) String word,
+                        @RequestParam(name = "pageNumber", required = false) Integer pageNumber) {
+        ArticleFilter articleFilter = new ArticleFilter(request);
+        if (pageNumber == null || pageNumber < 1) {
+            pageNumber = 1;
+        }
         model.addAttribute("articles", articleService.findAllArticles());
         model.addAttribute("comments", commentService.findAllCommentByArticle_id(RECOMENDED_NEWS));
         model.addAttribute("categories", articleCategoryService.findAll());
+        model.addAttribute("pageNumber", pageNumber);
+        model.addAttribute("filters", articleFilter.getFiltersString());
         return "index";
     }
 
@@ -68,6 +90,8 @@ public class MainController {
             model.addAttribute("categories", articleCategoryService.findAll());
         if (id!=null) {
             model.addAttribute("category", articleCategoryService.findOneById(id));
+            model.addAttribute("article", articleService.findById(id));
+            model.addAttribute("tags", articleService.findById(id).getTags());
         } else {
             model.addAttribute("category", null);
         }
@@ -82,22 +106,22 @@ public class MainController {
         return "fragments/header";
     }
 
+    @GetMapping("/fragments/footer")
+    public String fragFooter(Model model, @RequestParam(value = "id", required = false) Long id) {
+        model.addAttribute("articles", articleService.findAllArticles());
+        model.addAttribute("comments", commentService.findAllCommentByArticle_id(RECOMENDED_NEWS));
+        model.addAttribute("categories", articleCategoryService.findAll());
+        if (id==null){
+            model.addAttribute("tags", null);
+        } else {
+            model.addAttribute("tags", articleService.findById(id).getTags());
+        }
+        return "fragments/footer";
+    }
+
     @GetMapping("/login")
     public String login() {
         return "ui/login";
-    }
-
-    @GetMapping({"/category","/category/{id}"})
-    public String category(Model model, @PathVariable(value = "id", required = false) Long id) {
-        model.addAttribute("articles", articleService.findAllArticles());
-        model.addAttribute("recomended_news_id", RECOMENDED_NEWS);
-        model.addAttribute("categories", articleCategoryService.findAll());
-        if (id!=null) {
-            model.addAttribute("category", articleCategoryService.findOneById(id));
-        } else {
-            model.addAttribute("category", null);
-        }
-        return "ui/category";
     }
 
     @GetMapping("/forgot")
@@ -114,11 +138,6 @@ public class MainController {
     @GetMapping("/reset")
     public String reset() {
         return "ui/reset";
-    }
-
-    @GetMapping("/search")
-    public String search() {
-        return "ui/search";
     }
 
     @GetMapping("/single")

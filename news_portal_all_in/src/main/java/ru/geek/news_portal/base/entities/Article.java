@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,6 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "articles")
 public class Article {
+
+    public enum Status {EDIT, PUBLISHED, ARCHIVE}
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,25 +47,23 @@ public class Article {
   @Column(name = "main_picture_url")
   private String mainPictureUrl;
 
-  @JsonManagedReference
-  @ManyToOne(optional = false)
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
   private Status status;
 
   @JsonBackReference
   @OneToMany(mappedBy = "article",
-          fetch = FetchType.LAZY,
           cascade = CascadeType.ALL
   )
   private List<Comment> comments;
 
   @JsonBackReference
   @OneToMany(mappedBy = "article",
-          fetch = FetchType.LAZY,
           cascade = CascadeType.ALL
   )
   private List<ArticleLike> likes;
 
-  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(name = "articles_tags",
           joinColumns = @JoinColumn(name = "article_id"),
           inverseJoinColumns = @JoinColumn(name = "tag_id"))
@@ -72,28 +71,9 @@ public class Article {
 
   @JsonBackReference
   @OneToMany(mappedBy = "article",
-          fetch = FetchType.LAZY,
           cascade = CascadeType.ALL
   )
-  private List<ArticleRating> ratings = new ArrayList<>();
-
-  public void addLike(ArticleLike like) {
-    likes.add(like);
-  }
-
-  public void removeLike(ArticleLike like) {
-    likes.remove(like);
-  }
-
-  public void addComment(Comment comment) {
-    comments.add(comment);
-  }
-
-  public void removeComment(Comment comment) {
-    comments.remove(comment);
-  }
-
-
+  private List<ArticleRating> ratings;
 
   public LocalDateTime getCreated() {
     if (created == null) {
@@ -104,9 +84,17 @@ public class Article {
 
   public String getTitle() {
     if (title == null) {
-      title = "Title";
+      title = "Title_default";
     }
     return title;
   }
 
+  public String getCategoryString() {
+    String categoryString;
+    if (category == null) {
+      categoryString = "Category_default";
+      return categoryString;
+    }
+    return category.getName();
+  }
 }

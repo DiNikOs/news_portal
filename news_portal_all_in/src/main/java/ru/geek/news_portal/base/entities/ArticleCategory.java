@@ -3,6 +3,7 @@ package ru.geek.news_portal.base.entities;//package ru.geek.news_portal.newsport
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "article_categories")
+@ToString
 public class ArticleCategory {
 
     @Id
@@ -28,9 +30,7 @@ public class ArticleCategory {
 
     @JsonBackReference
     @OneToMany(mappedBy = "category",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+            cascade = CascadeType.ALL
     )
     private List<Article> articles;
 

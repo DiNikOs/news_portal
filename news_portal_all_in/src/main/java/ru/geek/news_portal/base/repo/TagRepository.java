@@ -9,4 +9,6 @@ import ru.geek.news_portal.base.entities.Tag;
  * v1.0
  */
 public interface TagRepository extends JpaRepository<Tag,Long> {
+    String findByName(String name);
+    Tag findTagByName(String name);
 }

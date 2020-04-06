@@ -335,9 +335,7 @@
 </div>
 
 <div th:fragment="category_news">
-
     <article class="col-md-12 article-list" th:each="article,state : ${articles}" >
-
         <div th:if="${category}==null">
             <div class="inner">
                 <figure>
@@ -372,7 +370,6 @@
 
         <div th:unless="${category}==null">
             <div class="inner" th:if="${article.category.id}==${category.id}">
-
                 <figure>
                     <a href="../ui/single.html" th:href="@{/single/articles/{id}(id=${category.id})}">
                         <!--                        <img src="../images/news/img01.jpg" th:src="@{images/news/img01.jpg}">-->
@@ -403,6 +400,46 @@
             </div>
         </div>
     </article>
+</div>
+
+<div th:fragment="category_search">
+    <article class="col-md-12 article-list"  th:each="article,state : ${page.getContent()}">
+        <div th:if="${category}==null">
+
+        </div>
+
+        <div th:unless="${category}==null">
+            <div class="inner" th:if="${article.category.id}==${category.id}">
+                <figure>
+                    <a href="../ui/single.html" th:href="@{/single/articles/{id}(id=${category.id})}">
+<!--                        <img src="../static/images/news/img09.jpg" th:src="@{/static/images/news/img09.jpg}">-->
+                        <p th:remove="tag" th:utext="${article.getMainPictureUrl()}">Main Picture</p>
+                    </a>
+                </figure>
+                <div class="details">
+                    <div class="detail">
+                        <div class="category">
+                            <a href="../ui/category.html" th:href="@{/category/{id}(id=${article.category.id})}" th:utext="${article.category.name}">Healthy</a>
+                        </div>
+                        <time th:utext="${article.created}">December 16, 2016</time>
+                    </div>
+                    <h1><a href="../ui/single.html" th:href="@{/single/articles/{id}(id=${category.id})}" th:utext="${article.title}">
+                        Maecenas blandit ultricies lorem id tempor enim pulvinar at</a></h1>
+                    <p>
+                        Maecenas blandit ultricies lorem, id tempor enim pulvinar at. Curabitur sit amet tortor eu ipsum lacinia malesuada. Etiam sed vulputate magna.
+                    </p>
+                    <footer>
+                        <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>783</div></a>
+                        <a class="btn btn-primary more" href="../ui/single.html" th:href="@{/single/articles/{id}(id=${category.id})}">
+                            <div>More</div>
+                            <div><i class="ion-ios-arrow-thin-right"></i></div>
+                        </a>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </article>
+
 
 </div>
 

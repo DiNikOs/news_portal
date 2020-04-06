@@ -1,5 +1,58 @@
--- @Author Farida Gareeva
--- Created 16/03/2020
+DROP TABLE IF EXISTS articles;
+
+CREATE TABLE articles (
+    id                    bigserial,
+    created               timestamp,
+    title                 VARCHAR(255),
+    text                  VARCHAR(10000),
+    published             timestamp NULL,
+    category_id           bigint NULL,
+    total_views           bigint NULL,
+    last_view_date        timestamp NULL,
+    main_picture_url      VARCHAR(300) NULL,
+    status                VARCHAR(25) NULL,
+    PRIMARY KEY (id)
+);
+
+
+DROP TABLE IF EXISTS article_likes;
+CREATE TABLE article_likes (
+  article_id            bigint NOT NULL,
+  user_id               bigint NOT NULL,
+  value                 integer NOT NULL,
+  PRIMARY KEY (article_id,user_id),
+  FOREIGN KEY(article_id)
+  REFERENCES articles (id),
+  FOREIGN KEY (user_id)
+  REFERENCES users (id)
+);
+
+DROP TABLE IF EXISTS comments;
+CREATE TABLE comments (
+    id                    bigserial,
+    created               timestamp,
+    article_id            bigint NOT NULL,
+    user_id               bigint NOT NULL,
+    text                  VARCHAR(10000),
+    PRIMARY KEY (id),
+    FOREIGN KEY(article_id)
+    REFERENCES articles (id),
+    FOREIGN KEY (user_id)
+    REFERENCES users (id)
+);
+
+DROP TABLE IF EXISTS comment_likes;
+CREATE TABLE comment_likes (
+  comment_id            bigint NOT NULL,
+  user_id               bigint NOT NULL,
+  value                 integer NOT NULL,
+  PRIMARY KEY (comment_id,user_id),
+  FOREIGN KEY(comment_id)
+  REFERENCES comments (id),
+  FOREIGN KEY (user_id)
+  REFERENCES users (id)
+);
+
 DROP TABLE IF EXISTS links;
 CREATE TABLE links (
   id                    bigserial,
@@ -53,20 +106,6 @@ CREATE TABLE article_categories (
   PRIMARY KEY (id)
 );
 
-DROP TABLE IF EXISTS statuses;
-CREATE TABLE statuses (
-  id                    bigserial,
-  name                  VARCHAR(50) NOT NULL,
-  PRIMARY KEY (id)
-);
-
--- ALTER TABLE articles
--- ADD COLUMN published timestamp NULL,
--- ADD COLUMN category_id bigint NULL,
--- ADD COLUMN total_views bigint NULL,
--- ADD COLUMN last_view_date timestamp NULL,
--- ADD COLUMN main_picture_url VARCHAR(300) NULL,
--- ADD COLUMN status_id bigint NULL;
 
 ALTER TABLE articles
 ADD CONSTRAINT fk_categories
@@ -74,22 +113,6 @@ ADD CONSTRAINT fk_categories
   REFERENCES article_categories (id)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
-
-ALTER TABLE articles
-ADD CONSTRAINT fk_statuses
-  FOREIGN KEY (status_id)
-  REFERENCES statuses (id)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
-
- INSERT INTO statuses (name)
- VALUES ('В работе'),('Опубликована'),('В архиве');
-
- INSERT INTO article_categories (name)
- VALUES ('В мире'),('Экономика'),('Киберспорт'),('Культура'),('Происшествия'), ('Технолгии'), ('Программирование'),('Путешествия'),('Стиль жизни'),('Статьи');
---мне кажется, что названия статей вполне могут быть неуникальными
---ALTER TABLE articles
---DROP CONSTRAINT articles_title_key;
 
 DROP TABLE IF EXISTS contacts;
 CREATE TABLE contacts (
@@ -111,4 +134,5 @@ CREATE TABLE messages (
     FOREIGN KEY (contact_id)
     REFERENCES contacts (id)
 );
+
 

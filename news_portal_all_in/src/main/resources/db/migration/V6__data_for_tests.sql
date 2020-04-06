@@ -1,10 +1,12 @@
+INSERT INTO article_categories (name)
+ VALUES ('В мире'),('Экономика'),('Киберспорт'),('Культура'),('Происшествия'), ('Технолгии'), ('Программирование'),('Путешествия'),('Стиль жизни'),('Статьи');
 
 -- Updated Stanislav Ryzhkov 28/03/2020
 -- Подправил скрипт, БД заполняется 11 тестовыми статьями с обширным текстом, тегами, форматирующими текст и тегами картинок
 -- В тегах картинок только название файла, url формируется на сервере, исходя из режима "разработка" или "продакшен"
 -- (соответственно, добавляется http://localhost:port/path/ или https://example.com/path )
 
-INSERT INTO articles (category_id,created, last_view_date, main_picture_url, published, status_id, title, text, total_views)
+INSERT INTO articles (category_id,created, last_view_date, main_picture_url, published, status, title, text, total_views)
 VALUES
 (
     1,
@@ -12,7 +14,7 @@ VALUES
     current_date,
     '<img src="http://localhost:8199/news/images/news/img01.jpg"/>',
     current_date,
-    1,
+    'EDIT',
     'Заголовок01',
     '<img src="img01.jpg"/>
     <p>
@@ -58,7 +60,7 @@ VALUES
     current_date,
     '<img src="http://localhost:8199/news/images/news/img02.jpg"/>',
     current_date,
-    1,
+    'EDIT',
     'Заголовок02',
     '<img src="img02.jpg"/>
     <p>
@@ -102,7 +104,7 @@ VALUES
     current_date,
     '<img src="http://localhost:8199/news/images/news/img03.jpg"/>',
     current_date,
-    1,
+    'EDIT',
     'Заголовок03',
     '<img src="img03.jpg"/>
     <p>
@@ -146,7 +148,7 @@ VALUES
     current_date,
     '<img src="http://localhost:8199/news/images/news/img04.jpg"/>',
     current_date,
-    2,
+    'PUBLISHED',
     'Заголовок04',
     '<img src="img04.jpg"/>
 <p>
@@ -190,7 +192,7 @@ Lacus vestibulum sed arcu non odio euismod lacinia. Nam aliquam sem et tortor. A
     current_date,
     '<img src="http://localhost:8199/news/images/news/img05.jpg"/>',
     current_date,
-    2,
+    'PUBLISHED',
     'Заголовок05',
     '<img src="img05.jpg"/>
 <p>
@@ -234,7 +236,7 @@ Lacus vestibulum sed arcu non odio euismod lacinia. Nam aliquam sem et tortor. A
     current_date,
     '<img src="http://localhost:8199/news/images/news/img06.jpg"/>',
     current_date,
-    2,
+    'PUBLISHED',
     'Заголовок06',
     '<img src="img06.jpg"/>
 <p>
@@ -278,7 +280,7 @@ Lacus vestibulum sed arcu non odio euismod lacinia. Nam aliquam sem et tortor. A
     current_date,
     '<img src="http://localhost:8199/news/images/news/img07.jpg"/>',
     current_date,
-    3,
+    'ARCHIVE',
     'Заголовок07',
     '<img src="img07.jpg"/>
 <p>
@@ -322,7 +324,7 @@ Lacus vestibulum sed arcu non odio euismod lacinia. Nam aliquam sem et tortor. A
     current_date,
     '<img src="http://localhost:8199/news/images/news/img08.jpg"/>',
     current_date,
-    3,
+    'ARCHIVE',
     'Заголовок08',
     '<img src="img08.jpg"/>
 <p>
@@ -365,7 +367,9 @@ Lacus vestibulum sed arcu non odio euismod lacinia. Nam aliquam sem et tortor. A
     current_date,
     current_date,
     '<img src="http://localhost:8199/news/images/news/img09.jpg"/>',
-    current_date,3,'Заголовок09',
+    current_date,
+    'ARCHIVE',
+    'Заголовок09',
     '<img src="img09.jpg"/>
 <p>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ipsum consequat nisl vel pretium. Praesent elementum facilisis leo vel fringilla est. Mauris sit amet massa vitae tortor. Nulla porttitor massa id neque aliquam vestibulum. Malesuada bibendum arcu vitae elementum curabitur. Arcu dui vivamus arcu felis bibendum. Fermentum et sollicitudin ac orci phasellus egestas tellus. Ornare aenean euismod elementum nisi. Porttitor eget dolor morbi non arcu risus. Lacus sed turpis tincidunt id aliquet. Viverra tellus in hac habitasse platea. Aliquet bibendum enim facilisis gravida neque convallis a. Ligula ullamcorper malesuada proin libero nunc consequat interdum varius sit. Scelerisque mauris pellentesque pulvinar pellentesque habitant. Et leo duis ut diam quam nulla porttitor. Quis lectus nulla at volutpat diam ut venenatis tellus. Eget felis eget nunc lobortis. Ac tincidunt vitae semper quis lectus nulla at volutpat diam. Ullamcorper velit sed ullamcorper morbi tincidunt.
@@ -408,7 +412,7 @@ Lacus vestibulum sed arcu non odio euismod lacinia. Nam aliquam sem et tortor. A
     current_date,
     '<img src="http://localhost:8199/news/images/news/img10.jpg"/>',
     current_date,
-    1,
+    'EDIT',
     'Заголовок10',
     '<img src="img10.jpg"/>
 <p>
@@ -452,7 +456,7 @@ Lacus vestibulum sed arcu non odio euismod lacinia. Nam aliquam sem et tortor. A
     current_date,
     '<img src="http://localhost:8199/news/images/news/img11.jpg"/>',
     current_date,
-    2,
+    'PUBLISHED',
     'Заголовок11',
     '<img src="img11.jpg"/>
 <p>
@@ -525,68 +529,11 @@ VALUES
 
 INSERT INTO  article_likes(article_id, user_id,value)
 VALUES
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-(1,1,1),
-
-
 (1,1,-1),
-(1,1,-1),
-(1,1,-1),
-(1,1,-1),
-(1,1,-1),
-(1,1,-1),
-(1,1,-1),
-(1,1,-1),
-(1,1,-1),
-(1,1,-1),
-(1,1,-1),
-(1,1,-1),
-
 (2,1,1),
-(2,1,1),
-(2,1,1),
-(2,1,1),
-(2,1,1),
-(2,1,1),
-(2,1,1),
-
-(3,1,-1),
-(3,1,-1),
-(3,1,-1),
-(3,1,-1),
-(3,1,-1),
-(3,1,-1),
 (3,1,-1)
 ;
+
+INSERT INTO tags (name)
+VALUES
+('JAVA'),('Spring'),('Web'),('Bootstrap 3'),('Web Design'),('CSS3'),('Html'),('Soft'),('Skill');

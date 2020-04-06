@@ -10,13 +10,13 @@ import ru.geek.news_portal.base.entities.ArticleLike;
  * Created 14/03/2020
  * v1.0
  */
-public interface ArticleLikeRepository extends JpaRepository<ArticleLike,Long> {
+public interface ArticleLikeRepository extends JpaRepository<ArticleLike,ArticleLike.ArticleLikeId> {
 
-    public Long getArticleLikesByArticle_IdAndValue(Long article_id, Integer value);
+    public Long getArticleLikesByArticleAndValue(Long article_id, Integer value);
 
-    public Long getDistinctByArticle_IdAndValue(Long article_id, Integer value);
+    public Long getDistinctByArticleAndValue(Long article_id, Integer value);
 
-    @Query("select sum(a.value) from ArticleLike a where a.article.id = :article_id and a.value = :value")
+    @Query("select sum(a.value) from ArticleLike a where a.article = :article_id and a.value = :value")
     public Integer getArticleLikesOrDislikes(@Param("article_id") Long article_id, @Param("value") Integer value);
 
 }

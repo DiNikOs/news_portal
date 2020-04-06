@@ -29,13 +29,15 @@
                         </div></h1>
                         <div class="block-body">
                             <ul class="tags">
-                                <li><a th:href="@{#}">HTML5</a></li>
-                                <li><a th:href="@{#}">CSS3</a></li>
-                                <li><a th:href="@{#}">Bootstrap 3</a></li>
-                                <li><a th:href="@{#}">Web Design</a></li>
-                                <li><a th:href="@{#}">Creative Mind</a></li>
-                                <li><a th:href="@{#}">Standing On The Train</a></li>
-                                <li><a th:href="@{#}">at 6.00PM</a></li>
+
+                                <li th:if="${tags}==null and ${state.count}<9" th:each="tag,state : ${@tagsServiceImpl.findAll()}" >
+                                    <a th:href="@{/search/tag/{id}(id=${tag.id})}" th:text="${tag.name}">HTML5</a></li>
+                            </ul>
+
+
+                            <ul class="tags">
+                                <li th:if="${tags}!=null and ${state.count}<9" th:each="tag,state : ${tags}">
+                                    <a th:href="@{/search/tag/{id}(id=${tag.id})}" th:text="${tag.name}">HTML5</a></li>
                             </ul>
                         </div>
                     </div>
