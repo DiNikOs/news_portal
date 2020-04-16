@@ -33,6 +33,8 @@ public final class ArticleDto {
     private final List<ArticleLike> likes;
     private final List<Tag> tags;
     private final List<ArticleRating> ratings;
+    private final List<User> authors;
+    private final String author;
 
     /**
      * @author Stanislav Ryzhkov
@@ -55,7 +57,9 @@ public final class ArticleDto {
                 article.getComments(),
                 article.getLikes(),
                 article.getTags(),
-                article.getRatings()
+                article.getRatings(),
+                article.getAuthors(),
+                article.getAuthor()
         );
     }
 }

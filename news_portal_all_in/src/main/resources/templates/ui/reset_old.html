@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/header.html :: head"></head>
+
+<body class="skin-orange">
+<!-- HEADER -->
+<header class="primary" th:insert="fragments/header.html :: firstbar"></header>
+<!-- /HEADER -->
+
+		<section class="login first grey">
+			<div class="container">
+				<div class="box-wrapper">				
+					<div class="box box-border">
+						<div class="box-body">
+							<h4>Reset Password</h4>
+							<form method="post" th:action="@{/register/reset}" th:object="${systemUser}">
+								<div class="form-group">
+<!--									<label class="fw" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password</label>-->
+									<input type="password" class="form-control" name="password"
+										   placeholder="password (*)">
+<!--										   th:field="*{password}"-->
+								</div>
+								<div class="form-group">
+<!--									<label class="fw" th:if="${#fields.hasErrors('matchingPassword')}" th:errors="*{matchingPassword}">Repeat password</label>-->
+									<input type="password" class="form-control" name="matchingPassword"
+										   placeholder="confirm password (*)">
+									<!--										   th:field="*{matchingPassword}"-->
+								</div>
+								<div class="form-group text-right">
+									<button type="submit" class="btn btn-primary btn-block">Reset Password</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+	<!-- FOOTER -->
+	<footer th:replace="fragments/footer.html :: footer"></footer>
+	<!-- /FOOTER -->
+
+	<!-- JS -->
+	<script th:remove="tag" th:replace="fragments/scripts.html :: scripts"> </script>
+
+	</body>
+</html>

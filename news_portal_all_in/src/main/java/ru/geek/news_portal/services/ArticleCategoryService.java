@@ -32,4 +32,17 @@ public class ArticleCategoryService {
     public ArticleCategory findOneById(Long id) {
         return articleCategoryRepository.getOne(id);
     }
+
+    public List<ArticleCategory> findAllById(List<Long> idList) {
+        return (List<ArticleCategory>) articleCategoryRepository.findAllById(idList);
+    }
+
+    public void deleteById(Long id) {
+        articleCategoryRepository.deleteById(id);
+    }
+
+    public void save(ArticleCategory category) {
+        articleCategoryRepository.save(category);
+    }
+
 }

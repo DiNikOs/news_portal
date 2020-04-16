@@ -63,11 +63,26 @@ public class Article {
   )
   private List<ArticleLike> likes;
 
-  @ManyToMany(cascade = CascadeType.ALL)
+  @JsonBackReference
+  @OneToMany(mappedBy = "article",
+          cascade = CascadeType.ALL
+  )
+  private List<CommentLike> comment_likes;
+
+  @ManyToMany
   @JoinTable(name = "articles_tags",
           joinColumns = @JoinColumn(name = "article_id"),
           inverseJoinColumns = @JoinColumn(name = "tag_id"))
   private List<Tag> tags;
+
+  @ManyToMany
+  @JoinTable(name = "articles_authors",
+          joinColumns = @JoinColumn(name = "article_id"),
+          inverseJoinColumns = @JoinColumn(name = "user_id"))
+  private List<User> authors;
+
+  @Column(name = "author")
+  private String author;
 
   @JsonBackReference
   @OneToMany(mappedBy = "article",

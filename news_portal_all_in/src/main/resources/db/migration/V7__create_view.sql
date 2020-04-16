@@ -24,8 +24,3 @@ right join
 	) as comment_details
 
 	on tab_likes_dislikes.comment_id = comment_details.comment_id);
-
-
-	INSERT INTO newsportal.comment_likes(
-	comment_id, user_id, value)
-	VALUES (1, 1, 1),(1, 2, 1),(2, 1, -1),(2, 2, -1),(3, 1, 1),(4, 2, -1),(5, 1, 1),(5, 2, -1);

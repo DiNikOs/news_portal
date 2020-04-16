@@ -103,6 +103,4 @@ public class User {
     public void removeComment(Comment comment){
         comments.remove(comment);
     }
-
-
 }

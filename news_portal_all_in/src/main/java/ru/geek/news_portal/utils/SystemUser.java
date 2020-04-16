@@ -35,23 +35,4 @@ public class SystemUser {
     @Email(message = "Must be Email@xxx.xxx!")
     private String email;
 
-//    public String getUsername() {
-//        return username;
-//    }
-//
-//    public CharSequence getPassword() {
-//        return password;
-//    }
-//
-//    public String getFirstName() {
-//        return firstName;
-//    }
-//
-//    public String getLastName() {
-//        return lastName;
-//    }
-//
-//    public String getEmail() {
-//        return email;
-//    }
 }

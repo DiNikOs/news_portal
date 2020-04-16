@@ -9,6 +9,7 @@ package ru.geek.news_portal.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
@@ -32,7 +33,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class MainController {
@@ -66,18 +69,40 @@ public class MainController {
 
     @GetMapping("/")
     public String index(Model model, @PathVariable(value = "id", required = false) Long id,
-                        HttpServletRequest request,
-                        @RequestParam(name = "word", required = false) String word,
-                        @RequestParam(name = "pageNumber", required = false) Integer pageNumber) {
-        ArticleFilter articleFilter = new ArticleFilter(request);
-        if (pageNumber == null || pageNumber < 1) {
-            pageNumber = 1;
+                        @RequestParam Map<String, String> params,
+                        HttpServletRequest request, HttpServletResponse response,
+                        @CookieValue(value = "page_size", required = false) Integer pageSize) {
+        Integer pageNumber = 0;
+        Integer pageLimit = 5;
+        ArticleCategory category = null;
+
+        if (params.containsKey("pageNumber")) {
+            pageNumber = Integer.parseInt(params.get("pageNumber")) - 1;
         }
-        model.addAttribute("articles", articleService.findAllArticles());
-        model.addAttribute("comments", commentService.findAllCommentByArticle_id(RECOMENDED_NEWS));
-        model.addAttribute("categories", articleCategoryService.findAll());
+        if (pageSize == null) {
+            pageSize = 10;
+            response.addCookie(new Cookie("page_size", String.valueOf(pageSize)));
+        }
+        if (params.containsKey("pageLimit")) {
+            pageLimit = Integer.parseInt(params.get("pageLimit"));
+        }
+        if (params.containsKey("cat_id")) {
+            category = articleCategoryService.findOneById(Long.parseLong(params.get("cat_id")));
+        }
+        ArticleFilter articleFilter = new ArticleFilter(params);
+        List<ArticleDto> articles = articleService.findAllArticles();
+        Pageable pageRequest = PageRequest.of(pageNumber, pageLimit, Sort.Direction.ASC, "id");
+
+        Page<Article> page = articleService.findAllByPagingAndFiltering(articleFilter.getSpecification(), pageRequest);
+
+        List<ArticleCategory> categories = articleCategoryService.findAll();
+        model.addAttribute("filtersDef", articleFilter.getFilterDefinition());
+        model.addAttribute("articles", articles);
+        model.addAttribute("categories", categories);
+        model.addAttribute("category", category);
         model.addAttribute("pageNumber", pageNumber);
-        model.addAttribute("filters", articleFilter.getFiltersString());
+        model.addAttribute("pageLimit", pageLimit);
+        model.addAttribute("page", page);
         return "index";
     }
 
@@ -124,10 +149,10 @@ public class MainController {
         return "ui/login";
     }
 
-    @GetMapping("/forgot")
-    public String forgot() {
-        return "ui/forgot";
-    }
+//    @GetMapping("/forgot")
+//    public String forgot() {
+//        return "ui/forgot";
+//    }
 
     @GetMapping("/page")
     public String page(Model model, @PathVariable(value = "id", required = false) Long id) {
@@ -135,10 +160,10 @@ public class MainController {
         return "ui/page";
     }
 
-    @GetMapping("/reset")
-    public String reset() {
-        return "ui/reset";
-    }
+//    @GetMapping("/reset")
+//    public String reset() {
+//        return "ui/reset";
+//    }
 
     @GetMapping("/single")
     public String single() {

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/header.html :: head"></head>
+
+
+<body class="skin-orange">
+<!-- HEADER -->
+<header class="primary" >
+    <div th:replace="fragments/header.html :: firstbar"></div>
+    <nav th:replace="fragments/header.html :: nav"></nav>
+</header>
+
+<section class="page">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h1 class="page-title">User favorites</h1>
+                <p class="page-subtitle">See it</p>
+                <div class="line thin"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer th:replace="fragments/footer.html :: footer"></footer>
+<!-- /FOOTER -->
+
+<!-- JS -->
+<script th:remove="tag" th:replace="fragments/scripts.html :: scripts"> </script>
+
+</body>
+</html>

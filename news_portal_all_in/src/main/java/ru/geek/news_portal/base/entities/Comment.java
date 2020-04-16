@@ -41,7 +41,10 @@ public class Comment {
   private User user;
 
   @JsonManagedReference
-  @ManyToOne
+  @ManyToOne(optional = false)
   private Article article;
+
+  @Column
+  private Long id_parent;
 
 }

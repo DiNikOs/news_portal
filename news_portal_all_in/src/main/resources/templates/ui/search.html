@@ -16,16 +16,17 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-3">
+						<form th:action="@{/search}" method="get">
 						<aside>
 							<h2 class="aside-title">Search</h2>
 							<div class="aside-body">
 								<p>Search with other keywords or use filters for more accurate results.</p>
-								<form th:action="@{/search}" method="get">
+<!--								<form th:action="@{/search}" method="get">-->
 									<div class="form-group">
 										<div class="input-group">
 <!--											<input type="text" name="q" class="form-control" placeholder="Type something ..." value="hello">-->
 											<input class="form-control" value="hello" type="text"  placeholder="Type something ..."
-												   th:value="${param.word != null} ? ${param.word}" th:name="word" >
+												   th:value="${param.word != null} ? ${param.word}" th:name="word">
 											<div class="input-group-btn">
 												<button class="btn btn-primary" type="submit">
 													<i class="ion-search"></i>
@@ -33,61 +34,66 @@
 											</div>
 										</div>
 									</div>
-								</form>
+									<div class="form-group">
+										<div class="input-group">
+											<select class="form-control" name="limit"  >
+												<option th:value="0" value="0" th:selected="${pageLimit==0}">
+													<a th:text="Limit" >Limit</a>
+												<option th:each="i : ${#numbers.sequence(1, 10, 3)}" th:value="${i}" th:text="${i}"
+														th:selected="${i==pageLimit}"></option>
+											</select>
+										</div>
+									</div>
 							</div>
 						</aside>
 						<aside>
 							<h2 class="aside-title">Filter</h2>
 							<div class="aside-body">
-								<form class="checkbox-group" th:action="@{/search}" method="get">
-									<div class="group-title">Date</div>
-									<div class="form-group">
-										<label><input type="radio" name="date" checked> Anytime</label>
-									</div>
-									<div class="form-group">
-										<label><input type="radio" name="date"> Today</label>
-									</div>
-									<div class="form-group">
-										<label><input type="radio" name="date"> Last Week</label>
-									</div>
-									<div class="form-group">
-										<label><input type="radio" name="date"> Last Month</label>
-									</div>
+<!--									<div class="group-title">Date</div>-->
+<!--									<div class="form-group">-->
+<!--										<label><input type="radio" name="date" checked> Anytime</label>-->
+<!--									</div>-->
+<!--									<div class="form-group">-->
+<!--										<label><input type="radio" name="date"> Today</label>-->
+<!--									</div>-->
+<!--									<div class="form-group">-->
+<!--										<label><input type="radio" name="date"> Last Week</label>-->
+<!--									</div>-->
+<!--									<div class="form-group">-->
+<!--										<label><input type="radio" name="date"> Last Month</label>-->
+<!--									</div>-->
+
 									<br>
 									<div class="group-title">Categories</div>
 									<div class="form-group">
-										<label><input type="checkbox" name="category" th:value="${null}"> All Categories</label>
+										<label><input type="checkbox" name="cat_id" th:value="${param.cat_id != null} ? null"
+													  th:checked="${catIdInteger.size()>0 and catIdInteger.get(0)==0}"
+													  onclick="this.value=this.checked"> All Categories</label>
 									</div>
-									<div class="form-group" th:each="category, state : ${categories}">
-										<input type="checkbox"   th:value="${param.catId != null} ? ${param.catId}" th:name="catId">
+									<div class="form-group" th:each="category, state : ${categories}" name="cat_id"
+										 th:unless="${catIdInteger.size()>0 and catIdInteger.get(0)==0}">
+										<input type="checkbox" name="cat_id" th:value="${category.id}"
+											   th:checked="${#arrays.contains(catIdInteger, __${category.id}__)}"
+											   onclick="this.value=this.checked">
 										<label th:text="${category.name}">
 											 Lifestyle</label>
 									</div>
 
-									<a class="btn btn-primary more" type="submit" >
-										<div>More</div>
-										<div><i class="ion-ios-arrow-thin-right"></i></div>
-									</a>
-
-									<!--									<div class="form-group">-->
-<!--										<label><input type="checkbox" name="category"> Lifestyle</labelb>-->
-<!--									</div>-->
-<!--									<div class="form-group">-->
-<!--										<label><input type="checkbox" name="category"> Travel</label>-->
-<!--									</div>-->
-<!--									<div class="form-group">-->
-<!--										<label><input type="checkbox" name="category"> Computer</label>-->
-<!--									</div>-->
-<!--									<div class="form-group">-->
-<!--										<label><input type="checkbox" name="category"> Film</label>-->
-<!--									</div>-->
-<!--									<div class="form-group">-->
-<!--										<label><input type="checkbox" name="category"> Sport</label>-->
-<!--									</div>-->
-
-								</form>
+									<div class="form-group" th:each="category, state : ${categories}" name="cat_id"
+										 th:if="${catIdInteger.size()>0 and catIdInteger.get(0)==0}" >
+										<input type="checkbox" name="cat_id" th:value="${category.id}">
+										<label th:text="${category.name}">
+											Lifestyle</label>
+									</div>
+									<div class="input-group-btn">
+										<button class="btn btn-primary more" type="submit">
+											<div>More</div>
+											<i class="ion-ios-arrow-thin-right"></i>
+										</button>
+									</div>
 							</div>
 						</aside>
+						</form>
 					</div>
 					<div class="col-md-9">
 						<div class="nav-tabs-group">
@@ -99,50 +105,22 @@
 								<li><a href="#">Trending</a></li>
 								<li><a href="#">Videos</a></li>
 							</ul>
-							<div class="nav-tabs-right">
-								<form th:action="@{/search}" method="get">
-									<div class="form-group">
-										<div class="input-group">
-											<select class="form-control" th:name="limit" id="">
-												<!--									required-->
-												<option th:value="null">
-													<a th:text="Limit" >Limit</a>
-												</option>
-												<option th:value="1">
-													<a th:text="1" >1</a>
-												</option>
-												<option th:value="2">
-													<a th:text="2" >2</a>
-												</option>
-												<option th:value="5">
-													<a th:text="5" >5</a>
-												</option>
-												<option th:value="10">
-													<a th:text="10" >10</a>
-												</option>
-
-											</select>
-										</div>
-									</div>
-								</form>
-							</div>
-
 						</div>
-						<div class="search-result">
+						<div class="search-result" th:if="${param.word}==null or ${param.word}!=empty">
+							Search all results found in <span th:text="${page.totalElements}">5,200 </span> posts.
+						</div>
+						<div class="search-result" th:unless="${param.word}==null or ${param.word}!=empty">
 							Search results for keyword "
 							<span class="page-subtitle" th:text="${#request.getParameter('word')}">"hello"</span>
 							" found in <span th:text="${page.totalElements}">5,200 </span> posts.
 						</div>
 						<div class="row">
-<!--							<div th:replace="fragments/news :: article_mini"></div>-->
 
 							<article class="col-md-12 article-list"  th:each="article,state : ${page.content}">
 
 									<div class="inner" >
-<!--										th:if="${article.category.id}==${category.id}"-->
 										<figure>
 											<a href="../ui/single.html" th:href="@{/single/articles/{id}(id=${article.id})}">
-												<!--<img src="../static/images/news/img09.jpg" th:src="@{/static/images/news/img09.jpg}">-->
 												<p th:remove="tag" th:utext="${article.getMainPictureUrl()}">Main Picture</p>
 											</a>
 										</figure>
@@ -150,15 +128,14 @@
 											<div class="detail">
 												<div class="category">
 													<a href="../ui/category.html"
-													   th:href="@{/category/{id}(id=${article.category.id})}"
-													   th:utext="${article.category.name}">Healthy</a>
+													   th:href="@{'/search?cat_id=' + ${article.category.id} + ${filtersDefCat}}"
+													   th:utext="${article.category.name}">Film</a>
 												</div>
 												<br>
-												<time th:utext="${article.created}">December 16, 2016</time>
+												<div class="time" th:utext="${article.created}">December 10, 2016</div>
 											</div>
 											<h1><a href="../ui/single.html" th:utext="${article.title}"
 												   th:href="@{/single/articles/{id}(id=${article.id})}">
-<!--												th:href="@{/single/articles/{id}(id=${category.id})}"-->
 												Maecenas blandit ultricies lorem id tempor enim pulvinar at</a></h1>
 											<p>
 												Maecenas blandit ultricies lorem, id tempor enim pulvinar at. Curabitur sit amet tortor eu ipsum lacinia malesuada. Etiam sed vulputate magna.
@@ -167,49 +144,40 @@
 												<a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>783</div></a>
 												<a class="btn btn-primary more" href="../ui/single.html"
 												   th:href="@{/single/articles/{id}(id=${article.id})}">
-<!--													th:href="@{/single/articles/{id}(id=${category.id})}"-->
 													<div>More</div>
 													<div><i class="ion-ios-arrow-thin-right"></i></div>
 												</a>
 											</footer>
 										</div>
 									</div>
-<!--								</div>-->
 							</article>
 
 		          <div class="col-md-12 text-center">
-<!--		            <ul class="pagination">-->
-<!--		              <li class="prev"><a href="#"><i class="ion-ios-arrow-left"></i></a></li>-->
-<!--		              <li class="active"><a href="#">1</a></li>-->
-<!--		              <li><a href="#">2</a></li>-->
-<!--		              <li><a href="#">3</a></li>-->
-<!--		              <li><a href="#">...</a></li>-->
-<!--		              <li><a href="#">97</a></li>-->
-<!--		              <li class="next"><a href="#"><i class="ion-ios-arrow-right"></i></a></li>-->
-<!--		            </ul>-->
-					  <nav aria-label="Page navigation">
+					  <nav aria-label="Page navigation" th:if="${page.content.size()>0}">
 						  <ul class="pagination">
 							  <li class="page-item " th:classappend="${!(page.getNumber() > 0) ? 'disabled' : ''}" >
-<!--								  th:if="${(page.getNumber() > 0)}"-->
-								  <a th:class="page-link" th:unless="${(page.getNumber() > 0)}"
-									 th:href="@{'/search?pageNumber=1' + ${filters}}">Prev</a>
-								  <a th:class="page-link" th:if="${(page.getNumber() > 0)}"
-									 th:href="@{'/search?pageNumber=' + ${page.getNumber()} + ${filters}}">Prev</a>
+
+								  <a class="page-link"
+									 th:href="@{'/search?pageNumber=' + ${page.previousOrFirstPageable().getPageNumber() + 1} + ${filtersDef}}">
+									  <i class="ion-ios-arrow-left"></i></a>
 							  </li>
 
 							  <li class="page-item" th:classappend="${page.getNumber() + 1 == i ? 'active' : ''}"
 								  th:each="i : ${#numbers.sequence(1, page.getTotalPages())}">
-								  <a th:class="page-link" th:text="${i}" th:href="@{'/search?pageNumber=' + ${i} + ${filters}}"></a>
+								  <a class="page-link" th:text="${i}" th:href="@{'/search?pageNumber=' + ${i} + ${filtersDef}}"></a>
 							  </li>
 
 							  <li class="page-item" th:classappend="${!(page.getNumber() < page.getTotalPages() - 1) ? 'disabled' : ''}" >
-								  <a th:class="page-link" th:unless="${(page.getNumber() < page.getTotalPages() - 1)}"
-									 th:href="@{'/search?pageNumber=' + ${page.getTotalPages()} + ${filters}}">Next</a>
-								  <a th:class="page-link" th:if="${(page.getNumber() < page.getTotalPages() - 1)}"
-									 th:href="@{'/search?pageNumber=' + ${page.getNumber() + 2} + ${filters}}">Next</a>
+								  <a class="page-link"
+									 th:href="@{'/search?pageNumber=' + ${page.nextOrLastPageable().getPageNumber() + 1} + ${filtersDef}}">
+									  <i class="ion-ios-arrow-right"></i></a>
 							  </li>
 						  </ul>
 					  </nav>
+					  <div th:if="${page.content.size()==0}">
+						  <h3 class="page-title">
+							  <span th:text="'Pages not found'">Computer</span> </h3>
+					  </div>
 
 		            <div class="pagination-help-text">
 		            	Showing <span  th:text="${page.getContent().size()}">8</span> results of
@@ -236,6 +204,14 @@
 		  cursor: true
 			});
 			</script>
+
+			<script>
+				function onSelected(select) {
+					var selectOption = select.options[select.selectedIndex];
+					window.location.href = '/search?pageSize=' + select;
+				}
+			</script>
+
 
 	</body>
 </html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/header.html :: head"></head>
+
+<body class="skin-orange">
+<!-- HEADER -->
+<header class="primary">
+    <div th:replace="fragments/header.html :: firstbar"></div>
+    <nav th:replace="fragments/header.html :: nav"></nav>
+</header>
+
+<section class="page">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h1 class="page-title">My account</h1>
+
+                <div th:if="${error}!=null" class="alert alert-danger">[[${error}]]</div>
+                <div th:if="${success}!=null" class="alert">[[${success}]]</div>
+
+                <form method="post" th:action="@{/user/edituser}" th:object="${user}">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" class="form-control" name="username"
+                               placeholder="username" value="target" autocomplete="off" required
+                               readonly th:field="*{username}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>First name</label>
+                        <input type="text" class="form-control" name="firstName"
+                               placeholder="firstName" value="John" autocomplete="off" required th:field="*{firstName}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Last name</label>
+                        <input type="text" class="form-control" name="lastName"
+                               placeholder="lastName" value="Connor" autocomplete="off" required th:field="*{lastName}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>E-mail</label>
+                        <input type="email" class="form-control" name="email"
+                               placeholder="email" value="terminator@murder.tv" autocomplete="off" required
+                               th:field="*{email}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>articleLikes</label>
+                        <p class="form-control" th:text="*{articleLikes.size()}"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>articleRatings</label>
+                        <p class="form-control" th:text="*{articleRatings.size()}"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>comments</label>
+                        <p class="form-control" th:text="*{comments.size()}"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>commentLikes</label>
+                        <p class="form-control" th:text="*{commentLikes.size()}"></p>
+                    </div>
+
+                    <div class="form-group text-right">
+                        <button type="submit" class="btn btn-primary btn-block">Save data</button>
+                    </div>
+                </form>
+
+                <!--                <p class="page-subtitle">See it</p>-->
+                <div class="line thin"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer th:replace="fragments/footer.html :: footer"></footer>
+<!-- /FOOTER -->
+
+<!-- JS -->
+<script th:remove="tag" th:replace="fragments/scripts.html :: scripts"></script>
+
+</body>
+</html>

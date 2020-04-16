@@ -13,20 +13,22 @@
 </header>
 <!-- /HEADER -->
 
+
 <section class="login first grey">
     <div class="container">
         <div class="box-wrapper">
             <div class="box box-border">
                 <div class="box-body">
-                    <h4>Reset Password</h4>
+                    <h4>Change Password</h4>
 
                     <div th:if="${error}!=null" class="alert alert-danger">[[${error}]]</div>
                     <div th:if="${success}!=null" class="alert">[[${success}]]</div>
-                    <div sec:authorize="isAnonymous()" class="alert"  >
-                        <a th:href="@{/login}">Please login before</a>
-                    </div>
 
-                    <form sec:authorize="isAuthenticated()" method="post" th:if="${success}==null" th:action="@{/reset}" th:object="${password}">
+                    <form sec:authorize="isAuthenticated()" th:if="${success}==null" method="post" th:action="@{/user/change_password}" th:object="${password}">
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="oldPassword"
+                                   placeholder="old password (*)">
+                        </div>
                         <div class="form-group">
                             <input type="password" class="form-control" name="newPassword"
                                    placeholder="new password (*)">
@@ -36,7 +38,7 @@
                                    placeholder="confirm password (*)">
                         </div>
                         <div class="form-group text-right">
-                            <button type="submit" class="btn btn-primary btn-block">Reset Password</button>
+                            <button type="submit" class="btn btn-primary btn-block">Change Password</button>
                         </div>
                     </form>
                 </div>

@@ -15,18 +15,23 @@ import java.math.BigDecimal;
 
 public class ArticleSpecifications {
     public static Specification<Article> titleContains(String word) {
-        return (Specification<Article>) (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.like(root.get("title"), "%" + word + "%");
+        return (Specification<Article>) (root, criteriaQuery, criteriaBuilder) ->
+                criteriaBuilder.like(root.get("title"), "%" + word + "%");
     }
 
-    public static Specification<Article> limitNavTab(BigDecimal value) {
-        return (Specification<Article>) (root, criteriaQuery, criteriaBuilder) -> {
-            return criteriaBuilder.lessThanOrEqualTo(root.get("limit").get("value"), value);
-        };
-    }
+    public static Specification<Article> limitNavTab(Integer value) {
+        return (Specification<Article>) (root, criteriaQuery, criteriaBuilder) ->
+            criteriaBuilder.lessThanOrEqualTo(root.get("limit").get("value"), value);
+        }
 
-    public static Specification<Article> categoryId(Long id) {
-        return (Specification<Article>) (root, criteriaQuery, criteriaBuilder) -> {
-            return criteriaBuilder.equal(root.get("category").get("id"), id);
-        };
-    }
+    public static Specification<Article> categoryId(Long catId) {
+        return (Specification<Article>) (root, criteriaQuery, criteriaBuilder) ->
+           criteriaBuilder.equal(root.get("category").get("id"), catId);
+        }
+
+
+
+//        return (Specification<Product>) (root, criteriaQuery, criteriaBuilder) ->
+//                criteriaBuilder.equal(root.get("category").get("id"), id);
+//    }
 }

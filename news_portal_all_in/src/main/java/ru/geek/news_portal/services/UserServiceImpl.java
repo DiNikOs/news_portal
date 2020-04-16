@@ -1,7 +1,7 @@
 /**
  * Бизнес логика User
- * @author
- * fix Dmitriy Ostrovskiy 19.03.2020
+ *
+ * @author fix Dmitriy Ostrovskiy 19.03.2020
  * created on
  */
 
@@ -20,6 +20,7 @@ import ru.geek.news_portal.base.entities.Role;
 import ru.geek.news_portal.base.entities.User;
 import ru.geek.news_portal.base.repo.UserRepository;
 import ru.geek.news_portal.base.repo.RoleRepository;
+import ru.geek.news_portal.dto.UserAccountDTO;
 import ru.geek.news_portal.utils.SystemUser;
 
 import java.util.Arrays;
@@ -70,21 +71,15 @@ public class UserServiceImpl implements UserService {
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                 mapRolesToAuthorities(user.getRoles()));
     }
-  
+
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }
-  
-  
+
     @Override
-     public List<User> findAll() {
+    public List<User> findAll() {
         return userRepository.findAll();
     }
-
-//     return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-//             mapRolesToAuthorities(user.getRoles()));
-//   }
-
 
     @Override
     public boolean isUserExist(String username) {
@@ -92,14 +87,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-  public boolean isUsernameExist(String username) {
-    return userRepository.existsByUsername(username);
-  }
+    public boolean isUsernameExist(String username) {
+        return userRepository.existsByUsername(username);
+    }
 
-  @Override
-  public boolean isEmailExist(String email) {
-      return userRepository.existsByEmail(email);
-  }
+    @Override
+    public boolean isEmailExist(String email) {
+        return userRepository.existsByEmail(email);
+    }
 
     @Override
     @Transactional
@@ -124,9 +119,68 @@ public class UserServiceImpl implements UserService {
     public User update(SystemUser systemUser) {
         return null;
     }
-  
+
     @Override
     public void delete(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean updatePassword(User user, String password) {
+        if (findByUsername(user.getUsername()) == null) {
+            throw new RuntimeException("User " + user + " not found");
+        }
+        if (password != null) {
+            user.setPassword(passwordEncoder.encode(password));
+        }
+        userRepository.save(user);
+        return true;
+    }
+
+    @Override
+    public boolean checkPassword(User user, String password) {
+        if (findByUsername(user.getUsername()) == null) {
+            throw new RuntimeException("User " + user + " not found");
+        }
+        String userPassword = user.getPassword();
+        return passwordEncoder.matches(password, userPassword);
+    }
+
+    @Override
+    public User saveDTO(UserAccountDTO userAccountDTO) {
+        User user = userRepository.findUserByUsername(userAccountDTO.getUsername()).orElse(new User());
+        user.setUsername(userAccountDTO.getUsername());
+
+        if (findByUsername(user.getUsername()) == null) {
+            throw new RuntimeException("User " + user + " not found");
+        }
+
+        user.setFirstName(userAccountDTO.getFirstName());
+        user.setLastName(userAccountDTO.getLastName());
+        user.setEmail(userAccountDTO.getEmail());
+
+        return userRepository.save(user);
+    }
+
+    @Override
+    public UserAccountDTO userToDTO(String username) {
+        UserAccountDTO userDTO = new UserAccountDTO();
+
+        if (!userRepository.existsByUsername(username)) {
+            throw new RuntimeException("User " + username + " not found");
+        }
+
+        User user = userRepository.findOneByUsername(username);
+
+        userDTO.setUsername(user.getUsername());
+        userDTO.setFirstName(user.getFirstName());
+        userDTO.setLastName(user.getLastName());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setArticleLikes(user.getArticleLikes());
+        userDTO.setArticleRatings(user.getArticleRatings());
+        userDTO.setComments(user.getComments());
+        userDTO.setCommentLikes(user.getCommentLikes());
+
+        return userDTO;
     }
 }

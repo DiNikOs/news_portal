@@ -17,20 +17,48 @@
 		    <div class="row">
 		      <div class="col-md-8 text-left">
 		        <div class="row">
-		          <div class="col-md-12" th:object="${page.content.get(0)}" >
-		            <ol class="breadcrumb">
-		              <li><a href="../index.html" th:href="@{/}">Home</a></li>
-		              <li class="active" th:text="${category}==null? 'All category' : *{category.name}">Computer</li>
-		            </ol>
-		            <h1 class="page-title"><span th:text="${category}==null? 'All category' : 'Category: ' + *{category.name}">Computer</span> </h1>
-		            <p class="page-subtitle">Showing all posts with <i> <span th:text="${category}==null? 'all category' : 'category ' + *{category.name}">Computer</span></i></p>
+		          <div class="col-md-12"  >
+					  <div class="form-row">
+						  <div class="form-group col-sm-6">
+							  <ol class="breadcrumb">
+								  <li><a href="../index.html" th:href="@{/}">Home</a></li>
+								  <li class="active" th:text="${category}==null? 'All category' : ${category.name}" >Computer</li>
+							  </ol>
+							  <h1 class="page-title">
+								  <span th:text="${category}==null? 'All category' : 'Category: ' + ${category.name}">Computer</span> </h1>
+							  <p class="page-subtitle">Showing all posts with <i>
+								  <span th:text="${category}==null? 'all category' : 'category ' + ${category.name}">Computer</span></i></p>
+						  </div>
+						  <div class="form-group col-sm-6">
+							  <br>
+							  <form th:action="@{/category}" method="get">
+								  <input class="form-control" value="cat_id" type="text"  th:type="hidden"
+										 th:value="${param.cat_id}" th:name="cat_id">
+
+								  <div class="form-group">
+									  <div class="input-group">
+										  <select class="form-control" name="limit"  >
+											  <option th:value="0" value="0" th:selected="${pageLimit==0}">
+												  <a th:text="Limit" >Limit</a>
+											  <option th:each="i : ${#numbers.sequence(1, 10, 3)}" th:value="${i}" th:text="${i}"
+													  th:selected="${i==pageLimit}"></option>
+										  </select>
+										  <div class="input-group-btn">
+											  <button class="btn btn-primary more" type="submit">
+												  <i class="ion-ios-arrow-thin-right"></i>
+											  </button>
+										  </div>
+									  </div>
+								  </div>
+							  </form>
+						  </div>
+					  </div>
 		          </div>
 
 		        </div>
 		        <div class="line"></div>
 		        <div class="row">
 <!--					<div th:replace="fragments/news :: category_news"></div>-->
-
 					<article class="col-md-12 article-list" th:each="article,state : ${page.content}" >
 						<div th:if="${category}==null">
 							<div class="inner">
@@ -43,11 +71,14 @@
 								<div class="details">
 									<div class="detail">
 										<div class="category">
-											<a href="../ui/category.html" th:href="@{'/category?catId=' + ${state.count} + ${filters}}" th:utext="${article.category.name}">Film</a>
+											<a href="../ui/category.html"
+											   th:href="@{'/category?cat_id=' + ${article.category.id} + ${filtersDef}}"
+											   th:utext="${article.category.name}">Film</a>
 										</div>
 										<div class="time" th:utext="${article.created}">December 26, 2016</div>
 									</div>
-									<h1><a href="../ui/single.html" th:href="@{/single/articles/{id}(id=${article.category.id})}" th:utext="${article.title}">Lorem Ipsum Dolor Sit Consectetur Adipisicing Elit</a></h1>
+									<h1><a href="../ui/single.html" th:href="@{/single/articles/{id}(id=${article.category.id})}"
+										   th:utext="${article.title}">Lorem Ipsum Dolor Sit Consectetur Adipisicing Elit</a></h1>
 									<p>
 										Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 										tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -55,7 +86,8 @@
 									</p>
 									<footer>
 										<a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>237</div></a>
-										<a class="btn btn-primary more" href="../ui/single.html" th:href="@{/single/articles/{id}(id=${article.category.id})}">
+										<a class="btn btn-primary more" href="../ui/single.html"
+										   th:href="@{/single/articles/{id}(id=${article.category.id})}">
 											<div>More</div>
 											<div><i class="ion-ios-arrow-thin-right"></i></div>
 										</a>
@@ -75,11 +107,13 @@
 								<div class="details">
 									<div class="detail">
 										<div class="category">
-											<a href="../ui/category.html" th:href="@{/category/{id}(id=${article.category.id})}" th:utext="${article.category.name}">Film</a>
+											<a href="../ui/category.html" th:href="@{'/category?' + ${filtersDef}}"
+											   th:utext="${article.category.name}">Film</a>
 										</div>
 										<div class="time" th:utext="${article.created}">December 26, 2016</div>
 									</div>
-									<h1><a href="../ui/single.html" th:href="@{/single/articles/{id}(id=${category.id})}" th:utext="${article.title}">Lorem Ipsum Dolor Sit Consectetur Adipisicing Elit</a></h1>
+									<h1><a href="../ui/single.html" th:href="@{/single/articles/{id}(id=${category.id})}"
+										   th:utext="${article.title}">Lorem Ipsum Dolor Sit Consectetur Adipisicing Elit</a></h1>
 									<p>
 										Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 										tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -97,43 +131,32 @@
 						</div>
 					</article>
 
-<!--		          <div class="col-md-12 text-center">-->
-<!--		            <ul class="pagination">-->
-<!--		              <li class="prev"><a href="#"><i class="ion-ios-arrow-left"></i></a></li>-->
-<!--		              <li class="active"><a href="#">1</a></li>-->
-<!--		              <li><a href="#">2</a></li>-->
-<!--		              <li><a href="#">3</a></li>-->
-<!--		              <li><a href="#">...</a></li>-->
-<!--		              <li><a href="#">97</a></li>-->
-<!--		              <li class="next"><a href="#"><i class="ion-ios-arrow-right"></i></a></li>-->
-<!--		            </ul>-->
-<!--		            <div class="pagination-help-text">-->
-<!--		            	Showing 8 results of 776 &mdash; Page 1-->
-<!--		            </div>-->
-<!--		          </div>-->
-					<nav aria-label="Page navigation">
+					<nav aria-label="Page navigation" th:if="${page.content.size()>0}">
 						<ul class="pagination">
 							<li class="page-item " th:classappend="${!(page.getNumber() > 0) ? 'disabled' : ''}" >
-								<!--								  th:if="${(page.getNumber() > 0)}"-->
-								<a th:class="page-link" th:unless="${(page.getNumber() > 0)}"
-								   th:href="@{'/category?pageNumber=1' + ${filters}}">Prev</a>
-								<a th:class="page-link" th:if="${(page.getNumber() > 0)}"
-								   th:href="@{'/category?pageNumber=' + ${page.getNumber()} + ${filters}}">Prev</a>
+
+								<a class="page-link"
+								   th:href="@{'/category?pageNumber=' + ${page.previousOrFirstPageable().getPageNumber() + 1} + ${filtersDef}}">
+									<i class="ion-ios-arrow-left"></i></a>
 							</li>
 
 							<li class="page-item" th:classappend="${page.getNumber() + 1 == i ? 'active' : ''}"
 								th:each="i : ${#numbers.sequence(1, page.getTotalPages())}">
-								<a th:class="page-link" th:text="${i}" th:href="@{'/category?pageNumber=' + ${i} + ${filters}}"></a>
+								<a class="page-link" th:text="${i}" th:href="@{'/category?pageNumber=' + ${i} + ${filtersDef}}"></a>
 							</li>
 
 							<li class="page-item" th:classappend="${!(page.getNumber() < page.getTotalPages() - 1) ? 'disabled' : ''}" >
-								<a th:class="page-link" th:unless="${(page.getNumber() < page.getTotalPages() - 1)}"
-								   th:href="@{'/category?pageNumber=' + ${page.getTotalPages()} + ${filters}}">Next</a>
-								<a th:class="page-link" th:if="${(page.getNumber() < page.getTotalPages() - 1)}"
-								   th:href="@{'/category?pageNumber=' + ${page.getNumber() + 2} + ${filters}}">Next</a>
+								<a class="page-link"
+								   th:href="@{'/category?pageNumber=' + ${page.nextOrLastPageable().getPageNumber() + 1} + ${filtersDef}}">
+									<i class="ion-ios-arrow-right"></i></a>
 							</li>
 						</ul>
 					</nav>
+					<div th:if="${page.content.size()==0}">
+						<h3 class="page-title">
+							<span th:text="'Pages not found'">Computer</span> </h3>
+					</div>
+
 		        </div>
 		      </div>
 		      <div class="col-md-4 sidebar">

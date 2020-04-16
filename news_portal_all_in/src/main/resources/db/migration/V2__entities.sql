@@ -11,6 +11,7 @@ CREATE TABLE articles (
     last_view_date        timestamp NULL,
     main_picture_url      VARCHAR(300) NULL,
     status                VARCHAR(25) NULL,
+    author                VARCHAR(300),
     PRIMARY KEY (id)
 );
 
@@ -34,6 +35,7 @@ CREATE TABLE comments (
     article_id            bigint NOT NULL,
     user_id               bigint NOT NULL,
     text                  VARCHAR(10000),
+    id_parent             bigint NULL,
     PRIMARY KEY (id),
     FOREIGN KEY(article_id)
     REFERENCES articles (id),
@@ -45,12 +47,15 @@ DROP TABLE IF EXISTS comment_likes;
 CREATE TABLE comment_likes (
   comment_id            bigint NOT NULL,
   user_id               bigint NOT NULL,
+  article_id            bigint NOT NULL,
   value                 integer NOT NULL,
   PRIMARY KEY (comment_id,user_id),
   FOREIGN KEY(comment_id)
   REFERENCES comments (id),
   FOREIGN KEY (user_id)
-  REFERENCES users (id)
+  REFERENCES users (id),
+  FOREIGN KEY (article_id)
+  REFERENCES articles (id)
 );
 
 DROP TABLE IF EXISTS links;
@@ -112,7 +117,7 @@ ADD CONSTRAINT fk_categories
   FOREIGN KEY (category_id)
   REFERENCES article_categories (id)
   ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
+  ON UPDATE CASCADE;
 
 DROP TABLE IF EXISTS contacts;
 CREATE TABLE contacts (
@@ -135,4 +140,12 @@ CREATE TABLE messages (
     REFERENCES contacts (id)
 );
 
+DROP TABLE IF EXISTS articles_authors;
+CREATE TABLE articles_authors(
+    article_id      bigint,
+    user_id         bigint,
+    PRIMARY KEY (article_id,user_id),
+    FOREIGN KEY (article_id) REFERENCES articles(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
 

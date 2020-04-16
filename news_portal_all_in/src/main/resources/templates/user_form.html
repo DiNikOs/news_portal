@@ -1,77 +1,81 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:replace="fragments/header.html :: head"></head>
 
 <body class="skin-orange">
-
-<header class="primary" >
+<!-- HEADER -->
+<header class="primary">
     <div th:replace="fragments/header.html :: firstbar"></div>
     <nav th:replace="fragments/header.html :: nav"></nav>
 </header>
+<!-- /HEADER -->
 
-<section class="login first grey" id="editbox">
+<section class="page">
     <div class="container">
         <div class="row">
-            <div class="box-wrapper">
-                <div class="box box-border">
-                    <div class="box-body">
-                        <h2 class="mb-4" th:if="${edit}" >Edit user</h2>
-                        <h2 class="mb-4" th:if="${create}" >Create user</h2>
+            <div class="callout">
 
-                        <form th:object="${user}" method="post" th:action="@{/user/update}">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <input th:type="hidden" th:field="*{id}">
-                                    <div class="form-group">
-                                        <label for="username">User name</label>
-                                        <input th:field="*{username}" type="text" class="form-control" id="username" placeholder="Enter user name" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="fw" for="password">Password</label>
-                                        <input th:field="*{password}" type="password" class="form-control" id="password" placeholder="Password" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="email">Email</label>
-                                        <input th:field="*{email}" type="text" class="form-control" id="email" placeholder="Enter user email" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="firstname">First name</label>
-                                        <input th:field="*{firstName}" type="text" class="form-control" id="firstname" placeholder="Enter user first name">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="lastname">Last name</label>
-                                        <input th:field="*{lastName}" type="text" class="form-control" id="lastname" placeholder="Enter user last name">
-                                    </div>
-                                    <div class="form-group" >
-                                        <label for="roles">User roles</label>
-                                        <select multiple class="form-control" id="roles" th:field="*{roles}" required>
-                                            <option th:each="role : ${roles}"
-                                                    th:text="${role.name}"
-                                                    th:value="${role.id}"
-                                                    th:selected="${user.roles.contains(role)}"></option>
-                                        </select>
-                                    </div>
+                <div class="box-body">
+                    <h1 class="mb-4" th:if="${edit}">Edit user</h1>
+                    <h1 class="mb-4" th:if="${create}">Create user</h1>
+
+                    <form th:object="${user}" method="post" th:action="@{/users/update_user}">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <input th:type="hidden" th:field="*{id}">
+                                <div class="form-group">
+                                    <label for="username">User name</label>
+                                    <input th:field="*{username}" type="text" class="form-control" id="username"
+                                           placeholder="Enter user name" required>
                                 </div>
-                                <div class="card-footer bg-white">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                <div class="form-group">
+                                    <label class="fw" for="password">Password</label>
+                                    <input th:field="*{password}" type="password" class="form-control" id="password"
+                                           placeholder="Password" required>
+                                </div>
+<!--                                <div class="form-group">-->
+<!--                                    <label class="fw" for="matchingpassword">Repeat password</label>-->
+<!--                                    <input type="password" class="form-control" name="matchingPassword"-->
+<!--                                           placeholder="confirm password (*)" th:field="*{matchingPassword}">-->
+<!--                                </div>-->
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input th:field="*{email}" type="text" class="form-control" id="email"
+                                           placeholder="Enter user email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="firstname">First name</label>
+                                    <input th:field="*{firstName}" type="text" class="form-control" id="firstname"
+                                           placeholder="Enter user first name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastname">Last name</label>
+                                    <input th:field="*{lastName}" type="text" class="form-control" id="lastname"
+                                           placeholder="Enter user last name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="roles">User roles</label>
+                                    <select multiple class="form-control" id="roles" th:field="*{roles}" required>
+                                        <option th:each="role : ${roles}"
+                                                th:text="${role.name}"
+                                                th:value="${role.id}"
+                                                th:selected="${user.roles.contains(role)}"></option>
+                                    </select>
                                 </div>
                             </div>
-                        </form>
-                    </div>
+                            <div class="card-footer bg-white">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+
                 </div>
-            </div>
-            <div class="col-3">
 
             </div>
-            <div class="col-3">
-
-            </div>
-
         </div>
-        <!--    <div th:replace="admin/sidebar :: sidebar"></div>-->
-
     </div>
 </section>
 
@@ -81,8 +85,6 @@
 <!-- /FOOTER -->
 
 <!-- JS -->
-<script th:replace="fragments/footer.html :: scripts"></script>
-</body>
-
+<script th:remove="tag" th:replace="fragments/scripts.html :: scripts"></script>
 </body>
 </html>

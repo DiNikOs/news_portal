@@ -30,7 +30,7 @@ public class ArticleCategory {
 
     @JsonBackReference
     @OneToMany(mappedBy = "category",
-            cascade = CascadeType.ALL
+            cascade = {CascadeType.REFRESH,CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST}
     )
     private List<Article> articles;
 

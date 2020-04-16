@@ -37,6 +37,10 @@ public class CommentLike {
     @Column(name = "value")
     int value;
 
+    @JsonManagedReference
+    @ManyToOne
+    Article article;
+
     @Setter
     @EqualsAndHashCode
     @Access(value = AccessType.FIELD)

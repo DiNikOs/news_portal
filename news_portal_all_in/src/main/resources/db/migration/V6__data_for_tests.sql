@@ -6,7 +6,7 @@ INSERT INTO article_categories (name)
 -- В тегах картинок только название файла, url формируется на сервере, исходя из режима "разработка" или "продакшен"
 -- (соответственно, добавляется http://localhost:port/path/ или https://example.com/path )
 
-INSERT INTO articles (category_id,created, last_view_date, main_picture_url, published, status, title, text, total_views)
+INSERT INTO articles (category_id,created, last_view_date, main_picture_url, published, status, title, text, total_views,author)
 VALUES
 (
     1,
@@ -49,7 +49,7 @@ VALUES
         Lacus vestibulum sed arcu non odio euismod lacinia. Nam aliquam sem et tortor. Aliquam vestibulum morbi blandit cursus risus at. At consectetur lorem donec massa sapien. Tortor consequat id porta nibh venenatis cras sed. Ornare suspendisse sed nisi lacus sed viverra tellus in hac. Lacus luctus accumsan tortor posuere ac ut consequat semper viverra. Quis lectus nulla at volutpat diam ut venenatis tellus. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. Leo in vitae turpis massa sed elementum tempus. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non. Justo eget magna fermentum iaculis. Viverra tellus in hac habitasse platea dictumst vestibulum. Viverra orci sagittis eu volutpat odio facilisis mauris sit. Amet facilisis magna etiam tempor orci eu lobortis. Amet volutpat consequat mauris nunc congue. Lorem ipsum dolor sit amet. Morbi non arcu risus quis varius. Id eu nisl nunc mi ipsum faucibus vitae aliquet.
     </p>
 ',
-    100
+    100, 'А.С.Пушкин'
 ),
 
 --         <p>TEXT</p> <img src="http://localhost:8199/news/images/news/img01.jpg"/> <p>TEXT</p>
@@ -95,7 +95,7 @@ VALUES
         Lacus vestibulum sed arcu non odio euismod lacinia. Nam aliquam sem et tortor. Aliquam vestibulum morbi blandit cursus risus at. At consectetur lorem donec massa sapien. Tortor consequat id porta nibh venenatis cras sed. Ornare suspendisse sed nisi lacus sed viverra tellus in hac. Lacus luctus accumsan tortor posuere ac ut consequat semper viverra. Quis lectus nulla at volutpat diam ut venenatis tellus. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. Leo in vitae turpis massa sed elementum tempus. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non. Justo eget magna fermentum iaculis. Viverra tellus in hac habitasse platea dictumst vestibulum. Viverra orci sagittis eu volutpat odio facilisis mauris sit. Amet facilisis magna etiam tempor orci eu lobortis. Amet volutpat consequat mauris nunc congue. Lorem ipsum dolor sit amet. Morbi non arcu risus quis varius. Id eu nisl nunc mi ipsum faucibus vitae aliquet.
     </p>
 ',
-    200
+    200, 'М.Ю.Лермонтов'
 ),
 
 (
@@ -139,7 +139,7 @@ VALUES
         Lacus vestibulum sed arcu non odio euismod lacinia. Nam aliquam sem et tortor. Aliquam vestibulum morbi blandit cursus risus at. At consectetur lorem donec massa sapien. Tortor consequat id porta nibh venenatis cras sed. Ornare suspendisse sed nisi lacus sed viverra tellus in hac. Lacus luctus accumsan tortor posuere ac ut consequat semper viverra. Quis lectus nulla at volutpat diam ut venenatis tellus. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. Leo in vitae turpis massa sed elementum tempus. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non. Justo eget magna fermentum iaculis. Viverra tellus in hac habitasse platea dictumst vestibulum. Viverra orci sagittis eu volutpat odio facilisis mauris sit. Amet facilisis magna etiam tempor orci eu lobortis. Amet volutpat consequat mauris nunc congue. Lorem ipsum dolor sit amet. Morbi non arcu risus quis varius. Id eu nisl nunc mi ipsum faucibus vitae aliquet.
 </p>
 ',
-    300
+    300, 'А.П.Чехов'
 ),
 
 (
@@ -183,7 +183,7 @@ Malesuada fames ac turpis egestas sed. Quis varius quam quisque id diam. Porttit
 Lacus vestibulum sed arcu non odio euismod lacinia. Nam aliquam sem et tortor. Aliquam vestibulum morbi blandit cursus risus at. At consectetur lorem donec massa sapien. Tortor consequat id porta nibh venenatis cras sed. Ornare suspendisse sed nisi lacus sed viverra tellus in hac. Lacus luctus accumsan tortor posuere ac ut consequat semper viverra. Quis lectus nulla at volutpat diam ut venenatis tellus. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. Leo in vitae turpis massa sed elementum tempus. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non. Justo eget magna fermentum iaculis. Viverra tellus in hac habitasse platea dictumst vestibulum. Viverra orci sagittis eu volutpat odio facilisis mauris sit. Amet facilisis magna etiam tempor orci eu lobortis. Amet volutpat consequat mauris nunc congue. Lorem ipsum dolor sit amet. Morbi non arcu risus quis varius. Id eu nisl nunc mi ipsum faucibus vitae aliquet.
 </p>
 ',
-    500
+    500, 'Н.Гоголь'
 ),
 
 (
@@ -227,7 +227,7 @@ Malesuada fames ac turpis egestas sed. Quis varius quam quisque id diam. Porttit
 Lacus vestibulum sed arcu non odio euismod lacinia. Nam aliquam sem et tortor. Aliquam vestibulum morbi blandit cursus risus at. At consectetur lorem donec massa sapien. Tortor consequat id porta nibh venenatis cras sed. Ornare suspendisse sed nisi lacus sed viverra tellus in hac. Lacus luctus accumsan tortor posuere ac ut consequat semper viverra. Quis lectus nulla at volutpat diam ut venenatis tellus. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. Leo in vitae turpis massa sed elementum tempus. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non. Justo eget magna fermentum iaculis. Viverra tellus in hac habitasse platea dictumst vestibulum. Viverra orci sagittis eu volutpat odio facilisis mauris sit. Amet facilisis magna etiam tempor orci eu lobortis. Amet volutpat consequat mauris nunc congue. Lorem ipsum dolor sit amet. Morbi non arcu risus quis varius. Id eu nisl nunc mi ipsum faucibus vitae aliquet.
 </p>
 ',
-    100
+    100, 'Л.Толстой'
 ),
 
 (
@@ -271,7 +271,7 @@ Malesuada fames ac turpis egestas sed. Quis varius quam quisque id diam. Porttit
 Lacus vestibulum sed arcu non odio euismod lacinia. Nam aliquam sem et tortor. Aliquam vestibulum morbi blandit cursus risus at. At consectetur lorem donec massa sapien. Tortor consequat id porta nibh venenatis cras sed. Ornare suspendisse sed nisi lacus sed viverra tellus in hac. Lacus luctus accumsan tortor posuere ac ut consequat semper viverra. Quis lectus nulla at volutpat diam ut venenatis tellus. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. Leo in vitae turpis massa sed elementum tempus. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non. Justo eget magna fermentum iaculis. Viverra tellus in hac habitasse platea dictumst vestibulum. Viverra orci sagittis eu volutpat odio facilisis mauris sit. Amet facilisis magna etiam tempor orci eu lobortis. Amet volutpat consequat mauris nunc congue. Lorem ipsum dolor sit amet. Morbi non arcu risus quis varius. Id eu nisl nunc mi ipsum faucibus vitae aliquet.
 </p>
 ',
-    200
+    200, 'А.Толстой'
 ),
 
 (
@@ -315,7 +315,7 @@ Malesuada fames ac turpis egestas sed. Quis varius quam quisque id diam. Porttit
 Lacus vestibulum sed arcu non odio euismod lacinia. Nam aliquam sem et tortor. Aliquam vestibulum morbi blandit cursus risus at. At consectetur lorem donec massa sapien. Tortor consequat id porta nibh venenatis cras sed. Ornare suspendisse sed nisi lacus sed viverra tellus in hac. Lacus luctus accumsan tortor posuere ac ut consequat semper viverra. Quis lectus nulla at volutpat diam ut venenatis tellus. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. Leo in vitae turpis massa sed elementum tempus. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non. Justo eget magna fermentum iaculis. Viverra tellus in hac habitasse platea dictumst vestibulum. Viverra orci sagittis eu volutpat odio facilisis mauris sit. Amet facilisis magna etiam tempor orci eu lobortis. Amet volutpat consequat mauris nunc congue. Lorem ipsum dolor sit amet. Morbi non arcu risus quis varius. Id eu nisl nunc mi ipsum faucibus vitae aliquet.
 </p>
 ',
-    500
+    500, 'Ф.Достоевский'
 ),
 
 (
@@ -359,7 +359,7 @@ Malesuada fames ac turpis egestas sed. Quis varius quam quisque id diam. Porttit
 Lacus vestibulum sed arcu non odio euismod lacinia. Nam aliquam sem et tortor. Aliquam vestibulum morbi blandit cursus risus at. At consectetur lorem donec massa sapien. Tortor consequat id porta nibh venenatis cras sed. Ornare suspendisse sed nisi lacus sed viverra tellus in hac. Lacus luctus accumsan tortor posuere ac ut consequat semper viverra. Quis lectus nulla at volutpat diam ut venenatis tellus. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. Leo in vitae turpis massa sed elementum tempus. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non. Justo eget magna fermentum iaculis. Viverra tellus in hac habitasse platea dictumst vestibulum. Viverra orci sagittis eu volutpat odio facilisis mauris sit. Amet facilisis magna etiam tempor orci eu lobortis. Amet volutpat consequat mauris nunc congue. Lorem ipsum dolor sit amet. Morbi non arcu risus quis varius. Id eu nisl nunc mi ipsum faucibus vitae aliquet.
 </p>
 ',
-    400
+    400, 'И.Тургенев'
 ),
 
 (
@@ -403,11 +403,11 @@ Malesuada fames ac turpis egestas sed. Quis varius quam quisque id diam. Porttit
 Lacus vestibulum sed arcu non odio euismod lacinia. Nam aliquam sem et tortor. Aliquam vestibulum morbi blandit cursus risus at. At consectetur lorem donec massa sapien. Tortor consequat id porta nibh venenatis cras sed. Ornare suspendisse sed nisi lacus sed viverra tellus in hac. Lacus luctus accumsan tortor posuere ac ut consequat semper viverra. Quis lectus nulla at volutpat diam ut venenatis tellus. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. Leo in vitae turpis massa sed elementum tempus. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non. Justo eget magna fermentum iaculis. Viverra tellus in hac habitasse platea dictumst vestibulum. Viverra orci sagittis eu volutpat odio facilisis mauris sit. Amet facilisis magna etiam tempor orci eu lobortis. Amet volutpat consequat mauris nunc congue. Lorem ipsum dolor sit amet. Morbi non arcu risus quis varius. Id eu nisl nunc mi ipsum faucibus vitae aliquet.
 </p>
 ',
-    1000
+    1000,'М.Булгаков'
 ),
 
 (
-    5,
+    10,
     current_date,
     current_date,
     '<img src="http://localhost:8199/news/images/news/img10.jpg"/>',
@@ -447,7 +447,7 @@ Malesuada fames ac turpis egestas sed. Quis varius quam quisque id diam. Porttit
 Lacus vestibulum sed arcu non odio euismod lacinia. Nam aliquam sem et tortor. Aliquam vestibulum morbi blandit cursus risus at. At consectetur lorem donec massa sapien. Tortor consequat id porta nibh venenatis cras sed. Ornare suspendisse sed nisi lacus sed viverra tellus in hac. Lacus luctus accumsan tortor posuere ac ut consequat semper viverra. Quis lectus nulla at volutpat diam ut venenatis tellus. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. Leo in vitae turpis massa sed elementum tempus. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non. Justo eget magna fermentum iaculis. Viverra tellus in hac habitasse platea dictumst vestibulum. Viverra orci sagittis eu volutpat odio facilisis mauris sit. Amet facilisis magna etiam tempor orci eu lobortis. Amet volutpat consequat mauris nunc congue. Lorem ipsum dolor sit amet. Morbi non arcu risus quis varius. Id eu nisl nunc mi ipsum faucibus vitae aliquet.
 </p>
 ',
-    300
+    300,'А.Фет'
 ),
 
 (
@@ -491,7 +491,7 @@ Malesuada fames ac turpis egestas sed. Quis varius quam quisque id diam. Porttit
 Lacus vestibulum sed arcu non odio euismod lacinia. Nam aliquam sem et tortor. Aliquam vestibulum morbi blandit cursus risus at. At consectetur lorem donec massa sapien. Tortor consequat id porta nibh venenatis cras sed. Ornare suspendisse sed nisi lacus sed viverra tellus in hac. Lacus luctus accumsan tortor posuere ac ut consequat semper viverra. Quis lectus nulla at volutpat diam ut venenatis tellus. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. Leo in vitae turpis massa sed elementum tempus. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non. Justo eget magna fermentum iaculis. Viverra tellus in hac habitasse platea dictumst vestibulum. Viverra orci sagittis eu volutpat odio facilisis mauris sit. Amet facilisis magna etiam tempor orci eu lobortis. Amet volutpat consequat mauris nunc congue. Lorem ipsum dolor sit amet. Morbi non arcu risus quis varius. Id eu nisl nunc mi ipsum faucibus vitae aliquet.
 </p>
 ',
-    250
+    250, 'А.Куприн'
 );
 
 INSERT INTO comments (created, article_id, user_id, text)
@@ -537,3 +537,11 @@ VALUES
 INSERT INTO tags (name)
 VALUES
 ('JAVA'),('Spring'),('Web'),('Bootstrap 3'),('Web Design'),('CSS3'),('Html'),('Soft'),('Skill');
+
+	INSERT INTO newsportal.comment_likes(
+	comment_id, user_id, article_id, value)
+	VALUES (1, 1, 1, 1),(1, 2,1, 1),(2, 1,1, -1),(2, 2,1, -1),(3, 1,1, 1),(4, 2,1, -1),(5, 1,1, 1),(5, 2,1, -1);
+
+INSERT INTO newsportal.articles_tags(
+	article_id, tag_id)
+	VALUES (1, 1),	(2,2),	(3,3),	(4, 1),	(5,2),	(6,3),	(7, 1),	(8,2),	(9,3),	(10, 4)	;
