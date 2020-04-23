@@ -10,6 +10,7 @@ package ru.geek.news_portal.base.specifications;
 import org.springframework.data.jpa.domain.Specification;
 
 import ru.geek.news_portal.base.entities.Article;
+import ru.geek.news_portal.dto.ArticleDto;
 
 import java.math.BigDecimal;
 

@@ -13,13 +13,11 @@ import ru.geek.news_portal.base.entities.ArticleCategory;
 import ru.geek.news_portal.dto.ArticleDto;
 import ru.geek.news_portal.services.ArticleCategoryService;
 import ru.geek.news_portal.services.ArticleService;
-import ru.geek.news_portal.services.TagsService;
 import ru.geek.news_portal.utils.ArticleFilter;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -50,7 +48,7 @@ public class CategoryController {
                                ,@PathVariable (value = "id", required = false) Long id) {
         Integer pageNumber = 0;
         Integer pageLimit = 5;
-        ArticleCategory category = null;
+        boolean categoryOne = false;
         if (params.size()==0) {
             if (id==null) {
                 params.put("cat_id", "");
@@ -72,11 +70,11 @@ public class CategoryController {
             }
         }
         if (params.containsKey("cat_id") && params.get("cat_id").length()>0) {
-            category = articleCategoryService.findOneById(Long.parseLong(params.get("cat_id")));
+            categoryOne = true;
         }
 
         ArticleFilter articleFilter = new ArticleFilter(params);
-        List<ArticleDto> articles = articleService.findAllArticles();
+        List<ArticleDto> articles = articleService.findAllDtoArticles();
         List<ArticleCategory> categories = articleCategoryService.findAll();
 
         Pageable pageRequest = PageRequest.of(pageNumber, pageLimit, Sort.Direction.ASC, "id");
@@ -84,7 +82,7 @@ public class CategoryController {
 
         model.addAttribute("filtersDef", articleFilter.getFilterDefinition());
         model.addAttribute("articles", articles);
-        model.addAttribute("category", category);
+        model.addAttribute("categoryOne", categoryOne);
         model.addAttribute("categories", categories);
         model.addAttribute("pageNumber", pageNumber);
         model.addAttribute("pageLimit", pageLimit);

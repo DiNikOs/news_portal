@@ -16,10 +16,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ru.geek.news_portal.base.entities.Article;
 import ru.geek.news_portal.base.entities.Role;
 import ru.geek.news_portal.base.entities.User;
 import ru.geek.news_portal.base.repo.UserRepository;
 import ru.geek.news_portal.base.repo.RoleRepository;
+import ru.geek.news_portal.dto.ArticleDto;
 import ru.geek.news_portal.dto.UserAccountDTO;
 import ru.geek.news_portal.utils.SystemUser;
 
@@ -33,6 +35,8 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private BCryptPasswordEncoder passwordEncoder;
+    private ArticleService articleService;
+    private List<Article> articleList;
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -49,6 +53,11 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Autowired
+    public void setArticleService(ArticleService articleService) {
+        this.articleService = articleService;
+    }
+
     @Override
     @Transactional
     public User findByUsername(String username) {
@@ -59,6 +68,28 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User findById(Long id) {
         return userRepository.findOneById(id);
+    }
+
+    /**
+     * @author Ostrovskiy Dmitriy
+     * @created 17/04/2020
+     * Метод возвращает статьи написанные пользователем
+     * v1.0
+     */
+    @Transactional
+    public List<Article> findArticlesByUser(String username) {
+        return articleService.findArticlesByAuthor(username);
+    }
+
+    /**
+     * @author Ostrovskiy Dmitriy
+     * @created 17/04/2020
+     * Метод возвращает статьи написанные пользователем
+     * v1.0
+     */
+    @Transactional
+    public List<ArticleDto> findArticlesByUserDto(String username) {
+        return articleService.findArticlesDtoByAuthor(username);
     }
 
     @Override
@@ -180,6 +211,7 @@ public class UserServiceImpl implements UserService {
         userDTO.setArticleRatings(user.getArticleRatings());
         userDTO.setComments(user.getComments());
         userDTO.setCommentLikes(user.getCommentLikes());
+        userDTO.setArticleList(findArticlesByUser(username));
 
         return userDTO;
     }

@@ -11,7 +11,11 @@ import ru.geek.news_portal.services.*;
 import ru.geek.news_portal.utils.ierarhy_comments.Tree;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author Farida Gareeva
@@ -29,6 +33,7 @@ public class ArticleController {
     private ArticleLikeService articleLikeService;
     private ArticleCategoryService articleCategoryService;
     private CommentLikeService commentLikeService;
+    private TagsServiceImpl tagsService;
 
     //Временное решение до появления сервиса предпочтений пользователя
     private Long RECOMENDED_NEWS = 5L;
@@ -39,12 +44,14 @@ public class ArticleController {
                              CommentService commentService,
                              ArticleLikeService articleLikeService,
                              ArticleCategoryService articleCategoryService,
-                             CommentLikeService commentLikeService) {
+                             CommentLikeService commentLikeService,
+                             TagsServiceImpl tagsService) {
         this.articleService = articleService;
         this.commentService = commentService;
         this.articleLikeService = articleLikeService;
         this.articleCategoryService = articleCategoryService;
         this.commentLikeService = commentLikeService;
+        this.tagsService = tagsService;
     }
 
     /**
@@ -67,6 +74,7 @@ public class ArticleController {
             Tree<Long, Comment> tree = commentService.getCommentsTreeByArticle_id(id);
 
             ArticleDto article = articleService.findArticleDtoById(id);
+//            Article article = articleService.findById(id);
             model.addAttribute("article", article);
             model.addAttribute("articles", articleService.findAllArticles());
             model.addAttribute("comments", tree.getChildren(null));
@@ -81,7 +89,57 @@ public class ArticleController {
             e.printStackTrace();
             return "ui/404";
         }
+    }
 
+    /**
+     * @author Ostrovskiy Dmitriy
+     * @created 17/04/2020
+     * Контроллер для сохранения и просмотра созданной статьи
+     * v1.0
+     */
+    @PostMapping("/editor_article")
+    public String saveArticle(Model model, @RequestParam Map<String, String> params, Article article,
+                              HttpServletRequest request, HttpServletResponse response,
+                              @RequestParam (value = "mainPicture", required = false) String mainPicture,
+                              @RequestParam (value = "tag_id", required = false) ArrayList<String> tagIdArr,
+                              @RequestParam (value = "tags", required = false) ArrayList<String> tagsArr,
+                              @RequestParam (value = "firstName", required = false) String firstName,
+                              @RequestParam (value = "lastName", required = false) String lastName) {
+
+        ArticleCategory category = null;
+        List<Tag> tags = new ArrayList<>();
+
+        if (params.containsKey("cat_id")) {
+            category = articleCategoryService.findOneById(Long.parseLong(params.get("cat_id")));
+        }
+
+//        List<ArticleDto> articles =  articleService.findAllArticles();
+        List<Article> articles =  articleService.findAllArticles();
+        List<ArticleCategory> categories = articleCategoryService.findAll();
+        if (tagsArr!=null){
+            for (int i = 0; i < tagsArr.size(); i++) {
+                tags.add(tagsService.findById(Long.parseLong(tagsArr.get(i))));
+            }
+            article.setTags(tags);
+        }
+
+        String url = null;
+        if (mainPicture.contains(":")) {
+            url = mainPicture;
+        } else {
+            url = "http://localhost:8199/news/";
+        }
+
+        article.setMainPictureUrl("<img src=\"" + url + mainPicture + "\"/>");
+        article.setAuthor(firstName + " " + lastName);
+        articleService.save(article, request);
+        Long id = article.getId();
+
+        model.addAttribute("articles", articles);
+        model.addAttribute("article", article);
+        model.addAttribute("categories", categories);
+        model.addAttribute("category", category);
+        return "redirect:/single/articles/" + id;
     }
 
     @PostMapping("/comment/{article_id}")

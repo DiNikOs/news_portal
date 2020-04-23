@@ -18,6 +18,9 @@ import ru.geek.news_portal.base.repo.ArticleRepository;
 import ru.geek.news_portal.dto.ArticleDto;
 import ru.geek.news_portal.exception.NotFoundException;
 import ru.geek.news_portal.utils.ListMapper;
+
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -45,8 +48,17 @@ public class ArticleService {
      * Created 28/03/2020
      * Метод, возвращающий список ArticleDto
      */
-    public List<ArticleDto> findAllArticles() {
+    public List<ArticleDto> findAllDtoArticles() {
         return mapToDtoList(articleRepository.findAll());
+    }
+
+    /**
+     * @author Ostrovskiy Dmitriy
+     * @created 17/04/2020
+     * Метод, возвращающий список Article
+     */
+    public List<Article> findAllArticles() {
+        return articleRepository.findAll();
     }
 
     /**
@@ -72,6 +84,26 @@ public class ArticleService {
 
     public Article findById(Long id) {
         return articleRepository.findById(id).orElseThrow(IllegalStateException::new);
+    }
+
+    /**
+     * @author Ostrovskiy Dmitriy
+     * @created 17/04/2020
+     * Метод возвращает статьи написанннные автором
+     * v1.0
+     */
+    public List<Article> findArticlesByAuthor(String author) {
+        return articleRepository.findArticlesByAuthor(author);
+    }
+
+    /**
+     * @author Ostrovskiy Dmitriy
+     * @created 17/04/2020
+     * Метод возвращает ArticleDto написанннные автором
+     * v1.0
+     */
+    public List<ArticleDto> findArticlesDtoByAuthor(String author) {
+        return mapToDtoList(articleRepository.findArticlesByAuthor(author));
     }
 
     /**
@@ -151,5 +183,24 @@ public class ArticleService {
   
   public Page<Article> findAllByPagingAndFiltering(Specification<Article> specification, Pageable pageable) {
         return articleRepository.findAll(specification, pageable);
+    }
+
+
+    /**
+     * @author Ostrovskiy Dmitriy
+     * @created 17/04/2020
+     * Метод для сохранения статьи в репозиторий
+     * v1.0(тестовое сохранение)
+     */
+    public void save(Article article, HttpServletRequest request) {
+        article.setCreated(LocalDateTime.now());
+        article.setTitle(article.getTitle());
+        article.setText(article.getText());
+        article.setPublished(LocalDateTime.now());
+        article.setCategory(article.getCategory());
+        article.setTotalViews(0L);
+        article.setLastViewDate(LocalDateTime.now());
+        article.setStatus(Article.Status.EDIT);
+        articleRepository.save(article);
     }
 }

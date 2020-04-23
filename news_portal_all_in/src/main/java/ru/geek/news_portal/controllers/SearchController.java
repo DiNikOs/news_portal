@@ -14,12 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.geek.news_portal.base.entities.Article;
 import ru.geek.news_portal.base.entities.ArticleCategory;
 import ru.geek.news_portal.dto.ArticleDto;
-import ru.geek.news_portal.dto.PageLimitDto;
 import ru.geek.news_portal.services.ArticleCategoryService;
 import ru.geek.news_portal.services.ArticleService;
 import ru.geek.news_portal.utils.ArticleFilter;
@@ -27,7 +25,6 @@ import ru.geek.news_portal.utils.ArticleFilter;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Array;
 import java.util.*;
 
 @Controller
@@ -104,7 +101,8 @@ public class SearchController {
         }
 
         ArticleFilter articleFilter = new ArticleFilter(params);
-        List<ArticleDto> articles = articleService.findAllArticles();
+//        List<ArticleDto> articles = articleService.findAllArticles();
+        List<Article> articles = articleService.findAllArticles();
         List<ArticleCategory> categories = articleCategoryService.findAll();
 
         Pageable pageRequest = PageRequest.of(pageNumber, pageLimit, Sort.Direction.ASC, "id");

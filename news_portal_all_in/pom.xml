@@ -18,6 +18,13 @@
     <properties>
         <java.version>1.8</java.version>
         <maven.deploy.skip>true</maven.deploy.skip>
+        <webjars-locator.version>0.30</webjars-locator.version>
+        <lombok.version>1.18.12</lombok.version>
+        <flyway.version>6.0.1</flyway.version>
+        <jquery.version>3.4.1</jquery.version>
+        <font-awesome.version>3.2.1</font-awesome.version>
+        <jquery-easing.version>1.4.1</jquery-easing.version>
+        <bootstrap.version>4.4.1</bootstrap.version>
     </properties>
 
     <dependencies>
@@ -43,6 +50,13 @@
             <artifactId>spring-boot-starter-security</artifactId>
             <version>2.2.5.RELEASE</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>2.2.5.RELEASE</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -93,12 +107,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>2.2.5.RELEASE</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>
@@ -142,31 +150,37 @@
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
-            <version>3.4.1</version>
+            <version>${jquery.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery-easing</artifactId>
-            <version>1.4.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>jquery.scrollTo</artifactId>
-            <version>2.1.1</version>
+            <version>${jquery-easing.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>font-awesome</artifactId>
-            <version>3.2.1</version>
+            <version>${font-awesome.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap</artifactId>
-            <version>4.3.1</version>
+            <version>${bootstrap.version}</version>
+        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.webjars</groupId>-->
+<!--            <artifactId>jquery.scrollTo</artifactId>-->
+<!--            <version>2.1.1</version>-->
+<!--        </dependency>-->
+
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>webjars-locator</artifactId>
+            <version>${webjars-locator.version}</version>
         </dependency>
 
         <dependency>
@@ -197,6 +211,8 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
             <optional>true</optional>
         </dependency>
 
@@ -217,6 +233,7 @@
 
 
 
+
       <!-- https://mvnrepository.com/artifact/org.hamcrest/hamcrest-library -->
       <dependency>
         <groupId>org.hamcrest</groupId>
@@ -232,7 +249,6 @@
         <version>2.4.0</version>
       </dependency>
 
-
     </dependencies>
 
 
@@ -246,7 +262,7 @@
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
-                <version>6.0.1</version>
+                <version>${flyway.version}</version>
                 <configuration>
                     <configFiles>src/main/resources/flyway.conf</configFiles>
                 </configuration>

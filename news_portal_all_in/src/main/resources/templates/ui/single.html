@@ -92,13 +92,6 @@
 							<footer>
 								<div class="col">
 									<ul class="tags">
-										<li><a href="#">Free Themes</a></li>
-										<li><a href="#">Bootstrap 3</a></li>
-
-									</ul>
-								</div>
-								<div class="col">
-									<ul class="tags">
 										<li  th:each="tag,state : ${article.tags}" >
 											<a th:href="@{/search/tag/{id}(id=${tag.id})}" th:text="${tag.name}">Free Themes</a></li>
 									</ul>
@@ -162,7 +155,7 @@
 							</figure>
 							<div class="details">
 								<div class="job">Web Developer</div>
-								<h3 class="name">John Doe</h3>
+								<h3 class="name" th:text="${article.author}">John Doe</h3>
 								<p>Nulla sagittis rhoncus nisi, vel gravida ante. Nunc lobortis condimentum elit, quis porta ipsum rhoncus vitae. Curabitur magna leo, porta vel fringilla gravida, consectetur in libero. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.</p>
 								<ul class="social trp sm">
 									<li>

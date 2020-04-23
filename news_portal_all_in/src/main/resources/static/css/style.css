@@ -715,6 +715,22 @@ section.search .search-result {
   box-shadow: 0 1px 2px #ddd;
 }
 
+.form-middle:focus {
+  /*padding: 50px;*/
+  position: fixed; top: 50%; left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.form-middle {
+  /*padding: 50px;*/
+  position: fixed; top: 50%; left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
 .btn {
   font-size: 15px;
   border-radius: 0;

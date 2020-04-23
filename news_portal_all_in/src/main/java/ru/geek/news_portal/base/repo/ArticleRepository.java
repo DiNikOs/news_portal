@@ -8,6 +8,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import ru.geek.news_portal.base.entities.Article;
 
+import java.util.List;
+
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, Long>, JpaSpecificationExecutor<Article> {
 
@@ -24,4 +26,12 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, JpaSpec
      * Метод, возвращающий статьи, сортированные по кол-ву просмотров
      */
     Page<Article> findAllByOrderByTotalViewsDesc(Pageable pageable);
+
+    /**
+     * @author Dmitriy Ostrovskiy
+     * @created 16/04/2020
+     * Метод, возвращающий статьи, написанные автором
+     */
+    List<Article> findArticlesByAuthor(String author);
+
 }

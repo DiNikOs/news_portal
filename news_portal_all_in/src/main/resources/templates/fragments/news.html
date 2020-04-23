@@ -149,7 +149,7 @@
 </div>
 
 <div th:fragment="article_mini">
-    <article class="article-mini" th:each="article,state : ${@articleService.findAllArticles()}">
+    <article class="article-mini" th:each="article,state : ${@articleService.findAllDtoArticles()}">
         <div class="inner">
             <figure>
                 <a th:href="@{/single/articles/{id}(id=${article.id})}">
