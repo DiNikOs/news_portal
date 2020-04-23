@@ -26,6 +26,7 @@ import ru.geek.news_portal.utils.SystemUser;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -148,7 +149,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User saveDTO(UserAccountDTO userAccountDTO) {
-        User user = userRepository.findUserByUsername(userAccountDTO.getUsername()).orElse(new User());
+        User user = userRepository.findOneByUsername(userAccountDTO.getUsername());
         user.setUsername(userAccountDTO.getUsername());
 
         if (findByUsername(user.getUsername()) == null) {

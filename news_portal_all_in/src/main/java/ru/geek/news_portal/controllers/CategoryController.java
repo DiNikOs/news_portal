@@ -31,9 +31,9 @@ public class CategoryController {
 
     private Long RECOMENDED_NEWS = 5L;
 
-//    @Autowired
-//    public void setArticleService(ArticleService articleService) {
-//    }
+    @Autowired
+    public void setArticleService(ArticleService articleService) {
+    }
 
     @Autowired
     public CategoryController(ArticleService articleService,
@@ -45,14 +45,15 @@ public class CategoryController {
     @GetMapping({"/{id}", ""})
     public String categoryShow(Model model,
                                @RequestParam Map<String, String> params,
-                               HttpServletRequest request, HttpServletResponse response,
-                               @CookieValue(value = "page_size", required = false) Integer pageSize
-                               ,@PathVariable (value = "id", required = false) Long id) {
+                               HttpServletRequest request,
+                               HttpServletResponse response,
+                               @CookieValue(value = "page_size", required = false) Integer pageSize,
+                               @PathVariable(value = "id", required = false) Long id) {
         Integer pageNumber = 0;
         Integer pageLimit = 5;
         ArticleCategory category = null;
-        if (params.size()==0) {
-            if (id==null) {
+        if (params.size() == 0) {
+            if (id == null) {
                 params.put("cat_id", "");
             } else {
                 params.put("cat_id", id.toString());
@@ -67,11 +68,11 @@ public class CategoryController {
         }
         if (params.containsKey("limit")) {
             int lim = Integer.parseInt(params.get("limit"));
-            if (lim>0) {
+            if (lim > 0) {
                 pageLimit = Integer.parseInt(params.get("limit"));
             }
         }
-        if (params.containsKey("cat_id") && params.get("cat_id").length()>0) {
+        if (params.containsKey("cat_id") && params.get("cat_id").length() > 0) {
             category = articleCategoryService.findOneById(Long.parseLong(params.get("cat_id")));
         }
 

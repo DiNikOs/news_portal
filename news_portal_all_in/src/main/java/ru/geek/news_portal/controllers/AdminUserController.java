@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.geek.news_portal.base.entities.User;
 import ru.geek.news_portal.base.repo.RoleRepository;
+import ru.geek.news_portal.dto.UserModifyDTO;
 import ru.geek.news_portal.services.UserService;
 import ru.geek.news_portal.utils.SystemUser;
 
@@ -67,7 +68,7 @@ public class AdminUserController {
     @GetMapping({"/users/create_user", "/users/create_user/{id}"})
     public String createUser(Model model) {
         model.addAttribute("create", true);
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new UserModifyDTO());
         model.addAttribute("roles", roleRepository.findAll());
         return "user_form";
     }
