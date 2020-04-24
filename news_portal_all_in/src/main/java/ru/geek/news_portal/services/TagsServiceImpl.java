@@ -9,9 +9,11 @@ package ru.geek.news_portal.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.geek.news_portal.base.entities.Tag;
 import ru.geek.news_portal.base.repo.TagRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -54,18 +56,13 @@ public class TagsServiceImpl implements TagsService {
         return tagRepository.save(tag);
     }
 
-    //    @Override
-//    public List<Tag> findAllTagByName(ArrayList<String> tagsArr){
-//        return  tagRepository.findAllTagByName(tagsArr);
-//    }
-//
-//    @Override
-//    public List<Tag> findTagsByName (List<String> tagsArr){
-//        return  tagRepository.findTagsByName(tagsArr);
-//    }
-
     @Override
     public void delete(Long id) {
         tagRepository.deleteById(id);
+    }
+
+    @Transactional
+    public List<Tag> findTagsById(ArrayList<Long> tagsArr) {
+        return tagRepository.findAllById(tagsArr);
     }
 }

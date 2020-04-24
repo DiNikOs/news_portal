@@ -47,9 +47,9 @@ public class SearchController {
     public String search(Model model, @RequestParam Map<String, String> params,
                          HttpServletRequest request, HttpServletResponse response,
                          @RequestParam (value = "cat_id", required = false) ArrayList<String> catIdArr,
-                         @CookieValue(value = "page_size", required = false) Integer pageSize) {
+                         @CookieValue(value = "limit", required = false) Integer pageLimit) {
         Integer pageNumber = 0;
-        Integer pageLimit = null;
+//        Integer pageLimit = null;
         pageLimit = articleService.findAllArticles().size();
 
         ArticleCategory category = null;
@@ -58,9 +58,9 @@ public class SearchController {
         if (params.containsKey("pageNumber")) { 
             pageNumber = Integer.parseInt(params.get("pageNumber")) - 1;
         }
-        if (pageSize == null) {
-            pageSize = 4;
-            response.addCookie(new Cookie("page_size", String.valueOf(pageSize)));
+        if (pageLimit == null) {
+            pageLimit = 4;
+            response.addCookie(new Cookie("limit", String.valueOf(pageLimit)));
         }
         if (params.containsKey("limit")) {
             int lim = Integer.parseInt(params.get("limit"));

@@ -1,6 +1,7 @@
 package ru.geek.news_portal.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,6 +29,10 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/single/articles")
 public class ArticleController {
+
+    @Value("${news.url}")
+    private String newsUrl;
+
 
     private ArticleService articleService;
     private CommentService commentService;
@@ -71,16 +76,12 @@ public class ArticleController {
             return "ui/404";
         }
        try {
-
             Tree<Long, Comment> tree = commentService.getCommentsTreeByArticle_id(id);
-
             ArticleDto article = articleService.findArticleDtoById(id);
-//            Article article = articleService.findById(id);
             model.addAttribute("article", article);
             model.addAttribute("articles", articleService.findAllArticles());
             model.addAttribute("comments", tree.getChildren(null));
             model.addAttribute("tree_comments", tree);
-//            model.addAttribute("comments", commentService.findAllCommentByArticle_id(id));
             model.addAttribute("comment", new Comment());
             model.addAttribute("categories", articleCategoryService.findAll());
             model.addAttribute("articleLikes", articleLikeService.getArticleLikes(id));
@@ -95,65 +96,31 @@ public class ArticleController {
     /**
      * @author Ostrovskiy Dmitriy
      * @created 17/04/2020
-     * Контроллер для сохранения и просмотра созданной статьи
-     * v1.0
+     * Контроллер для сохранения и перехода к просмотру созданной статьи
+     * @version v1.11
      */
     @PostMapping({"/editor_article","/editor_article/{id}"} )
-    public String saveArticle(Model model, @RequestParam Map<String, String> params, Optional<Article> article,
-                              HttpServletRequest request, HttpServletResponse response,
-                              @PathVariable(value = "art_id", required = false) Long artId,
+    public String saveArticle(Model model, @RequestParam Map<String, String> params, Article article,
                               @RequestParam (value = "mainPicture", required = false) String mainPicture,
-                              @RequestParam (value = "tag_id", required = false) ArrayList<String> tagIdArr,
-                              @RequestParam (value = "tags", required = false) ArrayList<String> tagsArr,
+                              @RequestParam (value = "tags", required = false) ArrayList <Long> tagsArr,
                               @RequestParam (value = "firstName", required = false) String firstName,
                               @RequestParam (value = "lastName", required = false) String lastName) {
 
-        ArticleCategory category = null;
         List<Tag> tags = new ArrayList<>();
-        Long articleId = null;
-        if (article.get().getId()!=null) {
-            articleId = article.get().getId();
-        }
-
-        if (params.containsKey("cat_id")||params.containsKey("category")) {
-            Long categoryId = 0L;
-            if (params.get("cat_id")!=null) {
-                categoryId = Long.parseLong(params.get("cat_id"));
-            } else {
-                categoryId = Long.parseLong(params.get("category"));
-            }
-            category = articleCategoryService.findOneById(categoryId);
-        }
-        if (params.containsKey("art_id")) {
-            article = articleService.findByUpdateId(Long.parseLong(params.get("art_id")));
-        }
-        article.get().getId();
-//        List<ArticleDto> articles =  articleService.findAllArticles();
-        List<ArticleDto> articles =  articleService.findAllDtoArticles();
-        List<ArticleCategory> categories = articleCategoryService.findAll();
         if (tagsArr!=null){
-            for (int i = 0; i < tagsArr.size(); i++) {
-                tags.add(tagsService.findById(Long.parseLong(tagsArr.get(i))));
-            }
-            article.get().setTags(tags);
+            tags.addAll(tagsService.findTagsById(tagsArr));
+            article.setTags(tags);
         }
-
-        String url = null;
+        //проверка на заполненеие ссылкой из сети
+        String url = newsUrl;
         if (mainPicture.contains(":")) {
             url = mainPicture;
-        } else {
-            url = "http://localhost:8199/news/";
         }
-
-        article.get().setMainPictureUrl("<img src=\"" + url + mainPicture + "\"/>");
-        article.get().setAuthor(firstName + " " + lastName);
-        articleService.save(article.get());
-        Long id = article.get().getId();
-
-        model.addAttribute("articles", articles);
+        article.setMainPictureUrl("<img src=\"" + url + mainPicture + "\"/>");
+        article.setAuthor(firstName + " " + lastName);
+        articleService.save(article);
+        Long id = article.getId();
         model.addAttribute("articleEdit", article);
-        model.addAttribute("categories", categories);
-        model.addAttribute("category", category);
         return "redirect:/single/articles/" + id;
     }
 

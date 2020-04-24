@@ -36,6 +36,4 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, JpaSpec
 
     List<Article> findArticlesByAuthor(String author);
 
-    Optional<Article> findById(Long id);
-
 }

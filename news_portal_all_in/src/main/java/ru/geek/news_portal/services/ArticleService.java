@@ -89,10 +89,6 @@ public class ArticleService implements ArticleServiceInterfase{
         return articleRepository.getOne(id);
     }
 
-    public Optional<Article> findByUpdateId(Long id) {
-        return articleRepository.findById(id);
-    }
-
     /**
      * @author Ostrovskiy Dmitriy
      * @created 17/04/2020
@@ -195,7 +191,7 @@ public class ArticleService implements ArticleServiceInterfase{
     /**
      * @author Ostrovskiy Dmitriy
      * @created 17/04/2020
-     * Метод для сохранения статьи в репозиторий
+     * Метод для сохранения созданной/отредактированной статьи в репозиторий
      * @version v1.0(тестовое сохранение)
      */
     @Override
@@ -210,7 +206,6 @@ public class ArticleService implements ArticleServiceInterfase{
         article.setLastViewDate(LocalDateTime.now());
         article.setStatus(Article.Status.EDIT);
         articleRepository.save(article);
-        Long artId = article.getId();
     }
 
     /**

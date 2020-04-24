@@ -26,10 +26,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class MainController {
@@ -95,28 +92,31 @@ public class MainController {
         return "index";
     }
 
+    /**
+     * @author Ostrovskiy Dmitriy
+     * @created 24/04/2020
+     * Контроллер для перехода к страници редактора статей для создания и редактирования
+     * @version v1.11
+     */
     @GetMapping("/editor_article")
     public String redactorArticle(Model model, @PathVariable(value = "id", required = false) Long id,
                                   @RequestParam Map<String, String> params,
-                                  HttpServletRequest request, HttpServletResponse response,
-                                  @RequestParam (value = "tag_id", required = false) ArrayList<String> tagIdArr) {
+                                  @RequestParam (value = "create", required = false, defaultValue = "false") Boolean create,
+                                  HttpServletRequest request) {
 
         HttpSession session = request.getSession();
         if (!session.getAttributeNames().hasMoreElements()) {
             return "redirect:/";
         }
-        ArticleCategory category = null;
         Article article = null;
-        Boolean create = false;
-        List<Integer> tagIdInteger = new ArrayList<Integer>();
-
         if(!params.containsKey("art_id")) {
             article = new Article();
-            create = true;
         } else {
             Long articleId = Long.parseLong(params.get("art_id"));
             article = articleService.findById(articleId);
-//            article = articleService.findById(id);
+        }
+        if (id!=null) {
+            article = articleService.findById(id);
         }
         if (params.containsKey("delete") && !params.get("delete").isEmpty()) {
             Boolean delete = Boolean.parseBoolean(params.get("delete"));
@@ -125,19 +125,11 @@ public class MainController {
                 String username = request.getUserPrincipal().getName();
                 return "redirect:/user/edituser/" + username;
             }
-
         }
-
-        Long articleId = article.getId();
         ArticleFilter articleFilter = new ArticleFilter(params);
-//        List<ArticleCategory> categories = articleCategoryService.findAll();
-//        List<Tag> tags = tagsServiceImpl.findAll();
         model.addAttribute("filtersDef", articleFilter.getFilterDefinition());
-        model.addAttribute("art_id", articleId);
         model.addAttribute("articleEdit", article);
         model.addAttribute("create", create);
-//        model.addAttribute("categories", categories);
-//        model.addAttribute("tags", tags);
         return "ui/editor_article";
     }
 
