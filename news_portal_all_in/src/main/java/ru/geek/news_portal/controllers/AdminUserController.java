@@ -8,12 +8,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.geek.news_portal.base.entities.User;
 import ru.geek.news_portal.base.repo.RoleRepository;
+import ru.geek.news_portal.dto.UserAccountDTO;
 import ru.geek.news_portal.dto.UserModifyDTO;
 import ru.geek.news_portal.services.UserService;
 import ru.geek.news_portal.utils.SystemUser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Arrays;
 
 /**
  * GeekBrains Java, news_portal.
@@ -60,30 +62,32 @@ public class AdminUserController {
         model.addAttribute("edit", true);
         model.addAttribute("user", userService.findById(id));
         model.addAttribute("roles", roleRepository.findAll());
-        return "user_form";
+        return "oneuser";
     }
 
     //---------------------------------------------------------------------------
 
-    @GetMapping({"/users/create_user", "/users/create_user/{id}"})
+    @GetMapping({"/users/create_user"})
     public String createUser(Model model) {
+        UserModifyDTO userDTO = new UserModifyDTO();
+        userDTO.setRoles(Arrays.asList(roleRepository.findOneByName("READER")));
         model.addAttribute("create", true);
-        model.addAttribute("user", new UserModifyDTO());
+        model.addAttribute("user", userDTO);
         model.addAttribute("roles", roleRepository.findAll());
-        return "user_form";
+        return "oneuser";
     }
 
     //---------------------------------------------------------------------------
 
     @PostMapping("/users/update_user")
-    public String updateUser(@Valid @ModelAttribute("user") SystemUser systemUser,
+    public String updateUser(@Valid @ModelAttribute("user") UserModifyDTO userDTO,
                              BindingResult bindingResult, Model model) {
 //        if (bindingResult.hasErrors()) {
 //            return "users";
 //        }
-        userService.update(systemUser);
+        userService.updateDTO(userDTO);
         model.addAttribute("users", userService.findAll());
-        return "users";
+        return "/users";
     }
 
     //---------------------------------------------------------------------------

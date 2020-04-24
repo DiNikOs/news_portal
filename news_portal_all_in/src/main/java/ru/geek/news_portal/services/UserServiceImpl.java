@@ -21,6 +21,7 @@ import ru.geek.news_portal.base.entities.User;
 import ru.geek.news_portal.base.repo.UserRepository;
 import ru.geek.news_portal.base.repo.RoleRepository;
 import ru.geek.news_portal.dto.UserAccountDTO;
+import ru.geek.news_portal.dto.UserModifyDTO;
 import ru.geek.news_portal.utils.SystemUser;
 
 import java.util.Arrays;
@@ -161,6 +162,25 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userAccountDTO.getEmail());
 
         return userRepository.save(user);
+    }
+
+    @Override
+    public void updateDTO(UserModifyDTO userDTO) {
+        User user;
+
+        if (findByUsername(userDTO.getUsername()) == null) {
+            user = new User();
+        } else {
+            user = userRepository.findOneByUsername(userDTO.getUsername());
+        }
+
+        user.setUsername(userDTO.getUsername());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setEmail(userDTO.getEmail());
+        user.setRoles(userDTO.getRoles());
+
+        userRepository.save(user);
     }
 
     @Override

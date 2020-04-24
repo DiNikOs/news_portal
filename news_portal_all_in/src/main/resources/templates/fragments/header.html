@@ -275,6 +275,9 @@
                             <li><a th:href="@{/user/setting/{username}(username=${#request.userPrincipal.name})}"><i
                                     class="icon ion-settings"></i> Settings</a></li>
                             <li class="divider"></li>
+                            <li><a th:href="@{/users}"><i
+                                    class="icon ion-person"></i> User list</a></li>
+                            <li class="divider"></li>
                             <li><a th:if="${#request.userPrincipal != null}" th:href="@{/logout}"><i
                                     class="icon ion-log-out"></i> Logout</a></li>
                         </ul>
