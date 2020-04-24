@@ -72,7 +72,7 @@
 									</div>
 									<div class="form-group" th:each="category, state : ${categories}" name="cat_id"
 										 th:unless="${catIdInteger.size()>0 and catIdInteger.get(0)==0}">
-										<input type="checkbox" name="cat_id" th:value="${category.id}"
+										<input type="checkbox" name="cat_id" th:name="cat_id" th:value="${category.id}"
 											   th:checked="${#arrays.contains(catIdInteger, __${category.id}__)}"
 											   onclick="this.value=this.checked">
 										<label th:text="${category.name}">
@@ -81,7 +81,7 @@
 
 									<div class="form-group" th:each="category, state : ${categories}" name="cat_id"
 										 th:if="${catIdInteger.size()>0 and catIdInteger.get(0)==0}" >
-										<input type="checkbox" name="cat_id" th:value="${category.id}">
+										<input type="checkbox" name="cat_id" th:name="cat_id" th:value="${category.id}">
 										<label th:text="${category.name}">
 											Lifestyle</label>
 									</div>

@@ -13,22 +13,24 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.geek.news_portal.base.entities.Article;
 import ru.geek.news_portal.base.repo.ArticleRepository;
 import ru.geek.news_portal.dto.ArticleDto;
 import ru.geek.news_portal.exception.NotFoundException;
 import ru.geek.news_portal.utils.ListMapper;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
 @Service
-public class ArticleService {
+public class ArticleService implements ArticleServiceInterfase{
     private static final int NEW_ARTICLES_TOP_COUNT = 5;
     private static final int MOST_VIEWED_ARTICLES_TOP_COUNT = 5;
+
 
     @Value("${news.host}")
     private String host;
@@ -82,8 +84,13 @@ public class ArticleService {
                 .findAllByOrderByTotalViewsDesc(PageRequest.of(0, MOST_VIEWED_ARTICLES_TOP_COUNT)).getContent());
     }
 
+
     public Article findById(Long id) {
-        return articleRepository.findById(id).orElseThrow(IllegalStateException::new);
+        return articleRepository.getOne(id);
+    }
+
+    public Optional<Article> findByUpdateId(Long id) {
+        return articleRepository.findById(id);
     }
 
     /**
@@ -181,18 +188,19 @@ public class ArticleService {
     }
   
   
-  public Page<Article> findAllByPagingAndFiltering(Specification<Article> specification, Pageable pageable) {
+    public Page<Article> findAllByPagingAndFiltering(Specification<Article> specification, Pageable pageable) {
         return articleRepository.findAll(specification, pageable);
     }
-
 
     /**
      * @author Ostrovskiy Dmitriy
      * @created 17/04/2020
      * Метод для сохранения статьи в репозиторий
-     * v1.0(тестовое сохранение)
+     * @version v1.0(тестовое сохранение)
      */
-    public void save(Article article, HttpServletRequest request) {
+    @Override
+    @Transactional
+    public void save(Article article) {
         article.setCreated(LocalDateTime.now());
         article.setTitle(article.getTitle());
         article.setText(article.getText());
@@ -202,5 +210,19 @@ public class ArticleService {
         article.setLastViewDate(LocalDateTime.now());
         article.setStatus(Article.Status.EDIT);
         articleRepository.save(article);
+        Long artId = article.getId();
     }
+
+    /**
+     * @author Ostrovskiy Dmitriy
+     * @created 23/04/2020
+     * Метод для удаления статьи из репозиторий
+     * @version v1.0
+     */
+    @Override
+    @Transactional
+    public void delete(Article article) {
+        articleRepository.delete(article);
+    }
+
 }

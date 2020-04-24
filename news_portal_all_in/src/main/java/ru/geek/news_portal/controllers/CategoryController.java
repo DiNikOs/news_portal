@@ -29,10 +29,6 @@ public class CategoryController {
 
     private Long RECOMENDED_NEWS = 5L;
 
-//    @Autowired
-//    public void setArticleService(ArticleService articleService) {
-//    }
-
     @Autowired
     public CategoryController(ArticleService articleService,
                               ArticleCategoryService articleCategoryService) {
@@ -42,12 +38,12 @@ public class CategoryController {
 
     @GetMapping({"/{id}", ""})
     public String categoryShow(Model model,
+                               @PathVariable (value = "id", required = false) Long id,
                                @RequestParam Map<String, String> params,
                                HttpServletRequest request, HttpServletResponse response,
-                               @CookieValue(value = "page_size", required = false) Integer pageSize
-                               ,@PathVariable (value = "id", required = false) Long id) {
+                               @CookieValue(value = "limit", required = false) Integer pageLimit) {
         Integer pageNumber = 0;
-        Integer pageLimit = 5;
+//        Integer pageLimit = 5;
         boolean categoryOne = false;
         if (params.size()==0) {
             if (id==null) {
@@ -59,9 +55,9 @@ public class CategoryController {
         if (params.containsKey("pageNumber")) {
             pageNumber = Integer.parseInt(params.get("pageNumber")) - 1;
         }
-        if (pageSize == null) {
-            pageSize = 10;
-            response.addCookie(new Cookie("page_size", String.valueOf(pageSize)));
+        if (pageLimit == null) {
+            pageLimit = 5;
+            response.addCookie(new Cookie("limit", String.valueOf(pageLimit)));
         }
         if (params.containsKey("limit")) {
             int lim = Integer.parseInt(params.get("limit"));

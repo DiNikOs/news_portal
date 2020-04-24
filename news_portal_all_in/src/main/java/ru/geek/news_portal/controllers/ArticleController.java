@@ -16,6 +16,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @Author Farida Gareeva
@@ -97,9 +98,10 @@ public class ArticleController {
      * Контроллер для сохранения и просмотра созданной статьи
      * v1.0
      */
-    @PostMapping("/editor_article")
-    public String saveArticle(Model model, @RequestParam Map<String, String> params, Article article,
+    @PostMapping({"/editor_article","/editor_article/{id}"} )
+    public String saveArticle(Model model, @RequestParam Map<String, String> params, Optional<Article> article,
                               HttpServletRequest request, HttpServletResponse response,
+                              @PathVariable(value = "art_id", required = false) Long artId,
                               @RequestParam (value = "mainPicture", required = false) String mainPicture,
                               @RequestParam (value = "tag_id", required = false) ArrayList<String> tagIdArr,
                               @RequestParam (value = "tags", required = false) ArrayList<String> tagsArr,
@@ -108,19 +110,32 @@ public class ArticleController {
 
         ArticleCategory category = null;
         List<Tag> tags = new ArrayList<>();
-
-        if (params.containsKey("cat_id")) {
-            category = articleCategoryService.findOneById(Long.parseLong(params.get("cat_id")));
+        Long articleId = null;
+        if (article.get().getId()!=null) {
+            articleId = article.get().getId();
         }
 
+        if (params.containsKey("cat_id")||params.containsKey("category")) {
+            Long categoryId = 0L;
+            if (params.get("cat_id")!=null) {
+                categoryId = Long.parseLong(params.get("cat_id"));
+            } else {
+                categoryId = Long.parseLong(params.get("category"));
+            }
+            category = articleCategoryService.findOneById(categoryId);
+        }
+        if (params.containsKey("art_id")) {
+            article = articleService.findByUpdateId(Long.parseLong(params.get("art_id")));
+        }
+        article.get().getId();
 //        List<ArticleDto> articles =  articleService.findAllArticles();
-        List<Article> articles =  articleService.findAllArticles();
+        List<ArticleDto> articles =  articleService.findAllDtoArticles();
         List<ArticleCategory> categories = articleCategoryService.findAll();
         if (tagsArr!=null){
             for (int i = 0; i < tagsArr.size(); i++) {
                 tags.add(tagsService.findById(Long.parseLong(tagsArr.get(i))));
             }
-            article.setTags(tags);
+            article.get().setTags(tags);
         }
 
         String url = null;
@@ -130,13 +145,13 @@ public class ArticleController {
             url = "http://localhost:8199/news/";
         }
 
-        article.setMainPictureUrl("<img src=\"" + url + mainPicture + "\"/>");
-        article.setAuthor(firstName + " " + lastName);
-        articleService.save(article, request);
-        Long id = article.getId();
+        article.get().setMainPictureUrl("<img src=\"" + url + mainPicture + "\"/>");
+        article.get().setAuthor(firstName + " " + lastName);
+        articleService.save(article.get());
+        Long id = article.get().getId();
 
         model.addAttribute("articles", articles);
-        model.addAttribute("article", article);
+        model.addAttribute("articleEdit", article);
         model.addAttribute("categories", categories);
         model.addAttribute("category", category);
         return "redirect:/single/articles/" + id;

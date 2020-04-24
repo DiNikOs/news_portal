@@ -110,49 +110,34 @@ public class MainController {
         Boolean create = false;
         List<Integer> tagIdInteger = new ArrayList<Integer>();
 
-        if(id!=null) {
-            article = articleService.findById(id);
-        } else {
+        if(!params.containsKey("art_id")) {
             article = new Article();
             create = true;
+        } else {
+            Long articleId = Long.parseLong(params.get("art_id"));
+            article = articleService.findById(articleId);
+//            article = articleService.findById(id);
         }
-
-        if (params.containsKey("cat_id")) {
-            category = articleCategoryService.findOneById(Long.parseLong(params.get("cat_id")));
-        }
-        if (params.containsKey("tag_id")) {
-            if (tagIdArr.size()>0) {
-                StringBuilder stringBuilder = new StringBuilder();
-                if (tagIdArr.contains("") && tagIdArr.size()>1){
-                    tagIdArr.remove("");
-                }
-                stringBuilder.append(tagIdArr.get(0));
-                tagIdInteger.add(Integer.parseInt(tagIdArr.get(0)));
-                for (int i = 1; i < tagIdArr.size(); i++) {
-                    stringBuilder.append("," + tagIdArr.get(i));
-                    tagIdInteger.add(Integer.parseInt(tagIdArr.get(i)));
-                }
-                params.put("tag_id", stringBuilder.toString());
-            } else {
-                tagIdInteger.add(0);
-                params.put("tag_id", "");
+        if (params.containsKey("delete") && !params.get("delete").isEmpty()) {
+            Boolean delete = Boolean.parseBoolean(params.get("delete"));
+            if (delete) {
+                articleService.delete(article);
+                String username = request.getUserPrincipal().getName();
+                return "redirect:/user/edituser/" + username;
             }
-        }
-        if (tagIdArr==null && params.size()>0) {
-            params.put("tag_id", "0");
-        }
-        if (tagIdArr==null && params.size()==0) {
-            tagIdInteger.add(0);
+
         }
 
-        List<ArticleCategory> categories = articleCategoryService.findAll();
-        List<Tag> tags = tagsServiceImpl.findAll();
-
+        Long articleId = article.getId();
+        ArticleFilter articleFilter = new ArticleFilter(params);
+//        List<ArticleCategory> categories = articleCategoryService.findAll();
+//        List<Tag> tags = tagsServiceImpl.findAll();
+        model.addAttribute("filtersDef", articleFilter.getFilterDefinition());
+        model.addAttribute("art_id", articleId);
         model.addAttribute("articleEdit", article);
         model.addAttribute("create", create);
-        model.addAttribute("categories", categories);
-        model.addAttribute("tags", tags);
-        model.addAttribute("category", category);
+//        model.addAttribute("categories", categories);
+//        model.addAttribute("tags", tags);
         return "ui/editor_article";
     }
 

@@ -159,7 +159,7 @@
             <div class="padding">
                 <h1><a th:href="@{/single/articles/{id}(id=${article.id})}" th:utext="${article.title}">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
                 <div class="detail">
-                    <div class="category"><a th:href="@{/category/{id}(id=${article.id})}" th:utext="${@articleService.findAllArticles().get((state.index)).category.name}">Lifestyle</a></div>
+                    <div class="category"><a th:href="@{/category/{id}(id=${article.category.id})}" th:utext="${article.category.name}">Lifestyle</a></div>
                     <div class="time" th:utext="${article.created}">December 22, 2016</div>
                 </div>
             </div>

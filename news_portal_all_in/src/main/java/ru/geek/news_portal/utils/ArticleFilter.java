@@ -52,11 +52,27 @@ public class ArticleFilter {
             filterDefinitionCat.append("&limit=").append(limit);
         }
 
+        if (map.containsKey("art_id") && !map.get("art_id").isEmpty()) {
+            Long articleId = Long.parseLong(map.get("art_id"));
+            spec = spec.and(ArticleSpecifications.articleId(articleId));
+            filterDefinition.append("&art_id=").append(articleId);
+        }
+
+        if (map.containsKey("edit") && !map.get("edit").isEmpty()) {
+            Boolean editId = Boolean.parseBoolean(map.get("edit"));
+            filterDefinition.append("&edit=").append(editId);
+        }
+
+        if (map.containsKey("delete") && !map.get("delete").isEmpty()) {
+            Boolean deleteId = Boolean.parseBoolean(map.get("delete"));
+            filterDefinition.append("&delete=").append(deleteId);
+        }
+
         if (map.containsKey("cat_id") && !map.get("cat_id").isEmpty()) {
             if (map.get("cat_id")!="0") {
                 String[] arrayStr = map.get("cat_id").trim().split(",");
                 for (int i = 0; i < arrayStr.length; i++) {
-                    specCat = specCat.or(ArticleSpecifications.categoryId(Long.valueOf(arrayStr[i])));
+                    specCat = specCat.or(ArticleSpecifications.categoryId(Long.parseLong(arrayStr[i])));
                     filterDefinition.append("&cat_id=").append(Long.valueOf(arrayStr[i]));
                 }
             } else {
