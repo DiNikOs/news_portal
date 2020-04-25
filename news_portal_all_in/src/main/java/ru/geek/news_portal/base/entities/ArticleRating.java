@@ -2,9 +2,12 @@ package ru.geek.news_portal.base.entities;//package ru.geek.news_portal.newsport
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * @Author Farida Gareeva
@@ -17,20 +20,24 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "article_rating")
+@IdClass(ArticleRating.ArticleRatingId.class)
 public class ArticleRating {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    Long id;
+    @Column(name = "article_id", nullable = false)
+    private Long article;
 
-    @JsonManagedReference
-    @ManyToOne(optional = false)
-    Article article;
-
-    @JsonManagedReference
-    @ManyToOne(optional = false)
-    User user;
+    @Id
+    @Column(name = "user_id", nullable = false)
+    private Long user;
 
     @Column(name = "value")
     int value;
+
+    @EqualsAndHashCode
+    @Access(value = AccessType.FIELD)
+    @Setter
+    public static class ArticleRatingId implements Serializable {
+        private Long article;
+        private Long user;
+    }
 }

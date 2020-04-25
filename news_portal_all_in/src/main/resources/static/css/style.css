@@ -3295,6 +3295,62 @@ section.single footer .col:last-child {
   width: 40%;
   text-align: right;
 }
+section.single footer .col_comments:last-child {
+  width: 100%;
+  text-align: right;
+}
+section.single footer .col_comments:last-child .love {
+  float: none;
+  border: 2px solid #989898;
+  border-radius: 30px;
+  display: inline-block;
+  padding: 3px 12px;
+}
+.love_news{
+  float: none;
+  border: 2px solid #989898;
+  border-radius: 30px;
+  display: inline-block;
+  padding: 3px 12px;
+}
+
+section.single footer .col_comments:last-child .love i {
+  transform: scale(0.8);
+  -webkit-transform: scale(0.8);
+  -moz-transform: scale(0.8);
+  -o-transform: scale(0.8);
+}
+section.single footer .col_comments:last-child .love i.animated {
+  top: 3px;
+  left: 12px;
+}
+section.single footer .col_comments:last-child .love.active {
+  background-color: #F73F52;
+  color: #fff;
+  border-color: #F73F52;
+}
+
+section.single footer .comment_response{
+  display: block;
+    margin-top: 0px;
+}
+footer .margin-top-zerro{
+    margin-top: 0px;
+}
+
+.col_comments .margin-top-zerro{
+    margin-top: 0px;
+}
+section.single footer .rating {
+    text-align: left;
+}
+
+.button-like-link{
+  border: hidden;
+  background: center;
+  color: red;
+}
+
 section.single footer .col:last-child .love {
   float: none;
   border: 2px solid #989898;

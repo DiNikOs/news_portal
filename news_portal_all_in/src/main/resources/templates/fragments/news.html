@@ -7,6 +7,8 @@
     <title>All News</title>
 </head>
 <body >
+<!--для отображения шрифтов для лайков и дизлайков-->
+<script src="https://use.fontawesome.com/2010e27091.js"></script>
 
 <div th:fragment="featured_news" >
     <div class="owl-carousel owl-theme slide" id="featured" >
@@ -21,7 +23,8 @@
                 <div class="details">
                     <div class="category"><a th:href="@{/category/{id}(id=${article.category.id})}" th:utext="${article.category.name}">Computer</a></div>
                     <h1><a th:href="@{/single/articles/{id}(id=${article.id})}" th:utext="${article.title}">Phasellus iaculis quam sed est elementum vel ornare ligula venenatis</a></h1>
-                    <div class="time" th:text="${article.created}">December 26, 2016</div>
+<!--                    <div class="time" th:text="${article.created}">December 26, 2016</div>-->
+                    <div class="time" th:text="${#temporals.format(article.created, 'dd MMM HH:mm')}">December 26, 2016</div>
                 </div>
             </article>
         </div>
@@ -41,17 +44,22 @@
                     </figure>
                     <div class="padding">
                         <div class="detail">
-                            <div class="time" th:utext="${article.created}">December 10, 2016</div>
+<!--                            <div class="time" th:utext="${article.created}">December 10, 2016</div>-->
+                            <div class="time" th:utext="${#temporals.format(article.created, 'dd MMM HH:mm')}">December 10, 2016</div>
                             <div class="category"><a th:href="@{/category/{id}(id=${article.category.id})}" th:utext="${article.category.name}">Healthy</a></div>
                         </div>
                         <h2><a th:href="@{/single/articles/{id}(id=${article.id})}" th:utext="${article.title}">Duis aute irure dolor in reprehenderit in voluptate</a></h2>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
                         <footer>
-                            <a th:href="@{#}" class="love"><i class="ion-android-favorite-outline"></i> <div>1263</div></a>
+<!--                            <a th:href="@{#}" class="love"><i class="ion-android-favorite-outline"></i> <div>1263</div></a>-->
+                            <div class="col_comments" >
+                                <i class="love_news fa fa-thumbs-up" th:text="${@articleLikeService.getArticleLikes(article.id)}">2333</i>
+                                <i class="love_news fa fa-thumbs-down" th:text="${@articleLikeService.getArticleDislikes(article.id)}">213</i>
                             <a class="btn btn-primary more" th:href="@{/single/articles/{id}(id=${article.id})}">
                                 <div>More</div>
                                 <div><i class="ion-ios-arrow-thin-right"></i></div>
                             </a>
+                            </div>
                         </footer>
                     </div>
                 </div>
@@ -73,7 +81,8 @@
                 <h1><a th:href="@{/single/articles/{id}(id=${article.id})}" th:utext="${article.title}">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
                 <div class="detail">
                     <div class="category"><a th:href="@{/category/{id}(id=${article.category.id})}" th:utext="${article.category.name}">Lifestyle</a></div>
-                    <div class="time" th:utext="${article.created}">December 22, 2016</div>
+<!--                    <div class="time" th:utext="${article.created}">December 22, 2016</div>-->
+                    <div class="time" th:utext="${#temporals.format(article.created, 'dd MMM HH:mm')}">December 22, 2016</div>
                 </div>
             </div>
         </div>
@@ -106,7 +115,8 @@
             </figure>
             <div class="padding">
                 <div class="detail">
-                        <div class="time" th:utext="${article.created}">December 11, 2016</div>
+<!--                        <div class="time" th:utext="${article.created}">December 11, 2016</div>-->
+                        <div class="time" th:utext="${#temporals.format(article.created, 'dd MMM HH:mm')}">December 11, 2016</div>
                         <div class="category"><a th:href="@{/category/{id}(id=${article.category.id})}" th:utext="${article.category.name}">Travel</a></div>
                 </div>
                 <h2><a th:href="@{/single/articles/{id}(id=${article.id})}" th:utext="${article.title}">tempor interdum Praesent tincidunt</a></h2>
@@ -130,18 +140,23 @@
                     <div class="category">
                         <a th:href="@{/category/{id}(id=${article.category.id})}" th:utext="${article.category.name}">Film</a>
                     </div>
-                    <div class="time" th:utext="${article.created}">December 19, 2016</div>
+<!--                    <div class="time" th:utext="${article.created}">December 19, 2016</div>-->
+                    <div class="time" th:utext="${#temporals.format(article.created, 'dd MMM HH:mm')}">December 19, 2016</div>
                 </div>
                 <h1><a th:href="@{/single/articles/{id}(id=${article.id})}" th:utext="${article.title}">Donec consequat arcu at ultrices sodales quam erat aliquet diam</a></h1>
                 <p>
                     Donec consequat, arcu at ultrices sodales, quam erat aliquet diam, sit amet interdum libero nunc accumsan nisi.
                 </p>
                 <footer>
-                    <a th:href="@{#}" class="love"><i class="ion-android-favorite-outline"></i> <div>273</div></a>
+<!--                    <a th:href="@{#}" class="love"><i class="ion-android-favorite-outline"></i> <div>273</div></a>-->
+                    <div>
+                        <i class="love_news fa fa-thumbs-up" th:text="${@articleLikeService.getArticleLikes(article.id)}">2333</i>
+                        <i class="love_news fa fa-thumbs-down" th:text="${@articleLikeService.getArticleDislikes(article.id)}">213</i>
                     <a class="btn btn-primary more" th:href="@{/single/articles/{id}(id=${article.id})}">
                         <div>More</div>
                         <div><i class="ion-ios-arrow-thin-right"></i></div>
                     </a>
+                    </div>
                 </footer>
             </div>
         </div>
@@ -160,7 +175,8 @@
                 <h1><a th:href="@{/single/articles/{id}(id=${article.id})}" th:utext="${article.title}">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
                 <div class="detail">
                     <div class="category"><a th:href="@{/category/{id}(id=${article.id})}" th:utext="${@articleService.findAllArticles().get((state.index)).category.name}">Lifestyle</a></div>
-                    <div class="time" th:utext="${article.created}">December 22, 2016</div>
+<!--                    <div class="time" th:utext="${article.created}">December 22, 2016</div>-->
+                    <div class="time" th:utext="${#temporals.format(article.created, 'dd MMM HH:mm')}">December 22, 2016</div>
                 </div>
             </div>
         </div>
@@ -181,7 +197,8 @@
                     <h1><a th:href="@{/single/articles/{id}(id=${article.id})}" th:utext="${article.title}">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
                     <div class="detail">
                         <div class="category"><a th:href="@{/category/{id}(id=${article.category.id})}" th:utext="${article.category.name}">Lifestyle</a></div>
-                        <div class="time" th:utext="${article.created}">December 22, 2016</div>
+<!--                        <div class="time" th:utext="${article.created}">December 22, 2016</div>-->
+                        <div class="time" th:utext="${#temporals.format(article.created, 'dd MMM HH:mm')}">December 22, 2016</div>
                     </div>
                 </div>
             </div>
@@ -200,7 +217,8 @@
                 </figure>
                 <div class="padding">
                     <div class="detail">
-                        <div class="time" th:utext="${article.created}">December 10, 2016</div>
+<!--                        <div class="time" th:utext="${article.created}">December 10, 2016</div>-->
+                        <div class="time" th:utext="${#temporals.format(article.created, 'dd MMM HH:mm')}">December 10, 2016</div>
                         <div class="category"><a th:href="@{/category/{id}(id=${article.category.id})}" th:utext="${article.category.name}">Healthy</a></div>
                     </div>
                     <h2><a th:href="@{/single/articles/{id}(id=${article.id})}" th:utext="${article.title}">Duis aute irure dolor in reprehenderit in voluptate</a></h2>
@@ -235,7 +253,8 @@
                     </figure>
                     <div class="details">
                         <div class="detail">
-                            <div class="time" th:utext="${articles.get((recomended_news)-1).created}">December 31, 2016</div>
+<!--                            <div class="time" th:utext="${articles.get((recomended_news)-1).created}">December 31, 2016</div>-->
+                            <div class="time" th:utext="${#temporals.format(articles.get((recomended_news)-1).created, 'dd MMM HH:mm')}">December 31, 2016</div>
                             <div class="category"><a th:href="@{/category/{id}(id=${articles.get((recomended_news)-1).category.id})}" th:utext="${articles.get((recomended_news)-1).category.name}">Sport</a></div>
                         </div>
                         <h1><a th:href="@{/single/articles/{id}(id=${recomended_news})}" th:utext="${articles.get((recomended_news)-1).title}">Donec congue turpis vitae mauris</a></h1>
@@ -259,7 +278,8 @@
                         </figure>
                         <div class="details">
                             <h5 class="name"  th:text="${comm.user.getUsername()}">Mark Otto</h5>
-                            <div class="time"  th:text="${comm.created}">24 Hours</div>
+<!--                            <div class="time"  th:text="${comm.created}">24 Hours</div>-->
+                            <div class="time"  th:text="${#temporals.format(comm.created, 'dd MMM HH:mm')}">24 Hours</div>
                             <div class="description" th:text="${comm.text}">
                                 Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                             </div>
@@ -287,7 +307,8 @@
                     tempor incididunt ut labore et dolore magna aliqua.
                 </p>
                 <div class="detail">
-                    <div class="time" th:utext="${articles.get((resent_post)-1).created}">December 26, 2016</div>
+<!--                    <div class="time" th:utext="${articles.get((resent_post)-1).created}">December 26, 2016</div>-->
+                    <div class="time" th:utext="${#temporals.format(articles.get((resent_post)-1).created, 'dd MMM HH:mm')}">December 26, 2016</div>
                     <div class="category"><a href="../ui/category.html" th:href="@{/category/{id}(id=${articles.get((resent_post)-1).category.id})}" th:utext="${articles.get((resent_post)-1).category.name}">Lifestyle</a></div>
                 </div>
             </div>
@@ -309,7 +330,8 @@
                     <h2><a th:href="@{/single/articles/{id}(id=${news_one})}" th:utext="${articles.get((news_one)-1).title}">Duis aute irure dolor in reprehenderit in voluptate</a></h2>
                     <div class="detail">
                         <div class="category"><a href="../ui/category" th:href="@{/category/{id}(id=${articles.get((news_one)-1).category.id})}" th:utext="${articles.get((news_one)-1).category.name}">Lifestyle</a></div>
-                        <div class="time" th:utext="${articles.get((news_one)-1).created}">December 26, 2016</div>
+<!--                        <div class="time" th:utext="${articles.get((news_one)-1).created}">December 26, 2016</div>-->
+                        <div class="time" th:utext="${#temporals.format(articles.get((news_one)-1).created, 'dd MMM HH:mm')}">December 26, 2016</div>
                     </div>
                 </div>
             </div>
@@ -349,7 +371,8 @@
                         <div class="category">
                             <a href="../ui/category.html" th:href="@{/category/{id}(id=${article.category.id})}" th:utext="${article.category.name}">Film</a>
                         </div>
-                        <div class="time" th:utext="${article.created}">December 26, 2016</div>
+<!--                        <div class="time" th:utext="${article.created}">December 26, 2016</div>-->
+                        <div class="time" th:utext="${#temporals.format(article.created, 'dd MMM HH:mm')}">December 26, 2016</div>
                     </div>
                     <h1><a href="../ui/single.html" th:href="@{/single/articles/{id}(id=${article.id})}" th:utext="${article.title}">Lorem Ipsum Dolor Sit Consectetur Adipisicing Elit</a></h1>
                     <p>
@@ -381,7 +404,8 @@
                         <div class="category">
                             <a href="../ui/category.html" th:href="@{/category/{id}(id=${article.category.id})}" th:utext="${article.category.name}">Film</a>
                         </div>
-                        <div class="time" th:utext="${article.created}">December 26, 2016</div>
+<!--                        <div class="time" th:utext="${article.created}">December 26, 2016</div>-->
+                        <div class="time" th:utext="${#temporals.format(article.created, 'dd MMM HH:mm')}">December 26, 2016</div>
                     </div>
                     <h1><a href="../ui/single.html" th:href="@{/single/articles/{id}(id=${article.id})}" th:utext="${article.title}">Lorem Ipsum Dolor Sit Consectetur Adipisicing Elit</a></h1>
                     <p>
@@ -421,7 +445,8 @@
                         <div class="category">
                             <a href="../ui/category.html" th:href="@{/category/{id}(id=${article.category.id})}" th:utext="${article.category.name}">Healthy</a>
                         </div>
-                        <time th:utext="${article.created}">December 16, 2016</time>
+<!--                        <time th:utext="${article.created}">December 16, 2016</time>-->
+                        <time th:utext="${#temporals.format(article.created, 'dd MMM HH:mm')}">December 16, 2016</time>
                     </div>
                     <h1><a href="../ui/single.html" th:href="@{/single/articles/{id}(id=${article.id})}" th:utext="${article.title}">
                         Maecenas blandit ultricies lorem id tempor enim pulvinar at</a></h1>
@@ -439,7 +464,6 @@
             </div>
         </div>
     </article>
-
 
 </div>
 

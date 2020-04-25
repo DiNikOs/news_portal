@@ -93,11 +93,10 @@ CREATE TABLE articles_tags (
 
 DROP TABLE IF EXISTS article_rating;
 CREATE TABLE article_rating (
-    id                    bigserial,
     article_id            bigint NOT NULL,
     user_id               bigint NOT NULL,
     value                 integer NOT NULL,
-    PRIMARY KEY (id),
+    PRIMARY KEY (article_id,user_id),
     FOREIGN KEY(article_id)
     REFERENCES articles (id),
     FOREIGN KEY (user_id)
