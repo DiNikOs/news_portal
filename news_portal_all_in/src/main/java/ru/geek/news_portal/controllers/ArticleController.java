@@ -50,7 +50,7 @@ public class ArticleController {
                              ArticleLikeService articleLikeService,
                              ArticleCategoryService articleCategoryService,
                              CommentLikeService commentLikeService,
-                             ArticleRatingService ratingService
+                             ArticleRatingService ratingService,
                              TagsServiceImpl tagsService) {                            
         this.articleService = articleService;
         this.commentService = commentService;

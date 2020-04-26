@@ -66,13 +66,13 @@
 									<li th:remove="tag" th:utext="${#temporals.format(article.created, 'dd-MMM-yyyy HH:mm')}">Posted on 31 December, 2016</li>
 <!--									<li th:remove="tag" th:utext="${#dates.format(article.created, 'dd-MMM-yyyy')}">Posted on 31 December, 2016</li>-->
 									<li><a  th:href="@{/category/{id}(id=${article.category.id})}" th:utext="${article.category.name}">Film</a></li>
-<!--									<li th:text="${article.author}">By John Doe </li>-->
+									<li th:text="${article.author}">By John Doe </li>
 									<!--вывод списка авторов-->
-									<li th:if="${article.authors.size()==1}" >Автор</li>
-									<li th:if="${article.authors.size()>1}" >Авторы</li>
-									<div th:each="writer:${article.authors}">
-										<li><a th:href="@{/user/edituser/{username}(username=${writer.username})}" th:utext="${writer.username}">А.С.Пушкин</a></li>
-									</div>
+<!--									<li th:if="${article.authors.size()==1}" >Автор</li>-->
+<!--									<li th:if="${article.authors.size()>1}" >Авторы</li>-->
+<!--									<div th:each="writer:${article.authors}">-->
+<!--										<li><a th:href="@{/user/edituser/{username}(username=${writer.username})}" th:utext="${writer.username}">А.С.Пушкин</a></li>-->
+<!--									</div>-->
 								</ul>
 							</header>
 							<div class="main">
