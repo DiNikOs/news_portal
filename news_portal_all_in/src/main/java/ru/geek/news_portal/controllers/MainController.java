@@ -75,7 +75,6 @@ public class MainController {
             category = articleCategoryService.findOneById(Long.parseLong(params.get("cat_id")));
         }
         ArticleFilter articleFilter = new ArticleFilter(params);
-//        List<ArticleDto> articles = articleService.findAllArticles();
         List<ArticleDto> articlesDto = articleService.findAllDtoArticles();
         Pageable pageRequest = PageRequest.of(pageNumber, pageLimit, Sort.Direction.ASC, "id");
 
@@ -118,6 +117,7 @@ public class MainController {
         if (id!=null) {
             article = articleService.findById(id);
         }
+        // delete article and redirect
         if (params.containsKey("delete") && !params.get("delete").isEmpty()) {
             Boolean delete = Boolean.parseBoolean(params.get("delete"));
             if (delete) {
@@ -152,17 +152,13 @@ public class MainController {
 
     @GetMapping("/fragments/header")
     public String fragHeader(Model model, @RequestParam(value = "id", required = false) Long id) {
-        model.addAttribute("articles", articleService.findAllDtoArticles());
         model.addAttribute("comments", commentService.findAllCommentByArticle_id(RECOMENDED_NEWS));
-        model.addAttribute("categories", articleCategoryService.findAll());
         return "fragments/header";
     }
 
     @GetMapping("/fragments/footer")
     public String fragFooter(Model model, @RequestParam(value = "id", required = false) Long id) {
-        model.addAttribute("articles", articleService.findAllDtoArticles());
         model.addAttribute("comments", commentService.findAllCommentByArticle_id(RECOMENDED_NEWS));
-        model.addAttribute("categories", articleCategoryService.findAll());
         if (id==null){
             model.addAttribute("tags", null);
         } else {
@@ -176,21 +172,11 @@ public class MainController {
         return "ui/login";
     }
 
-//    @GetMapping("/forgot")
-//    public String forgot() {
-//        return "ui/forgot";
-//    }
-
     @GetMapping("/page")
     public String page(Model model, @PathVariable(value = "id", required = false) Long id) {
         model.addAttribute("articles", articleService.findAllArticles());
         return "ui/page";
     }
-
-//    @GetMapping("/reset")
-//    public String reset() {
-//        return "ui/reset";
-//    }
 
     @GetMapping("/single")
     public String single() {

@@ -111,7 +111,7 @@ public class ArticleController {
             tags.addAll(tagsService.findTagsById(tagsArr));
             article.setTags(tags);
         }
-        //проверка на заполненеие ссылкой из сети
+        //проверка на заполнение ссылкой из сети
         String url = newsUrl;
         if (mainPicture.contains(":")) {
             url = mainPicture;

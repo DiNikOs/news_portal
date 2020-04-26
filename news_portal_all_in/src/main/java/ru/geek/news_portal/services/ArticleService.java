@@ -126,18 +126,6 @@ public class ArticleService implements ArticleServiceInterfase{
         return ArticleDto.fromArticle(article,
                 prepareArticleText(article.getText()),
                 getMainPictureUrlFromText(article.getText()));
-//                article.getPublished(),
-//                article.getCategory(),
-//                article.getCategoryString(),
-//                article.getTotalViews(),
-//                article.getLastViewDate(),
-//                getMainPictureUrlFromText(article.getText()),
-//                article.getStatus(),
-//                article.getComments(),
-//                article.getLikes(),
-//                article.getTags(),
-//                article.getRatings()
-//        );
     }
 
     /**

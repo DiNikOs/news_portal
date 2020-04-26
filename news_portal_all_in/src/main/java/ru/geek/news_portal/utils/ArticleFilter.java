@@ -20,18 +20,11 @@ import java.util.*;
 public class ArticleFilter {
 
     private Specification<Article> spec;
+    private Specification<Article> specCat;
     private StringBuilder filterDefinition;
     private StringBuilder filterDefinitionCat;
-    private Specification<Article> specCat;
     private List<Long> listCategory;
-    private List<String> listCat;
-
-    int iter2 = 0;
     HttpServletRequest request;
-
-    public List<Long> getListCategory() {
-        return listCategory;
-    }
 
     public ArticleFilter(Map<String, String> map) {
         this.spec = Specification.where(null);
@@ -47,7 +40,6 @@ public class ArticleFilter {
         }
         if (map.containsKey("limit") && !map.get("limit").isEmpty()) {
             Integer limit = Integer.parseInt(map.get("limit"));
-//            spec = spec.and(ArticleSpecifications.limitNavTab(limit));
             filterDefinition.append("&limit=").append(limit);
             filterDefinitionCat.append("&limit=").append(limit);
         }
@@ -84,11 +76,6 @@ public class ArticleFilter {
 //            Integer pageNumber = Integer.parseInt(map.get("pageNumber"));
 //            filterDefinition.append("&pageNumber=").append(pageNumber);
 //        }
-        if (map.containsKey("pageLimit") && !map.get("pageLimit").isEmpty()) {
-            Integer pageLimit = Integer.parseInt(map.get("pageLimit"));
-            filterDefinition.append("&pageLimit=").append(pageLimit);
-            filterDefinitionCat.append("&pageLimit=").append(pageLimit);
-        }
         if (map.containsKey("tag_id") && !map.get("tag_id").isEmpty()) {
             if (map.get("tag_id")!="0") {
                 String[] arrayStr = map.get("tag_id").trim().split(",");
@@ -128,6 +115,8 @@ public class ArticleFilter {
     public StringBuilder getFilterDefinitionCat() {
         return filterDefinitionCat;
     }
-
+    public List<Long> getListCategory() {
+        return listCategory;
+    }
 
 }

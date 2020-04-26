@@ -39,19 +39,4 @@ public class ArticleSpecifications {
         return (Specification<Article>) (root, criteriaQuery, criteriaBuilder) ->
                 criteriaBuilder.equal(root.get("tag_id").get("id"), tagId);
     }
-
-    public static Specification<Article> editId(Long editId) {
-        return (Specification<Article>) (root, criteriaQuery, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("edit").get("id"), editId);
-    }
-
-    public static Specification<Article> deleteId(Long deleteId) {
-        return (Specification<Article>) (root, criteriaQuery, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("delete").get("id"), deleteId);
-    }
-
-
-//        return (Specification<Product>) (root, criteriaQuery, criteriaBuilder) ->
-//                criteriaBuilder.equal(root.get("category").get("id"), id);
-//    }
 }

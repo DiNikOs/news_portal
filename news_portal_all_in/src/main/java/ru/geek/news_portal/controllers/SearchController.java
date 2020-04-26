@@ -1,7 +1,7 @@
 /**
  * @Author Ostrovskiy Dmitriy
  * @Created 04/04/2020
- * SearchController for Search Page
+ * SearchController for Search article Page, and show Categories Page
  * @version v1.0
  */
 
@@ -28,47 +28,41 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 @Controller
-@RequestMapping("/search")
 public class SearchController {
     private ArticleService articleService;
     private ArticleCategoryService articleCategoryService;
 
+    private Long RECOMENDED_NEWS = 5L;
+    private final Integer PAGE_LIMIT = 50;
+
     @Autowired
-    public void setArticleService(ArticleService articleService) {
+    public SearchController (ArticleCategoryService articleCategoryService,
+                             ArticleService articleService) {
+        this.articleCategoryService = articleCategoryService;
         this.articleService = articleService;
     }
 
-    @Autowired
-    public void setArticleCategoryService(ArticleCategoryService articleCategoryService) {
-        this.articleCategoryService = articleCategoryService;
-    }
-
-    @GetMapping()
+    @GetMapping("/search")
     public String search(Model model, @RequestParam Map<String, String> params,
                          HttpServletRequest request, HttpServletResponse response,
                          @RequestParam (value = "cat_id", required = false) ArrayList<String> catIdArr,
                          @CookieValue(value = "limit", required = false) Integer pageLimit) {
-        Integer pageNumber = 0;
-//        Integer pageLimit = null;
-        pageLimit = articleService.findAllArticles().size();
 
-        ArticleCategory category = null;
+        Integer pageNumber = 0;
         List<Integer> catIdInteger = new ArrayList<Integer>();
 
         if (params.containsKey("pageNumber")) { 
             pageNumber = Integer.parseInt(params.get("pageNumber")) - 1;
         }
         if (pageLimit == null) {
-            pageLimit = 4;
-            response.addCookie(new Cookie("limit", String.valueOf(pageLimit)));
+            response.addCookie(new Cookie("limit", String.valueOf(PAGE_LIMIT)));
         }
         if (params.containsKey("limit")) {
             int lim = Integer.parseInt(params.get("limit"));
             if (lim>0) {
-                pageLimit = Integer.parseInt(params.get("limit"));
+                pageLimit = lim;
             }
         }
-
         if (params.containsKey("cat_id")) {
             if (catIdArr.size()>0) {
                 StringBuilder stringBuilder = new StringBuilder();
@@ -82,12 +76,6 @@ public class SearchController {
                     catIdInteger.add(Integer.parseInt(catIdArr.get(i)));
                 }
                 params.put("cat_id", stringBuilder.toString());
-                
-                if (catIdArr.size()==1){
-                    category = articleCategoryService.findOneById(Long.parseLong(params.get("cat_id")));
-                } else {
-                    category = null;
-                }
             } else {
                 catIdInteger.add(0);
                 params.put("cat_id", "");
@@ -101,17 +89,11 @@ public class SearchController {
         }
 
         ArticleFilter articleFilter = new ArticleFilter(params);
-//        List<ArticleDto> articles = articleService.findAllArticles();
-        List<Article> articles = articleService.findAllArticles();
-        List<ArticleCategory> categories = articleCategoryService.findAll();
-
         Pageable pageRequest = PageRequest.of(pageNumber, pageLimit, Sort.Direction.ASC, "id");
         Page<Article> page = articleService.findAllByPagingAndFiltering(articleFilter.getSpecification(), pageRequest);
 
         model.addAttribute("filtersDef", articleFilter.getFilterDefinition());
         model.addAttribute("filtersDefCat", articleFilter.getFilterDefinitionCat());
-        model.addAttribute("articles", articles);
-        model.addAttribute("categories", categories);
         model.addAttribute("catIdInteger", catIdInteger);
         model.addAttribute("pageNumber", pageNumber);
         model.addAttribute("pageLimit", pageLimit);
@@ -119,11 +101,64 @@ public class SearchController {
         return "ui/search";
     }
 
-    @GetMapping("/show_categories")
-    public String showSearch(Model model, @RequestParam Map<String, String> params,
-                             HttpServletRequest request, HttpServletResponse response,
-                             @CookieValue(value = "page_size", required = false) Integer pageSize) {
+    @GetMapping({"/category/{id}", "/category"})
+    public String categoryShow(Model model,
+                               @PathVariable (value = "id", required = false) Long id,
+                               @RequestParam Map<String, String> params,
+                               HttpServletRequest request, HttpServletResponse response,
+                               @CookieValue(value = "limit", required = false) Integer pageLimit) {
+        Integer pageNumber = 0;
+        boolean categoryOne = false;
 
-        return "ui/search";
+        if (params.size()==0) {
+            if (id!=null) {
+                params.put("cat_id", id.toString());
+            }
+        }
+
+        if (params.containsKey("pageNumber")) {
+            pageNumber = Integer.parseInt(params.get("pageNumber")) - 1;
+        }
+        if (pageLimit == null) {
+            response.addCookie(new Cookie("limit", String.valueOf(PAGE_LIMIT)));
+        }
+        if (params.containsKey("limit")) {
+            int lim = Integer.parseInt(params.get("limit"));
+            if (lim>0) {
+                pageLimit = lim;
+            }
+        }
+
+        if (params.containsKey("cat_id")) {
+            if (params.get("cat_id").length() == 1 || !params.get("cat_id").contains("")) {
+                categoryOne = true;
+            }
+        }
+        List<ArticleDto> articles = articleService.findAllDtoArticles();
+        ArticleFilter articleFilter = new ArticleFilter(params);
+        Pageable pageRequest = PageRequest.of(pageNumber, pageLimit, Sort.Direction.ASC, "id");
+        Page<Article> page = articleService.findAllByPagingAndFiltering(articleFilter.getSpecification(), pageRequest);
+
+        model.addAttribute("filtersDef", articleFilter.getFilterDefinition());
+        model.addAttribute("articles", articles);
+        model.addAttribute("categoryOne", categoryOne);
+        model.addAttribute("pageNumber", pageNumber);
+        model.addAttribute("pageLimit", pageLimit);
+        model.addAttribute("page", page);
+        return "ui/category";
     }
+
+//    private Map getNumberLimit (Map params, HttpServletResponse response){
+//        if (params.containsKey("pageNumber") && params.get("pageNumber")!=null) {
+//           params.put("pageNumber", Integer.parseInt(String.valueOf(params.get("pageNumber"))) - 1) ;
+//        } else {
+//            params.put("pageNumber", "0") ;
+//        }
+//        if (params.containsKey("limit")) {
+//            if (params.get("limit").equals("null") || params.get("limit").equals("0")) {
+//                response.addCookie(new Cookie("limit", String.valueOf(50)));
+//            }
+//        }
+//        return params;
+//    }
 }

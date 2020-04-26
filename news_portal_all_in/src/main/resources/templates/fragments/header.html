@@ -117,18 +117,10 @@
                         <li><a sec:authorize="!isAuthenticated()" th:href="@{/login}"><i class="ion-log-in"></i>
                             <div>Login</div>
                         </a></li>
-                        <!--                            <li sec:authorize="isAuthenticated()">-->
-                        <!--                                <a><i class="fa fa-user-o"></i>  Welcome, <span sec:authentication="name">Username</span>)))</a>-->
-                        <!--                            </li>-->
                         <li><a sec:authorize="isAuthenticated()" th:href="@{/user/edituser}"><i
                                 class="ion-person"></i>
                             <div sec:authentication="name"></div>
                         </a></li>
-                        <!--                            <li sec:authorize="isAuthenticated()">-->
-                        <!--                                <form th:action="@{/logout}" method="POST">-->
-                        <!--                                    <button class="btn btn-primary" type="submit">Logout</button>-->
-                        <!--                                </form>-->
-                        <!--                            </li>-->
                         <li><a sec:authorize="isAuthenticated()" th:href="@{/logout}"><i class="ion-log-out"></i>
                             <div>Logout</div>
                         </a>
@@ -181,7 +173,7 @@
                             <li class="dropdown magz-dropdown">
                                 <a th:href="@{/category}">All categories<i class="ion-ios-arrow-right"></i></a>
                                 <ul class="dropdown-menu">
-                                    <li th:each="category,iter : ${categories}">
+                                    <li th:each="category,iter : ${@articleCategoryService.findAll()}">
                                         <a th:href="@{/category/{id}(id=${category.id})}"
                                            th:text="${category.name}">Category</a>
                                     </li>
