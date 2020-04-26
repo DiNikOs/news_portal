@@ -4,7 +4,7 @@ CREATE TABLE articles (
     id                    bigserial,
     created               timestamp,
     title                 VARCHAR(255),
-    text                  VARCHAR(10000),
+    text                  VARCHAR(10000000),
     published             timestamp NULL,
     category_id           bigint NULL,
     total_views           bigint NULL,

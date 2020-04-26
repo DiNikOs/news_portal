@@ -12,7 +12,6 @@
 	<nav th:replace="fragments/header :: nav"></nav>
 </header>
 <!-- /HEADER -->
-
 		<section class="single">
 			<div class="container">
 				<div class="row">
@@ -96,13 +95,6 @@
 								<p>Ut est elit, vehicula tempus volutpat ut, sodales eget odio. Nunc placerat, orci ac iaculis feugiat, sem tellus efficitur tortor, mollis iaculis lacus ante nec risus. Sed consequat vehicula pretium.</p>
 							</div>
 							<footer>
-<!--								<div class="col">-->
-<!--									<ul class="tags">-->
-<!--										<li><a href="#">Free Themes</a></li>-->
-<!--										<li><a href="#">Bootstrap 3</a></li>-->
-
-<!--									</ul>-->
-<!--								</div>-->
 								<div class="col">
 									<ul class="tags">
 										<li  th:each="tag,state : ${article.tags}" >
@@ -191,7 +183,7 @@
 							</figure>
 							<div class="details">
 								<div class="job">Web Developer</div>
-								<h3 class="name">John Doe</h3>
+								<h3 class="name" th:text="${article.author}">John Doe</h3>
 								<p>Nulla sagittis rhoncus nisi, vel gravida ante. Nunc lobortis condimentum elit, quis porta ipsum rhoncus vitae. Curabitur magna leo, porta vel fringilla gravida, consectetur in libero. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.</p>
 								<ul class="social trp sm">
 									<li>
@@ -229,12 +221,9 @@
 						</div>
 						<div class="line thin"></div>
 						<div class="comments">
-<!--							<div th:each="comm,iter : ${comments}">-->
-<!--								<div th:if="${iter.last}">-->
 									<h2 class="title" sec:authorize="isAnonymous()" ><span th:text="${tree_comments.size()-1}"></span> Responses<a th:href="@{/login}" >Registered user write a Response</a></h2>
 									<h2 class="title" sec:authorize="isAuthenticated()" ><span th:text="${tree_comments.size()-1}"></span> Responses <a href="#reply" >Write a Response</a></h2>
-<!--								</div>-->
-<!--							</div>-->
+
 							<!--							форма для отправки комментария-->
 							<form class="row" sec:authorize="isAuthenticated()"
 								  th:action="@{/single/articles/comment/{article_id}(article_id = ${article.id})}"

@@ -3,8 +3,12 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       sec:authorize="isAuthenticated()">
 
-<head th:replace="fragments/header :: head">
+<!--sec:authorize="isAuthenticated()"-->
 
+
+<head th:replace="fragments/header :: head">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
 </head>
 
 <body class="skin-orange">
@@ -22,34 +26,49 @@
                     <li><a href="index.html" th:href="@{/}">Home</a></li>
                     <li class="active">Create article</li>
                 </ol>
-                <h1 class="page-title" th:text="${create!=false? 'Create article':'Edit article'}">Create article</h1>
+                <h2 class="page-title" th:text="${create!=false? 'Create article':'Edit article'}">Create article</h2>
                 <p class="page-subtitle">You can create your own article in the editor</p>
-                <div class="line thin"></div>
                 <div class="page-description">
-                    <h1 class="page-title" th:text="${create!=false? 'Create article':'Edit article'}">Create article</h1>
                     <form class="row contact" id="create_article" method="post"
-                          th:action="@{/single/articles/editor_article}" th:object="${article}">
+                          th:action="@{/single/articles/editor_article}" th:object="${articleEdit}" enctype="multipart/form-data">
                     <div class="form-row">
                         <div class="form-group col-sm-8">
                             <label for="article_title">Article title</label>
                             <input class="form-control" id="article_title" placeholder="Enter article tittle" type="text" autocomplete="off"
                                    th:field="*{title}" required="">
+                            <input th:if="${articleEdit.id}!=null" type="text" name="id" id="id" th:value="*{id}" th:type="hidden">
                         </div>
-                        <div>
-                            <input type="text" class="form-control" name="firstName" th:type="hidden"
+                        <div class="form-group col-sm-6" >
+                            <label for="main_picture">Upload Main picture from Disk</label>
+                            <input class="form-control" id="main_picture" type="file" name="files" placeholder="Enter main picture">
+                        </div>
+
+<!--                        <div class="custom-file">-->
+<!--                            <input type="file" class="custom-file-input" id="customFile">-->
+<!--                            <label class="custom-file-label" for="customFile">Choose file</label>-->
+<!--                        </div>-->
+
+                        <div class="form-group col-sm-6">
+                            <label for="mainPicture">Upload Main picture Link</label>
+                            <input class="form-control" id="mainPicture" type="text" name="mainPicture" value="" placeholder="Enter main picture" required="">
+                        </div>
+                        <div sec:authorize="isAuthenticated()">
+                                <input type="text" class="form-control" name="firstName"
                                        th:placeholder="${@userServiceImpl.findByUsername(#request.userPrincipal.name).firstName}"
-                                   th:value="${@userServiceImpl.findByUsername(#request.userPrincipal.name).firstName}" >
-                            <input type="text" class="form-control" name="lastName" th:type="hidden"
+                                       th:value="${@userServiceImpl.findByUsername(#request.userPrincipal.name).firstName}" th:type="hidden">
+                                <input type="text" class="form-control" name="lastName"
                                        th:placeholder="${@userServiceImpl.findByUsername(#request.userPrincipal.name).lastName}"
-                                       th:value="${@userServiceImpl.findByUsername(#request.userPrincipal.name).lastName}">
+                                       th:value="${@userServiceImpl.findByUsername(#request.userPrincipal.name).lastName}" th:type="hidden">
                         </div>
+
                         <div class="form-group col-sm-4">
                             <label for="category">Select Category</label>
                             <div class="input-group">
                                 <select class="form-control" name="category" id="category" >
-                                    <option name="category" value="${category.id}" th:value="${category.id}"
-                                            th:each="category, state : ${categories}" autocomplete="off">
-                                        <a th:text="${category.name}" >Category</a>
+                                    <option name="cat_id" value="${category.id}" th:value="${category.id}"
+                                            th:each="category, state : ${@articleCategoryService.findAll()}"
+                                            th:selected="${articleEdit.id}!=null? ${category.id} == ${articleEdit.category.id} : ${category.id} == 1"
+                                            th:text="${category.name}" >
                                 </select>
                             </div>
                         </div>
@@ -59,19 +78,20 @@
                             <div class="input-group">
                                 <select multiple class="selectpicker form-control" name="tags" id="tags" >
                                     <option name="tag_id" value="tag_id" th:value="${tag.id}"
-                                            th:each="tag, state : ${tags}" th:text="${tag.name}"> Tag
+                                            th:each="tag, state : ${@tagsServiceImpl.findAll()}" th:text="${tag.name}"> Tag
                                     </option>
                                 </select>
                             </div>
                         </div>
                     </div>
                         <div class="col-md-12">
-                            <div class="form-group">
+                            <div class="form-group summernote">
                                 <label>Article editor</label>
                                 <textarea class="form-control" name="text" required=""  id="text" placeholder="Enter text"
                                           th:field="*{text}" autocomplete="off" ></textarea>
                             </div>
                         </div>
+
                         <div class="col-md-12">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
@@ -90,6 +110,7 @@
 <!--<script th:include="~{fragments/footer :: scripts}"></script>-->
 
 <script  type="text/javascript" src="../js/jquery.js" th:src="@{/js/jquery.js}"></script>
+
 <script  type="text/javascript" src="../js/jquery.migrate.js" th:src="@{/js/jquery.migrate.js}"></script>
 <!--<script  type="text/javascript" src="../scripts/bootstrap/bootstrap.min.js" th:src="@{/scripts/bootstrap/bootstrap.min.js}"></script>-->
 <script  >var $target_end = $(".best-of-the-week");</script>
@@ -102,49 +123,37 @@
 <script  type="text/javascript" src="../scripts/toast/jquery.toast.min.js" th:src="@{/scripts/toast/jquery.toast.min.js}"></script>
 <script  type="text/javascript" src="../js/demo.js" th:src="@{/js/demo.js}"></script>
 <script  type="text/javascript" src="../js/e-magz.js" th:src="@{/js/e-magz.js}"></script>
-<!--            <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js}"></script>-->
-<!--<script type="text/javascript" th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js}"></script>-->
 <script type="text/javascript" th:src="@{https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js}"></script>
 <script type="text/javascript" th:src="@{https://oss.maxcdn.com/respond/1.4.2/respond.min.js}"></script>
 
-<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<!--Summernote with Bootstrap 4-->
+<!--<script th:src="@{https://code.jquery.com/jquery-3.4.1.min.js}" crossorigin="anonymous"></script>-->
 <script type="text/javascript" th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
 <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 <script type="text/javascript" th:src="@{/assets/summernote/summernote-bs4.js}"></script>
-<!-- Latest compiled and minified JavaScript -->
+<script th:src="@{https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-bs4.min.js}"></script>
+<!--<script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js}"-->
+<!--        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>-->
+<script th:src="@{https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js}"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script type="text/javascript" th:src="@{/assets/summernote/lang/summernote-ru-Ru.js}"></script>
+
 <!-- Latest compiled and minified JavaScript -->
 <script type="text/javascript" th:src="@{https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.12/dist/js/bootstrap-select.min.js}"></script>
 <!-- (Optional) Latest compiled and minified JavaScript translation files -->
 <script  type="text/javascript" th:src="@{https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.12/dist/js/i18n/defaults-*.min.js}"></script>
+<script th:src="@{/js/i18n/defaults-ru_RU.js}"></script>
 
 <script>
     $(function () {
         $('.selectpicker').selectpicker('tags','tag_id');
     });
-    // $(document).ready(function() {
-    //     $('.summernote').summernote();
-    // });
-
-    // var edit = function() {
-    //     $('.click2edit').summernote({focus: true});
-    // };
-    //
-    // var save = function() {
-    //     var markup = $('.click2edit').summernote('code');
-    //     $('.click2edit').summernote('destroy');
-    // };
-
-    $('#text').summernote({
-        lang:'ru-RU',
-        height:300,
-        minHeight:200,
-        maxHeight:400,
-        focus:true,
-        placeholder:'Введите данные',
-        disableDragAndDrop:false
-    });
 </script>
-</body>
+
+<!-- For summernote-->
+<script th:src="@{/assets/summernote/plugin/summernote-ext-uploadfile.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/upload_img.js}"></script>
 
 </body>
 </html>

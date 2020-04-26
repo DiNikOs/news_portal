@@ -11,31 +11,22 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.geek.news_portal.base.entities.Article;
 import ru.geek.news_portal.base.entities.ArticleCategory;
 import ru.geek.news_portal.base.entities.Comment;
 import ru.geek.news_portal.base.entities.Tag;
-import ru.geek.news_portal.base.specifications.ArticleSpecifications;
 import ru.geek.news_portal.dto.ArticleDto;
-import ru.geek.news_portal.services.ArticleCategoryService;
-import ru.geek.news_portal.services.ArticleService;
-import ru.geek.news_portal.services.CommentService;
-import ru.geek.news_portal.services.ContactService;
+import ru.geek.news_portal.services.*;
 import ru.geek.news_portal.utils.ArticleFilter;
-import ru.geek.news_portal.utils.SystemUser;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 @Controller
 public class MainController {
@@ -44,27 +35,21 @@ public class MainController {
     private CommentService commentService;
     private ArticleCategoryService articleCategoryService;
     private ContactService contactService;
+    private TagsServiceImpl tagsServiceImpl;
     //Временное решение до появления сервиса предпочтений пользователя
     private Long RECOMENDED_NEWS = 5L;
 
     @Autowired
-    public void setArticleService(ArticleService articleService) {
+    public MainController(ArticleService articleService,
+                          CommentService commentService,
+                          ArticleCategoryService articleCategoryService,
+                          ContactService contactService,
+                          TagsServiceImpl tagsServiceImpl) {
         this.articleService = articleService;
-    }
-
-    @Autowired
-    public void setCommentService(CommentService commentService) {
         this.commentService = commentService;
-    }
-
-    @Autowired
-    public void setArticleCategoryService(ArticleCategoryService articleCategoryService) {
         this.articleCategoryService = articleCategoryService;
-    }
-
-    @Autowired
-    public void setContactService(ContactService contactService) {
         this.contactService = contactService;
+        this.tagsServiceImpl = tagsServiceImpl;
     }
 
     @GetMapping("/")
@@ -90,14 +75,14 @@ public class MainController {
             category = articleCategoryService.findOneById(Long.parseLong(params.get("cat_id")));
         }
         ArticleFilter articleFilter = new ArticleFilter(params);
-        List<ArticleDto> articles = articleService.findAllArticles();
+        List<ArticleDto> articlesDto = articleService.findAllDtoArticles();
         Pageable pageRequest = PageRequest.of(pageNumber, pageLimit, Sort.Direction.ASC, "id");
 
         Page<Article> page = articleService.findAllByPagingAndFiltering(articleFilter.getSpecification(), pageRequest);
 
         List<ArticleCategory> categories = articleCategoryService.findAll();
         model.addAttribute("filtersDef", articleFilter.getFilterDefinition());
-        model.addAttribute("articles", articles);
+        model.addAttribute("articles", articlesDto);
         model.addAttribute("categories", categories);
         model.addAttribute("category", category);
         model.addAttribute("pageNumber", pageNumber);
@@ -106,9 +91,51 @@ public class MainController {
         return "index";
     }
 
+    /**
+     * @author Ostrovskiy Dmitriy
+     * @created 24/04/2020
+     * Контроллер для перехода к страници редактора статей для создания и редактирования
+     * @version v1.11
+     */
+    @GetMapping("/editor_article")
+    public String redactorArticle(Model model, @PathVariable(value = "id", required = false) Long id,
+                                  @RequestParam Map<String, String> params,
+                                  @RequestParam (value = "create", required = false, defaultValue = "false") Boolean create,
+                                  HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+        if (!session.getAttributeNames().hasMoreElements()) {
+            return "redirect:/";
+        }
+        Article article = null;
+        if(!params.containsKey("art_id")) {
+            article = new Article();
+        } else {
+            Long articleId = Long.parseLong(params.get("art_id"));
+            article = articleService.findById(articleId);
+        }
+        if (id!=null) {
+            article = articleService.findById(id);
+        }
+        // delete article and redirect
+        if (params.containsKey("delete") && !params.get("delete").isEmpty()) {
+            Boolean delete = Boolean.parseBoolean(params.get("delete"));
+            if (delete) {
+                articleService.delete(article);
+                String username = request.getUserPrincipal().getName();
+                return "redirect:/user/edituser/" + username;
+            }
+        }
+        ArticleFilter articleFilter = new ArticleFilter(params);
+        model.addAttribute("filtersDef", articleFilter.getFilterDefinition());
+        model.addAttribute("articleEdit", article);
+        model.addAttribute("create", create);
+        return "ui/editor_article";
+    }
+
     @GetMapping("/fragments/news")
     public String fragNews(Model model, @RequestParam(value = "id", required = false) Long id) {
-            model.addAttribute("articles", articleService.findAllArticles());
+            model.addAttribute("articles", articleService.findAllDtoArticles());
             model.addAttribute("comments", commentService.findAllCommentByArticle_id(RECOMENDED_NEWS));
             model.addAttribute("comment", new Comment());
             model.addAttribute("recomended_news_id", RECOMENDED_NEWS);
@@ -125,17 +152,13 @@ public class MainController {
 
     @GetMapping("/fragments/header")
     public String fragHeader(Model model, @RequestParam(value = "id", required = false) Long id) {
-        model.addAttribute("articles", articleService.findAllArticles());
         model.addAttribute("comments", commentService.findAllCommentByArticle_id(RECOMENDED_NEWS));
-        model.addAttribute("categories", articleCategoryService.findAll());
         return "fragments/header";
     }
 
     @GetMapping("/fragments/footer")
     public String fragFooter(Model model, @RequestParam(value = "id", required = false) Long id) {
-        model.addAttribute("articles", articleService.findAllArticles());
         model.addAttribute("comments", commentService.findAllCommentByArticle_id(RECOMENDED_NEWS));
-        model.addAttribute("categories", articleCategoryService.findAll());
         if (id==null){
             model.addAttribute("tags", null);
         } else {
@@ -149,21 +172,11 @@ public class MainController {
         return "ui/login";
     }
 
-//    @GetMapping("/forgot")
-//    public String forgot() {
-//        return "ui/forgot";
-//    }
-
     @GetMapping("/page")
     public String page(Model model, @PathVariable(value = "id", required = false) Long id) {
         model.addAttribute("articles", articleService.findAllArticles());
         return "ui/page";
     }
-
-//    @GetMapping("/reset")
-//    public String reset() {
-//        return "ui/reset";
-//    }
 
     @GetMapping("/single")
     public String single() {
