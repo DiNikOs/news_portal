@@ -76,14 +76,25 @@ public class UserController {
 //        if (!request.isRequestedSessionIdValid()) {
 //            return "ui/personal";
 //        }
+        // todo Переделать с учетом фильтров
+
+        String errorMsg = "";
+
         if (!userAccountDTO.getUsername().equals(principal.getName())) {
-            model.addAttribute("error","Username wrong");
-        } else if (userAccountDTO.getFirstName().length() < 2 || userAccountDTO.getFirstName() == null) {
-            model.addAttribute("error", "The first name must be longer than or equal to 1 characters");
-        } else if (userAccountDTO.getLastName().length() < 2 || userAccountDTO.getLastName() == null) {
-            model.addAttribute("error", "The last name must be longer than or equal to 1 characters");
-        } else if (userAccountDTO.getEmail().length() < 6 || userAccountDTO.getEmail() == null) {
-            model.addAttribute("error", "The email is not correctly");
+            errorMsg = errorMsg + "Username wrong,";
+        }
+        if (userAccountDTO.getFirstName().length() < 2 || userAccountDTO.getFirstName() == null) {
+            errorMsg = errorMsg + " The first name must be longer than or equal to 1 characters,";
+        }
+        if (userAccountDTO.getLastName().length() < 2 || userAccountDTO.getLastName() == null) {
+            errorMsg = errorMsg + " The last name must be longer than or equal to 1 characters,";
+        }
+        if (userAccountDTO.getEmail().length() < 6 || userAccountDTO.getEmail() == null) {
+            errorMsg = errorMsg + " The email is not correctly";
+        }
+
+        if (errorMsg.length() > 0) {
+            model.addAttribute("error", errorMsg);
         } else {
             userService.saveDTO(userAccountDTO);
             model.addAttribute("success", "The changing succesful");
@@ -120,7 +131,7 @@ public class UserController {
 
     @GetMapping({"/user/change_password", "/user/change_password/{username}"})
     public String userChangePassword(Model model, @PathVariable(value = "username", required = false) String username,
-                                        HttpServletRequest request) {
+                                     HttpServletRequest request) {
         if (!request.isRequestedSessionIdValid()) {
             return "redirect:/";
         }
@@ -131,7 +142,7 @@ public class UserController {
 
     @PostMapping("/user/change_password")
     public String userChangePassword(@ModelAttribute("password") @Valid UpdatePasswordDTO updatePasswordDTO,
-                                         BindingResult bindingResult, Principal principal, Model model) {
+                                     BindingResult bindingResult, Principal principal, Model model) {
         User user = userService.findByUsername(principal.getName());
 
         if (!userService.checkPassword(user, updatePasswordDTO.getOldPassword())) {
@@ -179,7 +190,7 @@ public class UserController {
 
     @PostMapping("/reset")
     public String resetPassword(@ModelAttribute("password") NewPasswordDTO newPassword,
-                        Principal principal, Model model) {
+                                Principal principal, Model model) {
 
         User user = userService.findByUsername(principal.getName());
 

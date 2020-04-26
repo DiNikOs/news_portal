@@ -23,11 +23,13 @@ import ru.geek.news_portal.base.repo.UserRepository;
 import ru.geek.news_portal.base.repo.RoleRepository;
 import ru.geek.news_portal.dto.ArticleDto;
 import ru.geek.news_portal.dto.UserAccountDTO;
+import ru.geek.news_portal.dto.UserModifyDTO;
 import ru.geek.news_portal.utils.SystemUser;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -179,7 +181,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User saveDTO(UserAccountDTO userAccountDTO) {
-        User user = userRepository.findUserByUsername(userAccountDTO.getUsername()).orElse(new User());
+        User user = userRepository.findOneByUsername(userAccountDTO.getUsername());
         user.setUsername(userAccountDTO.getUsername());
 
         if (findByUsername(user.getUsername()) == null) {
@@ -191,6 +193,25 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userAccountDTO.getEmail());
 
         return userRepository.save(user);
+    }
+
+    @Override
+    public void updateDTO(UserModifyDTO userDTO) {
+        User user;
+
+        if (findByUsername(userDTO.getUsername()) == null) {
+            user = new User();
+        } else {
+            user = userRepository.findOneByUsername(userDTO.getUsername());
+        }
+
+        user.setUsername(userDTO.getUsername());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setEmail(userDTO.getEmail());
+        user.setRoles(userDTO.getRoles());
+
+        userRepository.save(user);
     }
 
     @Override

@@ -33,17 +33,16 @@ public class ArticleController {
     @Value("${news.url}")
     private String newsUrl;
 
-
     private ArticleService articleService;
     private CommentService commentService;
     private ArticleLikeService articleLikeService;
     private ArticleCategoryService articleCategoryService;
     private CommentLikeService commentLikeService;
     private TagsServiceImpl tagsService;
+    private ArticleRatingService ratingService;
 
     //Временное решение до появления сервиса предпочтений пользователя
     private Long RECOMENDED_NEWS = 5L;
-
 
     @Autowired
     public ArticleController(ArticleService articleService,
@@ -51,27 +50,30 @@ public class ArticleController {
                              ArticleLikeService articleLikeService,
                              ArticleCategoryService articleCategoryService,
                              CommentLikeService commentLikeService,
-                             TagsServiceImpl tagsService) {
+                             ArticleRatingService ratingService
+                             TagsServiceImpl tagsService) {                            
         this.articleService = articleService;
         this.commentService = commentService;
         this.articleLikeService = articleLikeService;
         this.articleCategoryService = articleCategoryService;
         this.commentLikeService = commentLikeService;
         this.tagsService = tagsService;
+        this.ratingService = ratingService;
     }
 
     /**
      * Updated by Stanislav Ryzhkov 28/03/2020
-     * */
-   
+     * */   
 
-    @Autowired
-    public void setArticleCategoryService(ArticleCategoryService articleCategoryService) {
-        this.articleCategoryService = articleCategoryService;
-    }
+//    @Autowired
+//    public void setArticleCategoryService(ArticleCategoryService articleCategoryService) {
+//        this.articleCategoryService = articleCategoryService;
+//    }
 
-   @GetMapping("/{id}")
-    public String showSinglePage(Model model, @PathVariable(value = "id", required = false) Long id) {
+   @GetMapping({"/{id}","/comment/reply/{id}"})
+   public String showSinglePage(Model model, @PathVariable(value = "id", required = false) Long id,
+                                @RequestParam(value = "reply_id",required = false) Long reply_id,
+                                Principal principal) {
         if (id == null) {
             return "ui/404";
         }
@@ -79,6 +81,7 @@ public class ArticleController {
             Tree<Long, Comment> tree = commentService.getCommentsTreeByArticle_id(id);
             ArticleDto article = articleService.findArticleDtoById(id);
             model.addAttribute("article", article);
+            model.addAttribute("reply_id",reply_id);
             model.addAttribute("articles", articleService.findAllArticles());
             model.addAttribute("comments", tree.getChildren(null));
             model.addAttribute("tree_comments", tree);
@@ -86,6 +89,9 @@ public class ArticleController {
             model.addAttribute("categories", articleCategoryService.findAll());
             model.addAttribute("articleLikes", articleLikeService.getArticleLikes(id));
             model.addAttribute("articleDislikes", articleLikeService.getArticleDislikes(id));
+           if (principal!=null) {
+               model.addAttribute("user_value", ratingService.getValueByArticle_idAndUsername(id, principal.getName()));
+           }
             return "ui/single";
         } catch (Exception e) {
             e.printStackTrace();
@@ -136,6 +142,47 @@ public class ArticleController {
         return "redirect:/single/articles/" + article_id;
     }
 
+//    @GetMapping("/comment/reply/{article_id}")
+    public String replyComment(Model model, @PathVariable("article_id") Long id,
+                               @RequestParam("reply_id") Long reply_id,
+                               Principal principal){
+
+        if (id == null) {
+            return "ui/404";
+        }
+        try {
+
+            Tree<Long, Comment> tree = commentService.getCommentsTreeByArticle_id(id);
+
+            ArticleDto article = articleService.findArticleDtoById(id);
+            model.addAttribute("article", article);
+            model.addAttribute("reply_id",reply_id);
+            model.addAttribute("articles", articleService.findAllArticles());
+            model.addAttribute("comments", tree.getChildren(null));
+            model.addAttribute("tree_comments", tree);
+//            model.addAttribute("comments", commentService.findAllCommentByArticle_id(id));
+            model.addAttribute("comment", new Comment());
+            model.addAttribute("categories", articleCategoryService.findAll());
+            model.addAttribute("articleLikes", articleLikeService.getArticleLikes(id));
+            model.addAttribute("articleDislikes", articleLikeService.getArticleDislikes(id));
+            if (principal!=null) {
+                model.addAttribute("user_value", ratingService.getValueByArticle_idAndUsername(id, principal.getName()));
+            }
+            return "ui/single";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "ui/404";
+        }
+//        return "redirect:/single/articles/" + article_id;
+    }
+
+    @PostMapping("add/rating/{article_id}")
+    public String evaluateArticle(@PathVariable("article_id") Long article_id,
+                                  @RequestParam(value = "article_value_by_user") int evaluation,
+                                  Principal principal) {
+        ratingService.addArticleRating(article_id, principal.getName(), evaluation);
+        return "redirect:/single/articles/" + article_id;
+    }
     @GetMapping("/add/like/{id}")
     public String addArticleLike(@PathVariable("id") Long article_id,
                                  Principal principal) {

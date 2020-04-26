@@ -73,7 +73,8 @@
 											   th:href="@{'/category?cat_id=' + ${article.category.id} + ${filtersDef}}"
 											   th:utext="${article.category.name}">Film</a>
 										</div>
-										<div class="time" th:utext="${article.created}">December 26, 2016</div>
+<!--										<div class="time" th:utext="${article.created}">December 26, 2016</div>-->
+										<div class="time" th:utext="${#temporals.format(article.created, 'dd MMM HH:mm')}">December 26, 2016</div>
 									</div>
 									<h1><a href="../ui/single.html" th:href="@{/single/articles/{id}(id=${article.id})}"
 										   th:utext="${article.title}">Lorem Ipsum Dolor Sit Consectetur Adipisicing Elit</a></h1>
@@ -83,12 +84,18 @@
 										quis nostrud exercitat...
 									</p>
 									<footer>
-										<a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>237</div></a>
+										<!--										<a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>237</div></a>-->
+										<div>
+											<i class="love_news fa fa-thumbs-up"
+											   th:text="${@articleLikeService.getArticleLikes(article.id)}">2333</i>
+											<i class="love_news fa fa-thumbs-down"
+											   th:text="${@articleLikeService.getArticleDislikes(article.id)}">213</i>
 										<a class="btn btn-primary more" href="../ui/single.html"
 										   th:href="@{/single/articles/{id}(id=${article.id})}">
 											<div>More</div>
 											<div><i class="ion-ios-arrow-thin-right"></i></div>
 										</a>
+										</div>
 									</footer>
 								</div>
 							</div>
@@ -172,5 +179,7 @@
 	<!-- /FOOTER -->
 	<!-- JS -->
 	<script th:remove="tag" th:replace="fragments/scripts.html :: scripts"> </script>
+	<!--для отображения шрифтов для лайков и дизлайков-->
+	<script src="https://use.fontawesome.com/2010e27091.js"></script>
 	</body>
 </html>

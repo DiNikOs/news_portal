@@ -3,15 +3,6 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <body>
-<!--<section th:fragment="comments">-->
-<!--    <ul>-->
-<!--        <li th:each="comm : ${comments}">-->
-<!--            <span th:text="${comm.text}">Вывод комментариев</span>-->
-<!--            <section th:include="fragments/comment_fragment.html :: comments"-->
-<!--                     th:with="comments=${@commentService.getChildren(tree_comments,comm.id)}"></section>-->
-<!--        </li>-->
-<!--    </ul>-->
-<!--</section>-->
 
 <section th:fragment="comments">
     <ul>
@@ -24,56 +15,59 @@
                         </figure>
                         <div class="details">
                             <h5 class="name" th:text="${comm.user.username}">Mark Otto</h5>
-                            <div class="time" th:text="${comm.created}">24 Hours</div>
+                            <div class="time" th:text="${#temporals.format(comm.created, 'dd-MMM-yyyy HH:mm')}" >24 Hours</div>
                             <!--											<div class="time" th:text="${#dates.format(comm.created, 'dd-MMM-yyyy')}">24 Hours</div>-->
                             <div class="text" th:text="${comm.text}">Text</div>
-                            <footer>
-                                <a href="#rerly" sec:authorize="isAuthenticated()">Reply</a>
-                                <div class="col" sec:authorize="isAuthenticated()">
+                            <footer style="margin-top: 0px;">
+                                <div class="col_comments margin-top-zerro" sec:authorize="isAuthenticated()">
+
                                     <a class="love"
-                                       th:href="@{/single/articles/comment/add/like/{id}(id = ${comm.getId()})}">
+                                       th:href="@{/single/articles/comment/add/like/{id}(id = ${comm.id})}">
                                         <i class="fa fa-thumbs-up"
-                                           th:text="${@commentLikeService.getLikes(comm.getId())}">2333</i>
+                                           th:text="${@commentLikeService.getLikes(comm.id)}">2333</i>
                                     </a>&nbsp;&nbsp;&nbsp;
                                     <a class="love"
                                        th:href="@{/single/articles/comment/add/dislike/{id}(id = ${comm.id})}">
                                         <i class="fa fa-thumbs-down"
-                                           th:text="${@commentLikeService.getDislikes(comm.getId())}">213</i>
+                                           th:text="${@commentLikeService.getDislikes(comm.id)}">213</i>
                                     </a>
 
+                                    <form class="col margin-top-zerro" th:action="@{/single/articles/comment/reply/{id}(id=${article.id})}">
+                                        <input type="hidden" id="reply_id" th:name="reply_id" th:value="${comm.id}">
+                                        <input th:type="submit" th:value="Reply" class ="button-like-link text" th:unless="${reply_id==comm.id}">
+                                    </form>
+
                                     <!--форма для отправки ответа к комментарию  (начало)-->
-                                    <form class="row" sec:authorize="isAuthenticated()"
+                                    <form class="row comment_response" th:if="${reply_id==comm.id}"
+                                          th:id="id_+${comm.id}" sec:authorize="isAuthenticated()"
                                           th:action="@{/single/articles/comment/{article_id}(article_id = ${article.id})}"
                                           th:object="${comment}" method="post">
                                         <input th:fielld="*{id_parent}" type="hidden" th:name="id_parent"
                                                th:value="${comm.id}">
-                                        <a name="reply"></a>
-                                        <div class="col-md-12">
-                                            <h3 class="title">Leave Your Response</h3>
-                                        </div>
-
                                         <div class="form-group col-md-12">
                                             <label for="message">Response <span
                                                     class="required"></span></label>
                                             <textarea class="form-control" name="message"
                                                       placeholder="Write your response ..."
-                                                      th:field="*{text}"></textarea>
+                                                      th:field="*{text}" th:id = "text_reply"></textarea>
                                         </div>
                                         <div class="form-group col-md-12">
                                             <button type="submit" class="btn btn-primary">Send Response
                                             </button>
                                         </div>
                                     </form>
+
                                     <!--форма для отправки ответа к комментарию  (конец)-->
 
                                 </div>
 
                                 <!--для неавторизованных пользователей кнопки с лайками должны быть недоступны-->
-                                <div class="col" sec:authorize="isAnonymous()">
+                                <div class="col_comments" sec:authorize="isAnonymous()">
                                     <!--														<i class="fa fa-thumbs-up" th:text="${comm.likes}">2333</i>-->
                                     <!--														<i class="fa fa-thumbs-down" th:text="${comm.dislikes}">213</i>-->
-                                    <i class="fa fa-thumbs-up" th:text="${@commentLikeService.getLikes(comm.getId())}">2333</i>
-                                    <i class="fa fa-thumbs-down"
+                                    <i class="love fa fa-thumbs-up"
+                                       th:text="${@commentLikeService.getLikes(comm.getId())}">2333</i>
+                                    <i class="love fa fa-thumbs-down"
                                        th:text="${@commentLikeService.getDislikes(comm.getId())}">213</i>
                                 </div>
                             </footer>
@@ -81,8 +75,10 @@
                     </div>
                 </div>
 
-                        <section th:include="fragments/comment_fragment.html :: comments"
+            <div th:if="${@commentService.getChildren(tree_comments,comm.id).size()>0}">
+                <section th:include="fragments/comment_fragment.html :: comments"
                                  th:with="comments=${@commentService.getChildren(tree_comments,comm.id)}"></section>
+            </div>
         </li>
     </ul>
 </section>

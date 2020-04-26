@@ -1,9 +1,12 @@
 package ru.geek.news_portal.base.entities;//package ru.geek.news_portal.newsportal.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -26,9 +29,18 @@ public class Tag {
     @Column(name = "name")
     private String name;
 
+    @JsonBackReference
     @ManyToMany
     @JoinTable(name = "articles_tags",
             joinColumns = @JoinColumn(name = "tag_id"),
             inverseJoinColumns = @JoinColumn(name = "article_id"))
     private List<Article> articles;
+
+    @Override
+    public String toString() {
+        return "Tag{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

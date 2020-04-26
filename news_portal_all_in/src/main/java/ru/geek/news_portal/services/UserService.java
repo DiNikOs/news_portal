@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import ru.geek.news_portal.base.entities.User;
 import ru.geek.news_portal.dto.UserAccountDTO;
+import ru.geek.news_portal.dto.UserModifyDTO;
 import ru.geek.news_portal.utils.SystemUser;
 
 import java.util.List;
@@ -37,4 +38,6 @@ public interface UserService extends UserDetailsService {
     public boolean checkPassword(User user, String password);
 
     UserAccountDTO userToDTO(String username);
+
+    void updateDTO(UserModifyDTO userDTO);
 }
