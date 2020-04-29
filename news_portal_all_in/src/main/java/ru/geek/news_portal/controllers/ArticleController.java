@@ -61,15 +61,6 @@ public class ArticleController {
         this.ratingService = ratingService;
     }
 
-    /**
-     * Updated by Stanislav Ryzhkov 28/03/2020
-     * */   
-
-//    @Autowired
-//    public void setArticleCategoryService(ArticleCategoryService articleCategoryService) {
-//        this.articleCategoryService = articleCategoryService;
-//    }
-
    @GetMapping({"/{id}","/comment/reply/{id}"})
    public String showSinglePage(Model model, @PathVariable(value = "id", required = false) Long id,
                                 @RequestParam(value = "reply_id",required = false) Long reply_id,
@@ -173,7 +164,6 @@ public class ArticleController {
             e.printStackTrace();
             return "ui/404";
         }
-//        return "redirect:/single/articles/" + article_id;
     }
 
     @PostMapping("add/rating/{article_id}")

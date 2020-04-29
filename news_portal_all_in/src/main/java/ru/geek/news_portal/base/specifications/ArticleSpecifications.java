@@ -2,7 +2,7 @@
  * @author Ostrovskiy Dmitriy
  * @created 04/04/2020
  * ArticleSpecifications for SearchController
- * @version v1.0
+ * @version v1.10 (30/04/2020)
  */
 
 package ru.geek.news_portal.base.specifications;
@@ -10,9 +10,15 @@ package ru.geek.news_portal.base.specifications;
 import org.springframework.data.jpa.domain.Specification;
 
 import ru.geek.news_portal.base.entities.Article;
+import ru.geek.news_portal.base.entities.Tag;
 import ru.geek.news_portal.dto.ArticleDto;
 
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 import java.math.BigDecimal;
+import java.util.Collection;
 
 public class ArticleSpecifications {
     public static Specification<Article> titleContains(String word) {
@@ -34,9 +40,15 @@ public class ArticleSpecifications {
         return (Specification<Article>) (root, criteriaQuery, criteriaBuilder) ->
            criteriaBuilder.equal(root.get("category").get("id"), catId);
         }
-
+        // spec many to many
     public static Specification<Article> tagsId(Long tagId) {
-        return (Specification<Article>) (root, criteriaQuery, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("tag_id").get("id"), tagId);
+        return (Specification<Article>) (root, criteriaQuery, criteriaBuilder) -> {
+                criteriaQuery.distinct(true);
+                Root<Article> article = root;
+                Root<Tag> tag = criteriaQuery.from(Tag.class);
+                Expression<Collection<Article>> tagsArticle = tag.get("articles");
+                return criteriaBuilder.and(criteriaBuilder.equal(tag.get("id"), tagId),
+                        criteriaBuilder.isMember(article, tagsArticle));
+        };
     }
 }

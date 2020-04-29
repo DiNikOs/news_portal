@@ -22,7 +22,7 @@
                 <div th:if="${error}!=null" class="alert alert-danger">[[${error}]]</div>
                 <div th:if="${success}!=null" class="alert">[[${success}]]</div>
 
-                <form method="post" th:action="@{/static/tmp/user/edituser}" th:object="${user}">
+                <form method="post" th:action="@{/user/edituser}" th:object="${user}">
                     <div class="form-group">
                         <label>Username</label>
                         <input type="text" class="form-control" name="username"

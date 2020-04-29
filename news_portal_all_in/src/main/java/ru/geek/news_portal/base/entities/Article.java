@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-//@Data "java.lang.StackOverflowError" with this annotation - changed to geter seter
+//@Data "java.lang.StackOverflowError" with this annotation - changed to getter setter
 @Getter
 @Setter
 @NoArgsConstructor

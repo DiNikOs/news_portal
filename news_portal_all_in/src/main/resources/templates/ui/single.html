@@ -55,6 +55,7 @@
 						</aside>
 					</div>
 					<div class="col-md-8">
+						<br>
 						<ol class="breadcrumb">
 						  <li><a href="#" th:href="@{/}">Home</a></li>
 						  <li class="active" th:utext="${article.category.name}">Film</li>
@@ -65,7 +66,7 @@
 								<ul class="details">
 									<li th:remove="tag" th:utext="${#temporals.format(article.created, 'dd-MMM-yyyy HH:mm')}">Posted on 31 December, 2016</li>
 <!--									<li th:remove="tag" th:utext="${#dates.format(article.created, 'dd-MMM-yyyy')}">Posted on 31 December, 2016</li>-->
-									<li><a  th:href="@{/category/{id}(id=${article.category.id})}" th:utext="${article.category.name}">Film</a></li>
+									<li><a  th:href="@{'/search?cat_id=' + ${article.category.id}}" th:utext="${article.category.name}">Film</a></li>
 									<li th:text="${article.author}">By John Doe </li>
 									<!--вывод списка авторов-->
 <!--									<li th:if="${article.authors.size()==1}" >Автор</li>-->

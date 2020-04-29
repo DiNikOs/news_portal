@@ -2,6 +2,7 @@
  * @Author Created
  * fix Dmitriy Ostrovskiy
  * MainController mapping pages v1.0
+ * @version 1.10 (30/04/2020)
  */
 
 package ru.geek.news_portal.controllers;
@@ -135,7 +136,7 @@ public class MainController {
 
     @GetMapping("/fragments/news")
     public String fragNews(Model model, @RequestParam(value = "id", required = false) Long id) {
-            model.addAttribute("articles", articleService.findAllDtoArticles());
+            model.addAttribute("articles", articleService.findAllArticles());
             model.addAttribute("comments", commentService.findAllCommentByArticle_id(RECOMENDED_NEWS));
             model.addAttribute("comment", new Comment());
             model.addAttribute("recomended_news_id", RECOMENDED_NEWS);
@@ -173,8 +174,7 @@ public class MainController {
     }
 
     @GetMapping("/page")
-    public String page(Model model, @PathVariable(value = "id", required = false) Long id) {
-        model.addAttribute("articles", articleService.findAllArticles());
+    public String page() {
         return "ui/page";
     }
 

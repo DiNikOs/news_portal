@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/header.html :: head"></head>
+
+<body class="skin-orange">
+<!-- HEADER -->
+<header class="primary">
+    <div th:replace="fragments/header.html :: firstbar"></div>
+    <nav th:replace="fragments/header.html :: nav"></nav>
+</header>
+
+<section class="page">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <!--                <div class="col-md-8 col-md-offset-2">-->
+                <h1 class="page-title">My account</h1>
+
+                <div th:if="${error}!=null" class="alert alert-danger">[[${error}]]</div>
+                <div th:if="${success}!=null" class="alert">[[${success}]]</div>
+
+                <form method="post" th:action="@{/static/tmp/user/edituser}" th:object="${user}">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" class="form-control" name="username"
+                               placeholder="username" value="target" autocomplete="off" required
+                               readonly th:field="*{username}">
+                        <input type="text" class="form-control" name="edit_data"
+                               value="edit_data"
+                               th:value="${param.edit_data}!= null? ${param.edit_data}:''">
+                    </div>
+                    <div class="form-group text-right">
+                        <button type="submit" class="btn btn-primary btn-block" id="edit_data" name="edit_data" th:value="true">Edit data</button>
+                    </div>
+
+                    <div th:if="${param.edit_data} == true">
+                        <div class="form-group">
+                            <label>First name</label>
+                            <input type="text" class="form-control" name="firstName"
+                                   placeholder="firstName" value="John" autocomplete="off" required th:field="*{firstName}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Last name</label>
+                            <input type="text" class="form-control" name="lastName"
+                                   placeholder="lastName" value="Connor" autocomplete="off" required th:field="*{lastName}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>E-mail</label>
+                            <input type="email" class="form-control" name="email"
+                                   placeholder="email" value="terminator@murder.tv" autocomplete="off" required
+                                   th:field="*{email}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>articleLikes</label>
+                        <p class="form-control" th:text="*{articleLikes.size()}"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>articleRatings</label>
+                        <p class="form-control" th:text="*{articleRatings.size()}"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>comments</label>
+                        <p class="form-control" th:text="*{comments.size()}"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>commentLikes</label>
+                        <p class="form-control" th:text="*{commentLikes.size()}"></p>
+                    </div>
+
+                    <div class="form-group text-right">
+                        <button type="submit" class="btn btn-primary btn-block" id="save_data" name="save_data" th:value="true">Save data</button>
+                    </div>
+                </form>
+
+                <!--                <p class="page-subtitle">See it</p>-->
+                <div class="line thin"></div>
+            </div>
+            <div class="col-md-5" th:object="${user}">
+                <h1 class="page-title">My articles</h1>
+                <form class="form-inline" th:action="@{/editor_article}"  method="get">
+                    <table class="table table-borderless table-black">
+                        <tbody>
+                        <tr>
+                            <td>
+                                <label  id="articles_user"
+                                        th:text="'Articles: ' + ${@articleService.findArticlesByAuthor(user.firstName + ' ' + user.lastName).size()}">
+                                    Articles</label></td>
+                            <td></td>
+                            <td><a name="write" id="write" th:href="@{'/editor_article?create=true'}" class="btn btn-primary mb-2" th:text="'   Write   '"></a></td>
+                            <!--                        <button th:href="@{/editor_article}" class="btn btn-primary mb-2" id="write" th:text="'   Write   '"></button>-->
+                        </tr>
+                        <tr>
+                            <td>
+                                <select class="form-control" name="art_id" id="art_id" data-th-placeholder="'Select article'">
+                                    <option name="art_id" value="art_id" th:value="${article.id}"
+                                            th:each="article, state : ${@articleService.findArticlesDtoByAuthor(user.firstName + ' ' + user.lastName)}">
+                                        <a th:text="${article.title}" >Article</a>
+                                </select>
+                            </td>
+                            <td>
+                                <button type="submit" class="btn btn-outline-secondary mb-2"
+                                        id="edit" name="edit" th:value="true">Edit</button></td>
+                            <td>
+                                <button type="submit" class="btn btn-primary mb-2"
+                                        id="delete" name="delete" th:value="true">Delete</button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer th:replace="fragments/footer.html :: footer"></footer>
+<!-- /FOOTER -->
+
+<!-- JS -->
+<script th:remove="tag" th:replace="fragments/scripts.html :: scripts"></script>
+
+</body>
+</html>

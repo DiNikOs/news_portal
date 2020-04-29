@@ -3,7 +3,9 @@ package ru.geek.news_portal.base.entities;//package ru.geek.news_portal.newsport
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,7 +18,9 @@ import java.util.List;
  */
 
 @NoArgsConstructor
-@Data
+//@Data "java.lang.StackOverflowError" with this annotation - changed to getter setter
+@Getter
+@Setter
 @Entity
 @Table(name = "tags")
 public class Tag {
