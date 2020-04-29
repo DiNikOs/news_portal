@@ -57,16 +57,8 @@
 								<h1 class="title-col">Trending Tags</h1>
 								<div class="body-col">
 									<ol class="tags-list">
-										<li><a th:href="@{#}">HTML5</a></li>
-										<li><a th:href="@{#}">CSS3</a></li>
-										<li><a th:href="@{#}">JavaScript</a></li>
-										<li><a th:href="@{#}">jQuery</a></li>
-										<li><a th:href="@{#}">Bootstrap</a></li>
-										<li><a th:href="@{#}">Responsive</a></li>
-										<li><a th:href="@{#}">AuteIrure</a></li>
-										<li><a th:href="@{#}">Voluptate</a></li>
-										<li><a th:href="@{#}">Veit</a></li>
-										<li><a th:href="@{#}">Reprehenderit</a></li>
+										<li th:if="${state.count}<11" th:each="tag,state : ${@tagsServiceImpl.findAll()}" >
+											<a th:href="@{'/search?tag_id=' + ${tag.id}}" th:text="${tag.name}">HTML5</a></li>
 									</ol>
 								</div>
 							</div>
@@ -97,76 +89,77 @@
 					</div>
 					<div class="col-xs-6 col-md-4 sidebar" id="sidebar">
 						<div class="sidebar-title for-tablet">Sidebar</div>
+						<br>
+<!--						<aside>-->
+<!--							<div class="aside-body">-->
+<!--								<div class="featured-author">-->
+<!--									<div class="featured-author-inner">-->
+<!--										<div class="featured-author-cover" th:style="'background-image: url(' + @{/images/news/img15.jpg} + ');'">-->
+<!--											<div class="badges">-->
+<!--												<div class="badge-item"><i class="ion-star"></i> Featured</div>-->
+<!--											</div>-->
+<!--											<div class="featured-author-center">-->
+<!--												<figure class="featured-author-picture">-->
+<!--													<img src="../static/images/img01.jpg" th:src="@{/images/img01.jpg}" alt="Sample Article">-->
+<!--												</figure>-->
+<!--												<div class="featured-author-info">-->
+<!--													<h2 class="name">John Doe</h2>-->
+<!--													<div class="desc">@JohnDoe</div>-->
+<!--												</div>-->
+<!--											</div>-->
+<!--										</div>-->
+<!--										<div class="featured-author-body">-->
+<!--											<div class="featured-author-count">-->
+<!--												<div class="item">-->
+<!--													<a th:href="@{#}">-->
+<!--														<div class="name">Posts</div>-->
+<!--														<div class="value">208</div>														-->
+<!--													</a>-->
+<!--												</div>-->
+<!--												<div class="item">-->
+<!--													<a th:href="@{#}">-->
+<!--														<div class="name">Stars</div>-->
+<!--														<div class="value">3,729</div>														-->
+<!--													</a>-->
+<!--												</div>-->
+<!--												<div class="item">-->
+<!--													<a th:href="@{#}">-->
+<!--														<div class="icon">-->
+<!--															<div>More</div>-->
+<!--															<i class="ion-chevron-right"></i>-->
+<!--														</div>														-->
+<!--													</a>-->
+<!--												</div>-->
+<!--											</div>-->
+<!--											<div class="featured-author-quote">-->
+<!--												"Eur costrict mobsa undivani krusvuw blos andugus pu aklosah"-->
+<!--											</div>-->
+<!--											<div class="block">-->
+<!--												<h2 class="block-title">Photos</h2>-->
+<!--												<div class="block-body">-->
+<!--													<ul class="item-list-round" data-magnific="gallery">-->
+<!--														<li><a th:href="@{/images/news/img06.jpg}" th:style="'background-image: url(' + @{/images/news/img06.jpg} + ');'"></a></li>-->
+<!--														<li><a th:href="@{/images/news/img07.jpg}" th:style="'background-image: url(' + @{/images/news/img07.jpg} + ');'"></a></li>-->
+<!--														<li><a th:href="@{/images/news/img08.jpg}" th:style="'background-image: url(' + @{/images/news/img08.jpg} + ');'"></a></li>-->
+<!--														<li><a th:href="@{/images/news/img09.jpg}" th:style="'background-image: url(' + @{/images/news/img09.jpg} + ');'"></a></li>-->
+<!--														<li><a th:href="@{/images/news/img10.jpg}" th:style="'background-image: url(' + @{/images/news/img10.jpg} + ');'"></a></li>-->
+<!--														<li><a th:href="@{/images/news/img11.jpg}" th:style="'background-image: url(' + @{/images/news/img11.jpg} + ');'"></a></li>-->
+<!--														<li><a th:href="@{/images/news/img12.jpg}" th:style="'background-image: url(' + @{/images/news/img12.jpg} + ');'"><div class="more">+2</div></a></li>-->
+<!--														<li class="hidden"><a th:href="@{/images/news/img13.jpg}" th:style="'background-image: url(' + @{/images/news/img13.jpg} + ');'"></a></li>-->
+<!--														<li class="hidden"><a th:href="@{/images/news/img14.jpg}" th:style="'background-image: url(' + @{/images/news/img14.jpg} + ');'"></a></li>-->
+<!--													</ul>-->
+<!--												</div>-->
+<!--											</div>-->
+<!--											<div class="featured-author-footer">-->
+<!--												<a th:href="@{#}">See All Authors</a>-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+<!--							</div>-->
+<!--						</aside>-->
 						<aside>
-							<div class="aside-body">
-								<div class="featured-author">
-									<div class="featured-author-inner">
-										<div class="featured-author-cover" th:style="'background-image: url(' + @{/images/news/img15.jpg} + ');'">
-											<div class="badges">
-												<div class="badge-item"><i class="ion-star"></i> Featured</div>
-											</div>
-											<div class="featured-author-center">
-												<figure class="featured-author-picture">
-													<img src="../static/images/img01.jpg" th:src="@{/images/img01.jpg}" alt="Sample Article">
-												</figure>
-												<div class="featured-author-info">
-													<h2 class="name">John Doe</h2>
-													<div class="desc">@JohnDoe</div>
-												</div>
-											</div>
-										</div>
-										<div class="featured-author-body">
-											<div class="featured-author-count">
-												<div class="item">
-													<a th:href="@{#}">
-														<div class="name">Posts</div>
-														<div class="value">208</div>														
-													</a>
-												</div>
-												<div class="item">
-													<a th:href="@{#}">
-														<div class="name">Stars</div>
-														<div class="value">3,729</div>														
-													</a>
-												</div>
-												<div class="item">
-													<a th:href="@{#}">
-														<div class="icon">
-															<div>More</div>
-															<i class="ion-chevron-right"></i>
-														</div>														
-													</a>
-												</div>
-											</div>
-											<div class="featured-author-quote">
-												"Eur costrict mobsa undivani krusvuw blos andugus pu aklosah"
-											</div>
-											<div class="block">
-												<h2 class="block-title">Photos</h2>
-												<div class="block-body">
-													<ul class="item-list-round" data-magnific="gallery">
-														<li><a th:href="@{/images/news/img06.jpg}" th:style="'background-image: url(' + @{/images/news/img06.jpg} + ');'"></a></li>
-														<li><a th:href="@{/images/news/img07.jpg}" th:style="'background-image: url(' + @{/images/news/img07.jpg} + ');'"></a></li>
-														<li><a th:href="@{/images/news/img08.jpg}" th:style="'background-image: url(' + @{/images/news/img08.jpg} + ');'"></a></li>
-														<li><a th:href="@{/images/news/img09.jpg}" th:style="'background-image: url(' + @{/images/news/img09.jpg} + ');'"></a></li>
-														<li><a th:href="@{/images/news/img10.jpg}" th:style="'background-image: url(' + @{/images/news/img10.jpg} + ');'"></a></li>
-														<li><a th:href="@{/images/news/img11.jpg}" th:style="'background-image: url(' + @{/images/news/img11.jpg} + ');'"></a></li>
-														<li><a th:href="@{/images/news/img12.jpg}" th:style="'background-image: url(' + @{/images/news/img12.jpg} + ');'"><div class="more">+2</div></a></li>
-														<li class="hidden"><a th:href="@{/images/news/img13.jpg}" th:style="'background-image: url(' + @{/images/news/img13.jpg} + ');'"></a></li>
-														<li class="hidden"><a th:href="@{/images/news/img14.jpg}" th:style="'background-image: url(' + @{/images/news/img14.jpg} + ');'"></a></li>
-													</ul>
-												</div>
-											</div>
-											<div class="featured-author-footer">
-												<a th:href="@{#}">See All Authors</a>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</aside>
-						<aside>
-							<h1 class="aside-title">Popular <a th:href="@{#}" class="all">See All <i class="ion-ios-arrow-right"></i></a></h1>
+							<h1 class="aside-title">Popular <a th:href="@{'/search?cat_id='}" class="all">See All <i class="ion-ios-arrow-right"></i></a></h1>
 							<div class="aside-body">
 
 								<div th:replace="fragments/news :: popular"></div>
