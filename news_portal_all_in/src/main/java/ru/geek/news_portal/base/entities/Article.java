@@ -3,14 +3,19 @@ package ru.geek.news_portal.base.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Data
+//@Data "java.lang.StackOverflowError" with this annotation - changed to getter setter
+@Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "articles")
 public class Article {
@@ -70,12 +75,14 @@ public class Article {
   private List<CommentLike> comment_likes;
 
   @ManyToMany
+  @JsonManagedReference
   @JoinTable(name = "articles_tags",
           joinColumns = @JoinColumn(name = "article_id"),
           inverseJoinColumns = @JoinColumn(name = "tag_id"))
   private List<Tag> tags;
 
   @ManyToMany
+  @JsonManagedReference
   @JoinTable(name = "articles_authors",
           joinColumns = @JoinColumn(name = "article_id"),
           inverseJoinColumns = @JoinColumn(name = "user_id"))
@@ -111,5 +118,23 @@ public class Article {
       return categoryString;
     }
     return category.getName();
+  }
+
+  @Override
+  public String toString() {
+    return "Article{" +
+            "id=" + id +
+            ", created=" + created +
+            ", title='" + title + '\'' +
+            ", published=" + published +
+            ", category=" + category +
+            ", totalViews=" + totalViews +
+            ", lastViewDate=" + lastViewDate +
+            ", mainPictureUrl='" + mainPictureUrl + '\'' +
+            ", status=" + status +
+            ", tags=" + tags +
+            ", authors=" + authors +
+            ", author='" + author + '\'' +
+            '}';
   }
 }

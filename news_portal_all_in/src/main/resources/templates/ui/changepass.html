@@ -24,7 +24,7 @@
                     <div th:if="${error}!=null" class="alert alert-danger">[[${error}]]</div>
                     <div th:if="${success}!=null" class="alert">[[${success}]]</div>
 
-                    <form sec:authorize="isAuthenticated()" th:if="${success}==null" method="post" th:action="@{/user/change_password}" th:object="${password}">
+                    <form sec:authorize="isAuthenticated()" th:if="${success}==null" method="post" th:action="@{/static/tmp/user/change_password}" th:object="${password}">
                         <div class="form-group">
                             <input type="password" class="form-control" name="oldPassword"
                                    placeholder="old password (*)">

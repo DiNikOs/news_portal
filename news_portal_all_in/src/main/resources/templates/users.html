@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      sec:authorize="isAuthenticated()">
 
 <head th:replace="fragments/header.html :: head"></head>
 
@@ -50,11 +51,11 @@
                                 <td th:text="${user.email}"></td>
                                 <td><p th:each="role : ${user.roles}" th:text="${role.name}"></p></td>
                                 <td>
-                                    <a th:href="@{users/edit_user/{id}(id=${user.id})}"
+                                    <a th:href="@{/users/edit_user/{id}(id=${user.id})}"
                                        class="btn btn-icon btn-pill btn-primary"
                                        data-toggle="tooltip" title="Edit">Edit<i
                                             class="fa fa-fw fa-edit"></i></a>
-                                    <a th:href="@{users/delete_user/{id}(id=${user.id})}"
+                                    <a th:href="@{/users/delete_user/{id}(id=${user.id})}"
                                        class="btn btn-icon btn-pill btn-danger"
                                        data-toggle="tooltip" title="Delete">Delete<i
                                             class="fa fa-fw fa-trash"></i></a>

@@ -3,16 +3,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<head th:replace="fragments/header.html :: head"></head>
+<head th:replace="fragments/header :: head"></head>
 
 <body class="skin-orange">
 <!-- HEADER -->
 <header class="primary" >
-	<div th:replace="fragments/header.html :: firstbar"></div>
-	<nav th:replace="fragments/header.html :: nav"></nav>
+	<div th:replace="fragments/header :: firstbar"></div>
+	<nav th:replace="fragments/header :: nav"></nav>
 </header>
 <!-- /HEADER -->
-
 		<section class="single">
 			<div class="container">
 				<div class="row">
@@ -56,6 +55,7 @@
 						</aside>
 					</div>
 					<div class="col-md-8">
+						<br>
 						<ol class="breadcrumb">
 						  <li><a href="#" th:href="@{/}">Home</a></li>
 						  <li class="active" th:utext="${article.category.name}">Film</li>
@@ -64,10 +64,16 @@
 							<header>
 								<h1 th:text="${article.title}">Title.</h1>
 								<ul class="details">
-									<li th:remove="tag" th:utext="${article.created}">Posted on 31 December, 2016</li>
+									<li th:remove="tag" th:utext="${#temporals.format(article.created, 'dd-MMM-yyyy HH:mm')}">Posted on 31 December, 2016</li>
 <!--									<li th:remove="tag" th:utext="${#dates.format(article.created, 'dd-MMM-yyyy')}">Posted on 31 December, 2016</li>-->
-									<li><a  th:href="@{/category/{id}(id=${article.category.id})}" th:utext="${article.category.name}">Film</a></li>
+									<li><a  th:href="@{'/search?cat_id=' + ${article.category.id}}" th:utext="${article.category.name}">Film</a></li>
 									<li th:text="${article.author}">By John Doe </li>
+									<!--вывод списка авторов-->
+<!--									<li th:if="${article.authors.size()==1}" >Автор</li>-->
+<!--									<li th:if="${article.authors.size()>1}" >Авторы</li>-->
+<!--									<div th:each="writer:${article.authors}">-->
+<!--										<li><a th:href="@{/user/edituser/{username}(username=${writer.username})}" th:utext="${writer.username}">А.С.Пушкин</a></li>-->
+<!--									</div>-->
 								</ul>
 							</header>
 							<div class="main">
@@ -92,16 +98,35 @@
 							<footer>
 								<div class="col">
 									<ul class="tags">
-										<li><a href="#">Free Themes</a></li>
-										<li><a href="#">Bootstrap 3</a></li>
-										<li><a href="#">Responsive Web Design</a></li>
-										<li><a href="#">HTML5</a></li>
-										<li><a href="#">CSS3</a></li>
-										<li><a href="#">Web Design</a></li>
+										<li  th:each="tag,state : ${article.tags}" >
+											<a th:href="@{/search/tag/{id}(id=${tag.id})}" th:text="${tag.name}">Free Themes</a></li>
 									</ul>
 								</div>
+								<!--вывод средней оценки-->
+								<div class="col_comments" th:text="#{rate.average_value}">Средняя оценка</div>
+									<div class="col_comments" style="margin-left:5px;" th:text="${@articleRatingService.getAverageValueOfArticle(article.id)}">4.567</div>
+								<!--проставление оценки статьи пользователями (рейтинг)-->
+								<form sec:authorize="isAuthenticated()"
+									  th:action="@{/single/articles/add/rating/{article_id}(article_id = ${article.id})}"
+									  method="post">
+									<div class="col_comments">
+										<input th:name="article_value_by_user" th:checked="${user_value == 1}"
+											   type="radio" th:value=1>1&nbsp;
+										<input th:name="article_value_by_user" th:checked="${user_value == 2}"
+											   type="radio" th:value=2>2&nbsp;
+										<input th:name="article_value_by_user" th:checked="${user_value == 3}"
+											   type="radio" th:value=3>3&nbsp;
+										<input th:name="article_value_by_user" th:checked="${user_value == 4}"
+											   type="radio" th:value=4>4&nbsp;
+										<input th:name="article_value_by_user" th:checked="${user_value == 5}"
+											   type="radio" th:value=5>5&nbsp;
+										<button type="submit" class="btn btn-primary" th:text="#{rate.evaluate}">Оценить
+											тест
+										</button>
+									</div>
+								</form>
 								<!--лайки и дизлайки-->
-								<div class="col" sec:authorize="isAuthenticated()">
+								<div class="col_comments" sec:authorize="isAuthenticated()">
 									<a class="love" th:href="@{/single/articles/add/like/{id}(id = ${article.id})}">
 										<i class="fa fa-thumbs-up" th:text="${articleLikes}">2333</i>
 									</a>&nbsp;&nbsp;&nbsp;
@@ -110,9 +135,9 @@
 									</a>
 								</div>
 								<!--для неавторизованных пользователей кнопки с лайками должны быть недоступны-->
-								<div class="col" sec:authorize="isAnonymous()">
-									<i class="fa fa-thumbs-up" th:text="${articleLikes}">2333</i>
-									<i class="fa fa-thumbs-down" th:text="${articleDislikes}">213</i>
+								<div class="col_comments" sec:authorize="isAnonymous()">
+									<i class="love fa fa-thumbs-up" th:text="${articleLikes}">2333</i>
+									<i class="love fa fa-thumbs-down" th:text="${articleDislikes}">213</i>
 								</div>
 							</footer>
 						</article>
@@ -159,7 +184,7 @@
 							</figure>
 							<div class="details">
 								<div class="job">Web Developer</div>
-								<h3 class="name">John Doe</h3>
+								<h3 class="name" th:text="${article.author}">John Doe</h3>
 								<p>Nulla sagittis rhoncus nisi, vel gravida ante. Nunc lobortis condimentum elit, quis porta ipsum rhoncus vitae. Curabitur magna leo, porta vel fringilla gravida, consectetur in libero. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.</p>
 								<ul class="social trp sm">
 									<li>
@@ -197,12 +222,9 @@
 						</div>
 						<div class="line thin"></div>
 						<div class="comments">
-<!--							<div th:each="comm,iter : ${comments}">-->
-<!--								<div th:if="${iter.last}">-->
 									<h2 class="title" sec:authorize="isAnonymous()" ><span th:text="${tree_comments.size()-1}"></span> Responses<a th:href="@{/login}" >Registered user write a Response</a></h2>
 									<h2 class="title" sec:authorize="isAuthenticated()" ><span th:text="${tree_comments.size()-1}"></span> Responses <a href="#reply" >Write a Response</a></h2>
-<!--								</div>-->
-<!--							</div>-->
+
 							<!--							форма для отправки комментария-->
 							<form class="row" sec:authorize="isAuthenticated()"
 								  th:action="@{/single/articles/comment/{article_id}(article_id = ${article.id})}"
@@ -221,94 +243,11 @@
 								</div>
 							</form>
 
-<!--							пробуем выводить дерево комментариев(начало)-->
+<!--						выводим дерево комментариев(начало)-->
+							<div id="multi-derevo">
 							<section th:include="fragments/comment_fragment.html :: comments" th:with="comments=${@commentService.getChildren(tree_comments,null)}"></section>
-<!--							пробуем выводить дерево комментариев(конец)-->
-
-
-<!--							<div class="comment-list" th:each="comm : ${comments}">-->
-<!--								<div class="item" >-->
-<!--									<div class="user">-->
-<!--										<figure>-->
-<!--											<img src="../images/img01.jpg" th:src="@{/images/img01.jpg}">-->
-<!--										</figure>-->
-<!--										<div class="details">-->
-<!--&lt;!&ndash;											<h5 class="name" th:text="${comm.user.getUsername()}">Mark Otto</h5>&ndash;&gt;-->
-<!--&lt;!&ndash;											<h5 class="name" th:text="${comm.author}">Mark Otto</h5>&ndash;&gt;-->
-<!--											<h5 class="name" th:text="${comm.user.username}">Mark Otto</h5>-->
-<!--											<div class="time" th:text="${comm.created}">24 Hours</div>-->
-<!--&lt;!&ndash;											<div class="time" th:text="${#dates.format(comm.created, 'dd-MMM-yyyy')}">24 Hours</div>&ndash;&gt;-->
-<!--											<div class="text" th:text="${comm.text}">Text</div>-->
-<!--											<footer>-->
-<!--												<a href="#rerly" sec:authorize="isAuthenticated()" >Reply</a>-->
-<!--												<div class="col" sec:authorize="isAuthenticated()">-->
-<!--													<a class="love"-->
-<!--													   th:href="@{/single/articles/comment/add/like/{id}(id = ${comm.getId()})}">-->
-<!--														<i class="fa fa-thumbs-up" th:text="${@commentLikeService.getLikes(comm.getId())}">2333</i>-->
-<!--&lt;!&ndash;														<i class="fa fa-thumbs-up" th:text="${comm.likes}">2333</i>&ndash;&gt;-->
-<!--													</a>&nbsp;&nbsp;&nbsp;-->
-<!--													<a class="love"-->
-<!--													   th:href="@{/single/articles/comment/add/dislike/{id}(id = ${comm.id})}">-->
-<!--														<i class="fa fa-thumbs-down"-->
-<!--														th:text="${@commentLikeService.getDislikes(comm.getId())}">213</i>-->
-<!--&lt;!&ndash;														   th:text="${comm.dislikes}">213</i>&ndash;&gt;-->
-<!--													</a>-->
-
-<!--													&lt;!&ndash;форма для отправки ответа к комментарию  (начало)&ndash;&gt;-->
-<!--													<form class="row" sec:authorize="isAuthenticated()"-->
-<!--														  th:action="@{/single/articles/comment/{article_id}(article_id = ${article.id})}"-->
-<!--														  th:object="${comment}" method="post">-->
-<!--														<input th:fielld = "*{id_parent}" type="hidden" th:name="id_parent" th:value="${comm.id}">-->
-<!--														<a name="reply"></a>-->
-<!--														<div class="col-md-12">-->
-<!--															<h3 class="title">Leave Your Response</h3>-->
-<!--														</div>-->
-
-<!--														<div class="form-group col-md-12">-->
-<!--															<label for="message">Response <span-->
-<!--																	class="required"></span></label>-->
-<!--															<textarea class="form-control" name="message"-->
-<!--																	  placeholder="Write your response ..."-->
-<!--																	  th:field="*{text}"></textarea>-->
-<!--														</div>-->
-<!--														<div class="form-group col-md-12">-->
-<!--															<button type="submit" class="btn btn-primary">Send Response-->
-<!--															</button>-->
-<!--														</div>-->
-<!--													</form>-->
-<!--													&lt;!&ndash;форма для отправки ответа к комментарию  (конец)&ndash;&gt;-->
-
-<!--												</div>-->
-
-<!--&lt;!&ndash;												для неавторизованных пользователей кнопки с лайками должны быть недоступны&ndash;&gt;-->
-<!--												<div class="col" sec:authorize="isAnonymous()" >-->
-<!--&lt;!&ndash;														<i class="fa fa-thumbs-up" th:text="${comm.likes}">2333</i>&ndash;&gt;-->
-<!--&lt;!&ndash;														<i class="fa fa-thumbs-down" th:text="${comm.dislikes}">213</i>&ndash;&gt;-->
-<!--														<i class="fa fa-thumbs-up" th:text="${@commentLikeService.getLikes(comm.getId())}">2333</i>-->
-<!--														<i class="fa fa-thumbs-down" th:text="${@commentLikeService.getDislikes(comm.getId())}">213</i>-->
-<!--												</div>-->
-<!--											</footer>-->
-<!--										</div>-->
-<!--									</div>-->
-<!--								</div>-->
-<!--&lt;!&ndash;								<div class="reply-list" th:if="${comm.is_reply}">&ndash;&gt;-->
-<!--&lt;!&ndash;									<div class="item">&ndash;&gt;-->
-<!--&lt;!&ndash;										<div class="user">&ndash;&gt;-->
-<!--&lt;!&ndash;											<figure>&ndash;&gt;-->
-<!--&lt;!&ndash;												<img src="images/img01.jpg">&ndash;&gt;-->
-<!--&lt;!&ndash;											</figure>&ndash;&gt;-->
-<!--&lt;!&ndash;											<div class="details">&ndash;&gt;-->
-<!--&lt;!&ndash;												<h5 class="name" th:text="${comm.user.getUsername()}">Mark Otto</h5>&ndash;&gt;-->
-<!--&lt;!&ndash;												<div class="time" th:text="${comm.created}">24 Hours</div>&ndash;&gt;-->
-<!--&lt;!&ndash;												<div class="description" th:text="${comm.text}">Text</div>&ndash;&gt;-->
-<!--&lt;!&ndash;												<footer>&ndash;&gt;-->
-<!--&lt;!&ndash;													<a href="#" sec:authorize="isAuthenticated()" >Reply</a>&ndash;&gt;-->
-<!--&lt;!&ndash;												</footer>&ndash;&gt;-->
-<!--&lt;!&ndash;											</div>&ndash;&gt;-->
-<!--&lt;!&ndash;										</div>&ndash;&gt;-->
-<!--&lt;!&ndash;									</div>&ndash;&gt;-->
-<!--&lt;!&ndash;								</div>&ndash;&gt;-->
-<!--							</div>-->
+							</div>
+<!--						выводим дерево комментариев(конец)-->
 
 						</div>
 					</div>
@@ -317,11 +256,11 @@
 		</section>
 
 	<!-- FOOTER -->
-	<footer th:replace="fragments/footer.html :: footer"></footer>
+	<footer th:replace="fragments/footer :: footer"></footer>
 	<!-- /FOOTER -->
 
 	<!-- JS -->
-	<script th:remove="tag" th:replace="fragments/scripts.html :: scripts"> </script>
+	<script th:remove="tag" th:replace="fragments/scripts :: scripts"> </script>
 
 <!--для отображения шрифтов для лайков и дизлайков-->
 <script src="https://use.fontawesome.com/2010e27091.js"></script>

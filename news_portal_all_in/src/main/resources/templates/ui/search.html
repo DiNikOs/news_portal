@@ -2,13 +2,13 @@
 
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/header.html :: head"></head>
+<head th:replace="fragments/header :: head"></head>
 
 <body class="skin-orange">
 <!-- HEADER -->
 <header class="primary" >
-	<div th:replace="fragments/header.html :: firstbar"></div>
-	<nav th:replace="fragments/header.html :: nav"></nav>
+	<div th:replace="fragments/header :: firstbar"></div>
+	<nav th:replace="fragments/header :: nav"></nav>
 </header>
 <!-- /HEADER -->
 <br>
@@ -16,7 +16,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-3">
-						<form th:action="@{/search}" method="get">
+						<form th:action="@{/search}" method="get" >
 						<aside>
 							<h2 class="aside-title">Search</h2>
 							<div class="aside-body">
@@ -26,7 +26,9 @@
 										<div class="input-group">
 <!--											<input type="text" name="q" class="form-control" placeholder="Type something ..." value="hello">-->
 											<input class="form-control" value="hello" type="text"  placeholder="Type something ..."
-												   th:value="${param.word != null} ? ${param.word}" th:name="word">
+												   th:value="${param.word != null} ? ${param.word}" th:name="word" required="">
+											<input class="form-control" value="search" type="text"  placeholder="search ..."
+												   th:value="${param.search != null} ? ${param.search}" th:name="search" th:type="hidden">
 											<div class="input-group-btn">
 												<button class="btn btn-primary" type="submit">
 													<i class="ion-search"></i>
@@ -35,7 +37,7 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<div class="input-group">
+										<div class="input-group col-sm-6">
 											<select class="form-control" name="limit"  >
 												<option th:value="0" value="0" th:selected="${pageLimit==0}">
 													<a th:text="Limit" >Limit</a>
@@ -70,18 +72,18 @@
 													  th:checked="${catIdInteger.size()>0 and catIdInteger.get(0)==0}"
 													  onclick="this.value=this.checked"> All Categories</label>
 									</div>
-									<div class="form-group" th:each="category, state : ${categories}" name="cat_id"
+									<div class="form-group" th:each="category, state :  ${@articleCategoryService.findAll()}" name="cat_ids"
 										 th:unless="${catIdInteger.size()>0 and catIdInteger.get(0)==0}">
-										<input type="checkbox" name="cat_id" th:value="${category.id}"
+										<input type="checkbox" name="cat_id" th:name="cat_id" th:value="${category.id}"
 											   th:checked="${#arrays.contains(catIdInteger, __${category.id}__)}"
 											   onclick="this.value=this.checked">
 										<label th:text="${category.name}">
 											 Lifestyle</label>
 									</div>
 
-									<div class="form-group" th:each="category, state : ${categories}" name="cat_id"
+									<div class="form-group" th:each="category, state : ${@articleCategoryService.findAll()}" name="cat_ids"
 										 th:if="${catIdInteger.size()>0 and catIdInteger.get(0)==0}" >
-										<input type="checkbox" name="cat_id" th:value="${category.id}">
+										<input type="checkbox" name="cat_id" th:name="cat_id" th:value="${category.id}">
 										<label th:text="${category.name}">
 											Lifestyle</label>
 									</div>
@@ -99,8 +101,7 @@
 						<div class="nav-tabs-group">
 							<ul class="nav-tabs-list">
 								<li class="active"><a href="#">All</a></li>
-								<li><a href="#" th:href="@{/search}"  >Latest</a></li>
-<!--								th:value="${param.limit != null} ? ${param.limit}"-->
+								<li><a href="#">Latest</a></li>
 								<li><a href="#">Popular</a></li>
 								<li><a href="#">Trending</a></li>
 								<li><a href="#">Videos</a></li>
@@ -132,7 +133,7 @@
 													   th:utext="${article.category.name}">Film</a>
 												</div>
 												<br>
-												<div class="time" th:utext="${article.created}">December 10, 2016</div>
+												<div class="time" th:utext="${#temporals.format(article.created, 'dd MMM HH:mm')}">December 10, 2016</div>
 											</div>
 											<h1><a href="../ui/single.html" th:utext="${article.title}"
 												   th:href="@{/single/articles/{id}(id=${article.id})}">

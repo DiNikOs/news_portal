@@ -34,4 +34,11 @@ public class ArticleCategory {
     )
     private List<Article> articles;
 
+    @Override
+    public String toString() {
+        return "ArticleCategory{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

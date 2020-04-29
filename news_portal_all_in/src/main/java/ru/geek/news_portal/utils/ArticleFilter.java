@@ -2,7 +2,7 @@
  * @Author Ostrovskiy Dmitriy
  * @Created 04/04/2020
  * ArticleFilter for SearchController
- * @version v1.0
+ * @version v1.10 (30/04/2020)
  */
 
 package ru.geek.news_portal.utils;
@@ -20,18 +20,11 @@ import java.util.*;
 public class ArticleFilter {
 
     private Specification<Article> spec;
+    private Specification<Article> specCat;
     private StringBuilder filterDefinition;
     private StringBuilder filterDefinitionCat;
-    private Specification<Article> specCat;
     private List<Long> listCategory;
-    private List<String> listCat;
-
-    int iter2 = 0;
     HttpServletRequest request;
-
-    public List<Long> getListCategory() {
-        return listCategory;
-    }
 
     public ArticleFilter(Map<String, String> map) {
         this.spec = Specification.where(null);
@@ -47,16 +40,46 @@ public class ArticleFilter {
         }
         if (map.containsKey("limit") && !map.get("limit").isEmpty()) {
             Integer limit = Integer.parseInt(map.get("limit"));
-//            spec = spec.and(ArticleSpecifications.limitNavTab(limit));
             filterDefinition.append("&limit=").append(limit);
             filterDefinitionCat.append("&limit=").append(limit);
         }
+
+        if (map.containsKey("art_id") && !map.get("art_id").isEmpty()) {
+            Long articleId = Long.parseLong(map.get("art_id"));
+            spec = spec.and(ArticleSpecifications.articleId(articleId));
+            filterDefinition.append("&art_id=").append(articleId);
+        }
+
+        if (map.containsKey("edit") && !map.get("edit").isEmpty()) {
+            Boolean editId = Boolean.parseBoolean(map.get("edit"));
+            filterDefinition.append("&edit=").append(editId);
+        }
+
+        if (map.containsKey("search") && !map.get("search").isEmpty()) {
+            filterDefinition.append("&search=").append(map.get("search"));
+        }
+
+        if (map.containsKey("delete") && !map.get("delete").isEmpty()) {
+            Boolean deleteId = Boolean.parseBoolean(map.get("delete"));
+            filterDefinition.append("&delete=").append(deleteId);
+        }
+
+        if (map.containsKey("edit_data") && !map.get("edit_data").isEmpty()) {
+            Boolean deleteId = Boolean.parseBoolean(map.get("edit_data"));
+            filterDefinition.append("&edit_data=").append(deleteId);
+        }
+
+        if (map.containsKey("save_data") && !map.get("save_data").isEmpty()) {
+            Boolean deleteId = Boolean.parseBoolean(map.get("save_data"));
+            filterDefinition.append("&save_data=").append(deleteId);
+        }
+
 
         if (map.containsKey("cat_id") && !map.get("cat_id").isEmpty()) {
             if (map.get("cat_id")!="0") {
                 String[] arrayStr = map.get("cat_id").trim().split(",");
                 for (int i = 0; i < arrayStr.length; i++) {
-                    specCat = specCat.or(ArticleSpecifications.categoryId(Long.valueOf(arrayStr[i])));
+                    specCat = specCat.or(ArticleSpecifications.categoryId(Long.parseLong(arrayStr[i])));
                     filterDefinition.append("&cat_id=").append(Long.valueOf(arrayStr[i]));
                 }
             } else {
@@ -64,14 +87,17 @@ public class ArticleFilter {
             }
                 spec = spec.and(specCat);
         }
-//        if (map.containsKey("pageNumber") && !map.get("pageNumber").isEmpty()) {
-//            Integer pageNumber = Integer.parseInt(map.get("pageNumber"));
-//            filterDefinition.append("&pageNumber=").append(pageNumber);
-//        }
-        if (map.containsKey("pageLimit") && !map.get("pageLimit").isEmpty()) {
-            Integer pageLimit = Integer.parseInt(map.get("pageLimit"));
-            filterDefinition.append("&pageLimit=").append(pageLimit);
-            filterDefinitionCat.append("&pageLimit=").append(pageLimit);
+        if (map.containsKey("tag_id") && !map.get("tag_id").isEmpty()) {
+            if (map.get("tag_id")!="0") {
+                String[] arrayStr = map.get("tag_id").trim().split(",");
+                for (int i = 0; i < arrayStr.length; i++) {
+                    specCat = specCat.or(ArticleSpecifications.tagsId(Long.parseLong(arrayStr[i])));
+                    filterDefinition.append("&tag_id=").append(Long.valueOf(arrayStr[i]));
+                }
+            } else {
+                specCat = specCat.or(ArticleSpecifications.tagsId(0L));
+            }
+            spec = spec.and(specCat);
         }
     }
 
@@ -100,6 +126,8 @@ public class ArticleFilter {
     public StringBuilder getFilterDefinitionCat() {
         return filterDefinitionCat;
     }
-
+    public List<Long> getListCategory() {
+        return listCategory;
+    }
 
 }

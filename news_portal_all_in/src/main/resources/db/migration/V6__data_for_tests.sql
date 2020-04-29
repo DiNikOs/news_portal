@@ -1,5 +1,7 @@
 INSERT INTO article_categories (name)
- VALUES ('В мире'),('Экономика'),('Киберспорт'),('Культура'),('Происшествия'), ('Технолгии'), ('Программирование'),('Путешествия'),('Стиль жизни'),('Статьи');
+--  VALUES ('Кодинг'),('Технологии'),('Киберспорт'),('В мире'),('Путешествия'), ('Стиль жизни'), ('Блог');
+ VALUES ('Coding'),('Technology'),('eSport'),('In the World'),('Travel'), ('Lifestyle'), ('B_log');
+
 
 -- Updated Stanislav Ryzhkov 28/03/2020
 -- Подправил скрипт, БД заполняется 11 тестовыми статьями с обширным текстом, тегами, форматирующими текст и тегами картинок
@@ -407,7 +409,7 @@ Lacus vestibulum sed arcu non odio euismod lacinia. Nam aliquam sem et tortor. A
 ),
 
 (
-    10,
+    7,
     current_date,
     current_date,
     '<img src="http://localhost:8199/news/images/news/img10.jpg"/>',

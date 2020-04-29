@@ -43,4 +43,6 @@ public class UserAccountDTO {
 
     private List<ArticleRating> articleRatings;
 
+    private List<Article> articleList;
+
 }

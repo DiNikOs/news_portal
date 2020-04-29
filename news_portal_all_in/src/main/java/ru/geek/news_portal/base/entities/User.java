@@ -1,6 +1,7 @@
 package ru.geek.news_portal.base.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -72,35 +73,22 @@ public class User {
     )
     private List<ArticleRating> articleRatings;
 
-    public void addArticleRating(ArticleRating rating) {
-        articleRatings.add(rating);
-    }
+    @ManyToMany
+    @JsonBackReference
+    @JoinTable(name = "articles_authors",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "article_id"))
+    private List<Article> articles;
 
-    public void removeArticleRating(ArticleRating rating) {
-        articleRatings.remove(rating);
-    }
-
-    public void addArticleLike(ArticleLike like) {
-        articleLikes.add(like);
-    }
-
-    public void removeArticleLike(ArticleLike like) {
-        articleLikes.remove(like);
-    }
-
-    public void addCommentLike(CommentLike like) {
-        commentLikes.add(like);
-    }
-
-    public void removeCommentLike(CommentLike like) {
-        commentLikes.remove(like);
-    }
-
-    public void addComment(Comment comment){
-        comments.add(comment);
-    }
-
-    public void removeComment(Comment comment){
-        comments.remove(comment);
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+               // ", roles=" + roles +
+                '}';
     }
 }

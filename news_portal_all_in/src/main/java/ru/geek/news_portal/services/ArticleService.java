@@ -13,19 +13,24 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.geek.news_portal.base.entities.Article;
 import ru.geek.news_portal.base.repo.ArticleRepository;
 import ru.geek.news_portal.dto.ArticleDto;
 import ru.geek.news_portal.exception.NotFoundException;
 import ru.geek.news_portal.utils.ListMapper;
+
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
 @Service
-public class ArticleService {
+public class ArticleService implements ArticleServiceInterfase{
     private static final int NEW_ARTICLES_TOP_COUNT = 5;
     private static final int MOST_VIEWED_ARTICLES_TOP_COUNT = 5;
+
 
     @Value("${news.host}")
     private String host;
@@ -45,8 +50,17 @@ public class ArticleService {
      * Created 28/03/2020
      * Метод, возвращающий список ArticleDto
      */
-    public List<ArticleDto> findAllArticles() {
+    public List<ArticleDto> findAllDtoArticles() {
         return mapToDtoList(articleRepository.findAll());
+    }
+
+    /**
+     * @author Ostrovskiy Dmitriy
+     * @created 17/04/2020
+     * Метод, возвращающий список Article
+     */
+    public List<Article> findAllArticles() {
+        return articleRepository.findAll();
     }
 
     /**
@@ -70,8 +84,29 @@ public class ArticleService {
                 .findAllByOrderByTotalViewsDesc(PageRequest.of(0, MOST_VIEWED_ARTICLES_TOP_COUNT)).getContent());
     }
 
+
     public Article findById(Long id) {
-        return articleRepository.findById(id).orElseThrow(IllegalStateException::new);
+        return articleRepository.getOne(id);
+    }
+
+    /**
+     * @author Ostrovskiy Dmitriy
+     * @created 17/04/2020
+     * Метод возвращает статьи написанннные автором
+     * v1.0
+     */
+    public List<Article> findArticlesByAuthor(String author) {
+        return articleRepository.findArticlesByAuthor(author);
+    }
+
+    /**
+     * @author Ostrovskiy Dmitriy
+     * @created 17/04/2020
+     * Метод возвращает ArticleDto написанннные автором
+     * v1.0
+     */
+    public List<ArticleDto> findArticlesDtoByAuthor(String author) {
+        return mapToDtoList(articleRepository.findArticlesByAuthor(author));
     }
 
     /**
@@ -91,18 +126,6 @@ public class ArticleService {
         return ArticleDto.fromArticle(article,
                 prepareArticleText(article.getText()),
                 getMainPictureUrlFromText(article.getText()));
-//                article.getPublished(),
-//                article.getCategory(),
-//                article.getCategoryString(),
-//                article.getTotalViews(),
-//                article.getLastViewDate(),
-//                getMainPictureUrlFromText(article.getText()),
-//                article.getStatus(),
-//                article.getComments(),
-//                article.getLikes(),
-//                article.getTags(),
-//                article.getRatings()
-//        );
     }
 
     /**
@@ -149,7 +172,40 @@ public class ArticleService {
     }
   
   
-  public Page<Article> findAllByPagingAndFiltering(Specification<Article> specification, Pageable pageable) {
+    public Page<Article> findAllByPagingAndFiltering(Specification<Article> specification, Pageable pageable) {
         return articleRepository.findAll(specification, pageable);
     }
+
+    /**
+     * @author Ostrovskiy Dmitriy
+     * @created 17/04/2020
+     * Метод для сохранения созданной/отредактированной статьи в репозиторий
+     * @version v1.0(тестовое сохранение)
+     */
+    @Override
+    @Transactional
+    public void save(Article article) {
+        article.setCreated(LocalDateTime.now());
+        article.setTitle(article.getTitle());
+        article.setText(article.getText());
+        article.setPublished(LocalDateTime.now());
+        article.setCategory(article.getCategory());
+        article.setTotalViews(0L);
+        article.setLastViewDate(LocalDateTime.now());
+        article.setStatus(Article.Status.EDIT);
+        articleRepository.save(article);
+    }
+
+    /**
+     * @author Ostrovskiy Dmitriy
+     * @created 23/04/2020
+     * Метод для удаления статьи из репозиторий
+     * @version v1.0
+     */
+    @Override
+    @Transactional
+    public void delete(Article article) {
+        articleRepository.delete(article);
+    }
+
 }
