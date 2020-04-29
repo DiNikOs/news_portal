@@ -18,7 +18,6 @@
                 <figure>
 <!--                    <img th:src="@{/images/news/img04.jpg}" alt="Sample Article">-->
                     <p  th:remove="tag" th:utext="${article.getMainPictureUrl()}">Main Picture</p>
-
                 </figure>
                 <div class="details">
                     <div class="category"><a th:href="@{'/search?cat_id=' + ${article.category.id}}" th:utext="${article.category.name}">Computer</a></div>
@@ -120,7 +119,6 @@
         </div>
     </article>
 
-
 <div th:fragment="another_news">
     <article class="col-md-12 article-list" th:each="article,state : ${articles}">
         <div class="inner">
@@ -142,7 +140,6 @@
                     Donec consequat, arcu at ultrices sodales, quam erat aliquet diam, sit amet interdum libero nunc accumsan nisi.
                 </p>
                 <footer>
-<!--                    <a th:href="@{#}" class="love"><i class="ion-android-favorite-outline"></i> <div>273</div></a>-->
                     <div>
                         <i class="love_news fa fa-thumbs-up" th:text="${@articleLikeService.getArticleLikes(article.id)}">2333</i>
                         <i class="love_news fa fa-thumbs-down" th:text="${@articleLikeService.getArticleDislikes(article.id)}">213</i>
@@ -171,7 +168,6 @@
                     <div class="category">
                         <a th:href="@{'/search?cat_id=' + ${article.category.id}}" th:utext="${article.category.name}">Lifestyle</a></div>
                     <div class="time" th:utext="${#temporals.format(article.created, 'dd MMM HH:mm')}">December 22, 2016</div>
-
                 </div>
             </div>
         </div>
@@ -309,7 +305,6 @@
 </div>
 
 <div th:fragment="like_news" th:with="news_one=3, news_two=5">
-
         <article class="article related col-md-6 col-sm-6 col-xs-12" >
             <div class="inner">
                 <figure>
@@ -422,7 +417,6 @@
     <article class="col-md-12 article-list"  th:each="article,state : ${page.getContent()}">
         <div th:if="${category}==null">
         </div>
-
         <div th:unless="${category}==null">
             <div class="inner" th:if="${article.category.id}==${category.id}">
                 <figure>
