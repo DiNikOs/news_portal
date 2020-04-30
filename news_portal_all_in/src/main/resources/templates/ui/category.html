@@ -19,7 +19,7 @@
 		          <div class="col-md-12"  >
 					  <div class="form-row">
 						  <br>
-						  <div class="form-group col-sm-6" th:if="${search} == 'tags'">
+						  <div class="form-group col-sm-6" th:if="${tag} != null">
 							  <ol class="breadcrumb">
 								  <li><a href="../index.html" th:href="@{/}">Home</a></li>
 								  <li class="active" th:text="${param.tag_id} != null? 'Tag ' + ${tag.name} : 'All news'" >Computer</li>
@@ -30,7 +30,7 @@
 								  <span th:text="${param.tag_id} != null? 'News with tag:' + ${tag.name} : 'All news'">Computer</span></i></p>
 						  </div>
 
-						  <div class="form-group col-sm-6" th:if="${search} == 'category'">
+						  <div class="form-group col-sm-6" th:if="${param.cat_id} != null and ${tag} == null">
 							  <ol class="breadcrumb">
 								  <li><a href="../index.html" th:href="@{/}">Home</a></li>
 								  <li class="active" th:text="${cat} != null? 'Category ' + ${cat.name} : 'All news'" >Computer</li>
@@ -44,7 +44,7 @@
 
 						  <div class="form-group col-sm-6">
 							  <br>
-							  <form th:action="@{/category}" method="get">
+							  <form th:action="@{/search}" method="get">
 <!--								  th:type="hidden"-->
 								  <input class="form-control" value="cat_id" type="text"
 										 th:value="${param.cat_id}" th:name="cat_id"  th:type="hidden">
@@ -88,7 +88,7 @@
 									<div class="detail">
 										<div class="category">
 											<a href="../ui/category.html"
-											   th:href="@{'/search?cat_id=' + ${article.category.id} + ${filtersDef}}"
+											   th:href="@{'/search?cat_id=' + ${article.category.id}}"
 											   th:utext="${article.category.name}">Film</a>
 										</div>
 <!--										<div class="time" th:utext="${article.created}">December 26, 2016</div>-->
@@ -124,18 +124,18 @@
 							<li class="page-item " th:classappend="${!(page.getNumber() > 0) ? 'disabled' : ''}" >
 
 								<a class="page-link"
-								   th:href="@{'/category?pageNumber=' + ${page.previousOrFirstPageable().getPageNumber() + 1} + ${filtersDef}}">
+								   th:href="@{'/search?pageNumber=' + ${page.previousOrFirstPageable().getPageNumber() + 1} + ${filtersDef}}">
 									<i class="ion-ios-arrow-left"></i></a>
 							</li>
 
 							<li class="page-item" th:classappend="${page.getNumber() + 1 == i ? 'active' : ''}"
 								th:each="i : ${#numbers.sequence(1, page.getTotalPages())}">
-								<a class="page-link" th:text="${i}" th:href="@{'/category?pageNumber=' + ${i} + ${filtersDef}}"></a>
+								<a class="page-link" th:text="${i}" th:href="@{'/search?pageNumber=' + ${i} + ${filtersDef}}"></a>
 							</li>
 
 							<li class="page-item" th:classappend="${!(page.getNumber() < page.getTotalPages() - 1) ? 'disabled' : ''}" >
 								<a class="page-link"
-								   th:href="@{'/category?pageNumber=' + ${page.nextOrLastPageable().getPageNumber() + 1} + ${filtersDef}}">
+								   th:href="@{'/search?pageNumber=' + ${page.nextOrLastPageable().getPageNumber() + 1} + ${filtersDef}}">
 									<i class="ion-ios-arrow-right"></i></a>
 							</li>
 						</ul>

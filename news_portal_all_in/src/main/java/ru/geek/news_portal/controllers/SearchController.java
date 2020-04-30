@@ -77,7 +77,6 @@ public class SearchController {
         }
 
         if (params.containsKey("cat_id")) {
-            search = "category";
             if (catIdArr.size()>0) {
                 StringBuilder stringBuilder = new StringBuilder();
                 if (catIdArr.contains("") && catIdArr.size()>1){
@@ -95,37 +94,28 @@ public class SearchController {
                 cat = articleCategoryService.findOneById(Long.parseLong(params.get("cat_id")));
             }
         }
-        if (params.containsKey("tag_id")) {
-            search = "tags";
-            if (tagIdArr.size()>0) {
-                StringBuilder stringBuilder = new StringBuilder();
-                if (tagIdArr.contains("") && tagIdArr.size()>1){
-                    tagIdArr.remove("");
-                }
-                stringBuilder.append(tagIdArr.get(0));
-                tagIdInteger.add(Integer.parseInt(tagIdArr.get(0)));
-                for (int i = 1; i < tagIdArr.size(); i++) {
-                    stringBuilder.append("," + tagIdArr.get(i));
-                    tagIdInteger.add(Integer.parseInt(tagIdArr.get(i)));
-                }
-                params.put("tag_id", stringBuilder.toString());
-            }
+        if (params.containsKey("tag_id")&&params.get("tag_id")!="") {
             if (tagIdArr.size()==1) {
+                tagIdInteger.add(Integer.parseInt(tagIdArr.get(0)));
+                params.put("tag_id", tagIdArr.get(0));
                 tag = tagsService.findById(Long.parseLong(params.get("tag_id")));
             }
         }
+
+        if (catIdArr != null && catIdArr.size()==1) {
+            cat = articleCategoryService.findOneById(Long.parseLong(params.get("cat_id")));
+        }
+
+        if (tagIdArr != null && tagIdArr.size()==1) {
+            tag = tagsService.findById(Long.parseLong(params.get("tag_id")));
+        }
+
         if (params.containsKey("search")) {
             if (params.get("search").contains("all")) {
                 catIdInteger.add(0);
                 if (params.get("word").length()==0) {
                     params.put("cat_id", "0");
                 }
-            }
-            if (params.get("search").contains("category")) {
-
-            }
-            if (params.get("search").contains("tags")) {
-
             }
             params.put("search", search);
         }
@@ -145,7 +135,7 @@ public class SearchController {
         model.addAttribute("tag", tag);
         model.addAttribute("cat", cat);
         model.addAttribute("page", page);
-        if (params.containsKey("search")) {
+        if (params.containsKey("search")&&params.get("search").contains("all")) {
             return "ui/search";
         } else {
             return "ui/category";

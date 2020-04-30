@@ -16,7 +16,7 @@
     <meta property="og:type" content="article"/>
 <!--    <meta property="og:url"-->
 <!--          content="https://github.com/DiNikOs/news_portal/tree/master/ui-news_portal/src/main/resources/static"/>-->
-    <meta property="og:image" content="https://raw.githubusercontent.com/nauvalazhar/Magz/master/images/preview.png"/>
+<!--    <meta property="og:image" content="https://raw.githubusercontent.com/nauvalazhar/Magz/master/images/preview.png"/>-->
 
     <!--  <meta name="_csrf" th:content="${_csrf.token}" />-->
     <!--  <meta name="_csrf_header" th:content="${_csrf.headerName}" />-->
@@ -52,14 +52,6 @@
     <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/bootstrap-select.css}"/>
     <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/bootstrap-select.min.css}"/>
 
-<!--    <link  rel="stylesheet" type="text/css" media="all" th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css} "/>-->
-<!--    <link th:rel="stylesheet" th:href="@{webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>-->
-
-<!--    <link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css}">-->
-        <!--Summernote for Bootstrap 4-->
-
-<!--    <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css}" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">-->
-
     <link type="text/css" media="all" th:href="@{/assets/summernote/summernote-bs4.min.css}" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -73,7 +65,6 @@
 
     <![endif]-->
 </head>
-
 <!-- HEADER -->
 <body>
 <header>
@@ -88,12 +79,12 @@
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-12">
-                    <form class="search" autocomplete="off" th:action="@{/search}" method="get" th:if="${param.search!=null? param.search.toString() !='all': param.search==null}" >
+<!--                    th:if="${param.search!=null? param.search.toString() !='all': param.search==null}"-->
+                    <form class="search" autocomplete="off" th:action="@{/search}" method="get"  >
                         <div class="form-group">
-                            <div class="input-group">
+                            <div class="input-group" th:if="${param.search!=null? param.search.toString() !='all': param.search==null}">
                                 <input class="form-control" value="hello" type="text"  placeholder="Type something ..."
                                        th:value="${param.word != null} ? ${param.word}" name="word">
-<!--                                <input type="text" name="q" class="form-control" placeholder="Type something here">-->
                                 <div class="input-group-btn">
                                     <button class="btn btn-primary" type="submit" id="search" name="search" th:value="all"><i class="ion-search"></i></button>
                                 </div>
@@ -110,7 +101,6 @@
                 </div>
                 <div class="col-md-3 col-sm-12 text-right">
                     <ul class="nav-icons">
-
                         <li><a sec:authorize="!isAuthenticated()" th:href="@{/register}"><i class="ion-person-add"></i>
                             <div>Register</div>
                         </a></li>
@@ -118,30 +108,41 @@
                             <div>Login</div>
                         </a></li>
                         <li  sec:authorize="isAuthenticated()" class="nav-item magz-dropdown">
-                            <!--                        <li  sec:authorize="isAuthenticated()" class="nav-item dropdown magz-dropdown"> -->
-
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
                                aria-haspopup="true" aria-expanded="false" th:href="@{#}"
                                sec:authorize="isAuthenticated()"><i class="icon ion-person"></i>
                                 <div sec:authentication="name"> Authorized
                                     user</div>
                                </a>
-                            <ul class="nav-icons dropdown-menu">
-                                <li><a th:href="@{/user/edituser/{username}(username=${#request.userPrincipal.name})}">
-                                    <i class="icon ion-person"></i><div>My Account</div></a></li><br>
-                                <li><a th:href="@{/user/favorite/{username}(username=${#request.userPrincipal.name})}">
-                                    <i class="icon ion-heart"></i><div>Favorite</div> </a></li><br>
-                                <li><a th:href="@{/user/comment/{username}(username=${#request.userPrincipal.name})}">
-                                    <i class="icon ion-chatbox"></i><div>Comments</div> </a></li><br>
-                                <li><a th:href="@{/user/change_password/{username}(username=${#request.userPrincipal.name})}">
-                                    <i class="icon ion-key"></i><div>Change Password</div> </a></li><br>
-                                <li><a th:href="@{/users}" sec:authorize="hasRole('ADMIN')">
-                                    <i class="icon ion-person"></i><div>User list</div> </a></li><br>
-                                <li class="dropdown-divider"><div>------------------------------------------</div>
+                            <ul class="nav-icons dropdown-menu ">
+                                <ul class="list-group ">
+                                    <li><a th:href="@{/user/edituser/{username}(username=${#request.userPrincipal.name})}">
+                                        <i class="icon ion-person"></i><div>My Account</div></a></li><br>
+                                    <li><a th:href="@{/user/favorite/{username}(username=${#request.userPrincipal.name})}">
+                                            <i class="icon ion-heart"></i>
+                                            <div>Favorite</div><span class="badge badge-primary badge-pill"
+                                                        th:text="${@userServiceImpl.findByUsername(#request.userPrincipal.name).getArticleLikes().size()}"
+                                    >14</span> </a></li><br>
+                                    <li><a th:href="@{/user/comment/{username}(username=${#request.userPrincipal.name})}">
+                                            <i class="icon ion-chatbox"></i>
+                                            <div>Comments</div><span class="badge badge-primary badge-pill"
+                                                        th:text="${@userServiceImpl.findByUsername(#request.userPrincipal.name).getComments().size()}"
+                                    >14</span> </a></li><br>
+                                    <li><a th:href="@{/user/comment/{username}(username=${#request.userPrincipal.name})}">
+                                        <i class="icon ion-chatbox"></i>
+                                        <div>CommentsLikes</div><span class="badge badge-primary badge-pill"
+                                                    th:text="${@userServiceImpl.findByUsername(#request.userPrincipal.name).getCommentLikes().size()}"
+                                    >14</span> </a></li><br>
+                                    <li><a th:href="@{/user/change_password/{username}(username=${#request.userPrincipal.name})}">
+                                        <i class="icon ion-key"></i><div>Change Password</div> </a></li><br>
+                                    <li><a th:href="@{/users}" sec:authorize="hasRole('ADMIN')">
+                                        <i class="icon ion-person"></i><div>User list</div> </a></li><br>
+                                    <li class="dropdown-divider"><div>------------------------------------------</div>
                                     </li><br>
-                                <li > <a th:if="${#request.userPrincipal != null}" th:href="@{/logout}">
-                                    <i class="icon ion-log-out"></i> <div>Logout</div></a></li>
-                                <!--                                <div class="dropdown-divider"></div>-->
+                                    <li > <a th:if="${#request.userPrincipal != null}" th:href="@{/logout}">
+                                        <i class="icon ion-log-out"></i> <div>Logout</div></a></li>
+                                </ul>
+
                             </ul>
                         </li>
                         <li><a sec:authorize="isAuthenticated()" th:href="@{/logout}"><i class="ion-log-out"></i>
@@ -153,7 +154,6 @@
             </div>
         </div>
     </div>
-
     <!-- NAVIGATION -->
     <nav class="menu" th:fragment="nav" xmlns:th="http://www.thymeleaf.org">
         <!-- Start nav -->
@@ -172,12 +172,11 @@
             <div id="menu-list">
                 <ul class="nav-list">
                     <li class="for-tablet nav-title"><a>Menu</a></li>
-                    <li class="for-tablet" sec:authorize="!isAuthenticated()"><a href="../ui/login.html"
-                                                                                 th:href="@{/login}">Login</a></li>
-                    <li class="for-tablet" sec:authorize="!isAuthenticated()"><a href="../ui/register.html"
-                                                                                 th:href="@{/register}">Register</a>
+                    <li class="for-tablet" sec:authorize="!isAuthenticated()">
+                        <a href="../ui/login.html" th:href="@{/login}">Login</a></li>
+                    <li class="for-tablet" sec:authorize="!isAuthenticated()">
+                        <a href="../ui/register.html" th:href="@{/register}">Register</a>
                     </li>
-
                     <li><a th:href="@{'/search?cat_id='}">All news</a></li>
                     <li th:if="${iter.count} < 4" th:each="category,iter : ${@articleCategoryService.findAll()}">
                         <a th:href="@{'/search?cat_id=' + ${category.id}}"
