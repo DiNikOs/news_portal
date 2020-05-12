@@ -79,8 +79,8 @@
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-12">
-<!--                    th:if="${param.search!=null? param.search.toString() !='all': param.search==null}"-->
-                    <form class="search" autocomplete="off" th:action="@{/search}" method="get"  >
+                    <form class="search" autocomplete="off" th:action="@{/search}" method="get"
+                          th:if="${param.search!=null? param.search.toString() !='all': param.search==null}">
                         <div class="form-group">
                             <div class="input-group" th:if="${param.search!=null? param.search.toString() !='all': param.search==null}">
                                 <input class="form-control" value="hello" type="text"  placeholder="Type something ..."
@@ -115,24 +115,35 @@
                                     user</div>
                                </a>
                             <ul class="nav-icons dropdown-menu ">
-                                <ul class="list-group ">
+                                <ul class="list-group">
                                     <li><a th:href="@{/user/edituser/{username}(username=${#request.userPrincipal.name})}">
                                         <i class="icon ion-person"></i><div>My Account</div></a></li><br>
                                     <li><a th:href="@{/user/favorite/{username}(username=${#request.userPrincipal.name})}">
                                             <i class="icon ion-heart"></i>
-                                            <div>Favorite</div><span class="badge badge-primary badge-pill"
-                                                        th:text="${@userServiceImpl.findByUsername(#request.userPrincipal.name).getArticleLikes().size()}"
-                                    >14</span> </a></li><br>
-                                    <li><a th:href="@{/user/comment/{username}(username=${#request.userPrincipal.name})}">
-                                            <i class="icon ion-chatbox"></i>
-                                            <div>Comments</div><span class="badge badge-primary badge-pill"
-                                                        th:text="${@userServiceImpl.findByUsername(#request.userPrincipal.name).getComments().size()}"
-                                    >14</span> </a></li><br>
+                                            <div >Favorite </div>
+                                        <div class="container-fluid container-sm"><span class="badge badge-primary badge-pill"
+                                                   th:text="${@userServiceImpl.findByUsername(#request.userPrincipal.name).getArticleLikes().size()}">
+                                            14</span></div>
+                                        </a></li><br>
+                                    <li ><a th:href="@{/user/comment/{username}(username=${#request.userPrincipal.name})}">
+                                        <div class="row-cols">
+                                            <i class="col-1 icon ion-chatbox"></i>
+                                            <div class="col-10">Comments</div>
+                                            <div class="col-1 bg-light flex-fill1 container-fluid d-flex justify-content-end" >
+                                            <span class="badge badge-primary badge-pill"
+                                                  th:text="${@userServiceImpl.findByUsername(#request.userPrincipal.name).getComments().size()}">
+                                            14</span></div>
+                                        </div>
+                                         </a>
+
+                                    </li><br>
                                     <li><a th:href="@{/user/comment/{username}(username=${#request.userPrincipal.name})}">
                                         <i class="icon ion-chatbox"></i>
-                                        <div>CommentsLikes</div><span class="badge badge-primary badge-pill"
-                                                    th:text="${@userServiceImpl.findByUsername(#request.userPrincipal.name).getCommentLikes().size()}"
-                                    >14</span> </a></li><br>
+                                        <div>CommentsLikes </div>
+                                        <div><span class="badge badge-primary badge-pill"
+                                                   th:text="${@userServiceImpl.findByUsername(#request.userPrincipal.name).getCommentLikes().size()}">
+                                            14</span></div>
+                                        </a></li><br>
                                     <li><a th:href="@{/user/change_password/{username}(username=${#request.userPrincipal.name})}">
                                         <i class="icon ion-key"></i><div>Change Password</div> </a></li><br>
                                     <li><a th:href="@{/users}" sec:authorize="hasRole('ADMIN')">
@@ -194,7 +205,7 @@
                     <li class="dropdown magz-dropdown">
                         <a th:href="@{#}"><i class="ion-ios-arrow-left"></i> Сommon</a>
                         <ul class="dropdown-menu">
-                            <li><a th:href="@{/search}">Search</a></li>
+                            <li><a th:href="@{'/search?search=all'}">Search</a></li>
                             <li><a th:href="@{/page}">About Us</a></li>
                             <li><a th:href="@{/contact}">Contact</a></li>
                         </ul>
