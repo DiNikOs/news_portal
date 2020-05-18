@@ -99,7 +99,7 @@
 								<div class="col">
 									<ul class="tags">
 										<li  th:each="tag,state : ${article.tags}" >
-											<a th:href="@{/search/tag/{id}(id=${tag.id})}" th:text="${tag.name}">Free Themes</a></li>
+											<a th:href="@{'/search?tag_id=' + ${tag.id}}" th:text="${tag.name}">Free Themes</a></li>
 									</ul>
 								</div>
 								<!--вывод средней оценки-->
@@ -145,27 +145,22 @@
 						<div class="title"><i class="ion-android-share-alt"></i> Sharing is caring</div>
 							<ul class="social">
 								<li>
-									<a href="#" class="facebook">
+									<a href="https://www.facebook.com" class="facebook">
 										<i class="ion-social-facebook"></i> Facebook
 									</a>
 								</li>
 								<li>
-									<a href="#" class="twitter">
+									<a href="https://twitter.com" class="twitter">
 										<i class="ion-social-twitter"></i> Twitter
 									</a>
 								</li>
 								<li>
-									<a href="#" class="googleplus">
+									<a href="https://accounts.google.com" class="googleplus">
 										<i class="ion-social-googleplus"></i> Google+
 									</a>
 								</li>
 								<li>
-									<a href="#" class="linkedin">
-										<i class="ion-social-linkedin"></i> Linkedin
-									</a>
-								</li>
-								<li>
-									<a href="#" class="skype">
+									<a href="https://www.skype.com" class="skype">
 										<i class="ion-ios-email-outline"></i> Email
 									</a>
 								</li>
@@ -215,16 +210,19 @@
 							</div>
 						</div>
 						<div class="line"><div>You May Also Like</div></div>
-						<div class="row" >
+						<div class="row">
 
 							<div th:replace="fragments/news :: like_news"></div>
 
 						</div>
 						<div class="line thin"></div>
 						<div class="comments">
-									<h2 class="title" sec:authorize="isAnonymous()" ><span th:text="${tree_comments.size()-1}"></span> Responses<a th:href="@{/login}" >Registered user write a Response</a></h2>
-									<h2 class="title" sec:authorize="isAuthenticated()" ><span th:text="${tree_comments.size()-1}"></span> Responses <a href="#reply" >Write a Response</a></h2>
-
+									<h2 class="title" sec:authorize="isAnonymous()" >
+										<span th:text="${tree_comments.size()-1}"></span>
+										Responses<a th:href="@{/login}" >Registered user write a Response</a></h2>
+									<h2 class="title" sec:authorize="isAuthenticated()" >
+										<span th:text="${tree_comments.size()-1}"></span>
+										Responses <a href="#reply" >Write a Response</a></h2>
 							<!--							форма для отправки комментария-->
 							<form class="row" sec:authorize="isAuthenticated()"
 								  th:action="@{/single/articles/comment/{article_id}(article_id = ${article.id})}"
@@ -233,7 +231,6 @@
 								<div class="col-md-12">
 									<h3 class="title">Leave Your Response</h3>
 								</div>
-
 								<div class="form-group col-md-12">
 									<label for="message">Response <span class="required"></span></label>
 									<textarea class="form-control" name="message" placeholder="Write your response ..." th:field="*{text}"></textarea>
@@ -242,26 +239,21 @@
 									<button type="submit" class="btn btn-primary">Send Response</button>
 								</div>
 							</form>
-
 <!--						выводим дерево комментариев(начало)-->
 							<div id="multi-derevo">
 							<section th:include="fragments/comment_fragment.html :: comments" th:with="comments=${@commentService.getChildren(tree_comments,null)}"></section>
 							</div>
 <!--						выводим дерево комментариев(конец)-->
-
 						</div>
 					</div>
 				</div>
 			</div>
 		</section>
-
 	<!-- FOOTER -->
 	<footer th:replace="fragments/footer :: footer"></footer>
 	<!-- /FOOTER -->
-
 	<!-- JS -->
 	<script th:remove="tag" th:replace="fragments/scripts :: scripts"> </script>
-
 <!--для отображения шрифтов для лайков и дизлайков-->
 <script src="https://use.fontawesome.com/2010e27091.js"></script>
 	</body>

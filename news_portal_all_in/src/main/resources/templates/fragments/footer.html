@@ -5,7 +5,6 @@
 <body>
     <!-- FOOTER -->
     <footer class="footer"  th:fragment="footer"  xmlns:th="http://www.thymeleaf.org">
-
         <div class="container">
             <div class="row">
                 <div class="col-md-3 col-sm-6 col-xs-12">
@@ -28,14 +27,9 @@
                         </div></h1>
                         <div class="block-body">
                             <ul class="tags">
-                                <li th:if="${tags}==null and ${state.count}<9" th:each="tag,state : ${@tagsServiceImpl.findAll()}" >
+                                <li th:if="${tags}==null and ${state.count}<9" th:each="tag,state : ${@tagsServiceImpl.findAll()}">
                                     <a th:href="@{'/search?tag_id=' + ${tag.id}}" th:text="${tag.name}">HTML5</a></li>
                             </ul>
-
-<!--                            <ul class="tags">-->
-<!--                                <li th:if="${tags}!=null and ${state.count}<9" th:each="tag,state : ${tags}">-->
-<!--                                    <a th:href="@{/search/tag/{id}(id=${tag.id})}" th:text="${tag.name}">HTML5</a></li>-->
-<!--                            </ul>-->
                         </div>
                     </div>
                     <div class="line"></div>
@@ -80,13 +74,13 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="https://twitter.com/" class="twitter">
+                                    <a href="https://twitter.com" class="twitter">
                                         <svg><rect width="0" height="0"/></svg>
                                         <i class="ion-social-twitter-outline"></i>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="https://www.youtube.com/" class="youtube">
+                                    <a href="https://www.youtube.com" class="youtube">
                                         <svg><rect width="0" height="0"/></svg>
                                         <i class="ion-social-youtube-outline"></i>
                                     </a>
@@ -98,7 +92,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="https://www.skype.com/" class="skype">
+                                    <a href="https://www.skype.com" class="skype">
                                         <svg><rect width="0" height="0"/></svg>
                                         <i class="ion-social-skype"></i>
                                     </a>
@@ -124,7 +118,7 @@
                     <div class="copyright">
                         COPYRIGHT &copy; MAGZ 2017. ALL RIGHT RESERVED.
                         <div>
-                            Made with <i class="ion-heart"></i> by <a href="http://kodinger.com">Kodinger</a>
+                            Made with <i class="ion-heart"></i> by <a href="http://kodinger.com">Kodinger </a>fix by <a href="#">DiNikOs</a>
                         </div>
                     </div>
                 </div>
@@ -132,6 +126,5 @@
         </div>
     </footer>
     <!-- /FOOTER -->
-
 </body>
 </html>
