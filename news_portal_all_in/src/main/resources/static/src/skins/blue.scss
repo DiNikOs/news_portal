@@ -300,6 +300,11 @@ $colors: (
     }
   }
 
+  .flex-fill1 {
+    flex:1;
+    weight: 100%;
+  }
+
   .article-list {
     .badge {
       background-color: color($colors, primary);

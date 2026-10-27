@@ -74,7 +74,6 @@ public class ArticleFilter {
             filterDefinition.append("&save_data=").append(deleteId);
         }
 
-
         if (map.containsKey("cat_id") && !map.get("cat_id").isEmpty()) {
             if (map.get("cat_id")!="0") {
                 String[] arrayStr = map.get("cat_id").trim().split(",");

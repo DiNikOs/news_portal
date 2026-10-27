@@ -20,6 +20,7 @@ import ru.geek.news_portal.base.entities.ArticleCategory;
 import ru.geek.news_portal.base.entities.Comment;
 import ru.geek.news_portal.base.entities.Tag;
 import ru.geek.news_portal.dto.ArticleDto;
+import ru.geek.news_portal.dto.UserAccountDTO;
 import ru.geek.news_portal.services.*;
 import ru.geek.news_portal.utils.ArticleFilter;
 
@@ -27,6 +28,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.*;
 
 @Controller
@@ -37,6 +39,7 @@ public class MainController {
     private ArticleCategoryService articleCategoryService;
     private ContactService contactService;
     private TagsServiceImpl tagsServiceImpl;
+    private UserService userService;
     //Временное решение до появления сервиса предпочтений пользователя
     private Long RECOMENDED_NEWS = 5L;
 
@@ -51,6 +54,7 @@ public class MainController {
         this.articleCategoryService = articleCategoryService;
         this.contactService = contactService;
         this.tagsServiceImpl = tagsServiceImpl;
+        this.userService = userService;
     }
 
     @GetMapping("/")

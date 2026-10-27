@@ -39,9 +39,9 @@ public class SearchController {
     private final Integer PAGE_LIMIT = 50;
 
     @Autowired
-    public SearchController (ArticleCategoryService articleCategoryService,
-                             ArticleService articleService,
-                             TagsServiceImpl tagsService) {
+    public SearchController(ArticleCategoryService articleCategoryService,
+                            ArticleService articleService,
+                            TagsServiceImpl tagsService) {
         this.articleCategoryService = articleCategoryService;
         this.articleService = articleService;
         this.tagsService = tagsService;
@@ -49,12 +49,12 @@ public class SearchController {
 
     @GetMapping("/search")
     public String search(Model model, @RequestParam Map<String, String> params,
-                         @PathVariable (value = "id", required = false) Long id,
+                         @PathVariable(value = "id", required = false) Long id,
                          HttpServletRequest request, HttpServletResponse response,
-                         @RequestParam (value = "cat_id", required = false) ArrayList<String> catIdArr,
-                         @RequestParam (value = "tag_id", required = false) ArrayList<String> tagIdArr,
-                         @RequestParam (value = "search", required = false) String search,
-                         @RequestParam (value = "page", required = false) Page<Article> page,
+                         @RequestParam(value = "cat_id", required = false) ArrayList<String> catIdArr,
+                         @RequestParam(value = "tag_id", required = false) ArrayList<String> tagIdArr,
+                         @RequestParam(value = "search", required = false) String search,
+                         @RequestParam(value = "page", required = false) Page<Article> page,
                          @CookieValue(value = "limit", required = false) Integer pageLimit) {
 
         Integer pageNumber = 0;
@@ -63,89 +63,83 @@ public class SearchController {
         Tag tag = null;
         ArticleCategory cat = null;
 
-        if (params.containsKey("pageNumber")) { 
-            pageNumber = Integer.parseInt(params.get("pageNumber")) - 1;
-        }
-        if (pageLimit == null) {
-            response.addCookie(new Cookie("limit", String.valueOf(PAGE_LIMIT)));
-        }
-        if (params.containsKey("limit")) {
-            int lim = Integer.parseInt(params.get("limit"));
-            if (lim>0) {
-                pageLimit = lim;
+        try {
+            if (params.containsKey("pageNumber")) {
+                pageNumber = Integer.parseInt(params.get("pageNumber")) - 1;
             }
-        }
+            if (pageLimit == null) {
+                response.addCookie(new Cookie("limit", String.valueOf(PAGE_LIMIT)));
+            }
+            if (params.containsKey("limit")) {
+                int lim = Integer.parseInt(params.get("limit"));
+                if (lim > 0) {
+                    pageLimit = lim;
+                }
+            }
 
-        if (params.containsKey("cat_id")) {
-            search = "category";
-            if (catIdArr.size()>0) {
+            if (params.containsKey("cat_id")) {
                 StringBuilder stringBuilder = new StringBuilder();
-                if (catIdArr.contains("") && catIdArr.size()>1){
-                    catIdArr.remove("");
+                if (catIdArr.size() > 0) {
+                    if (catIdArr.contains("") && catIdArr.size() > 1) {
+                        catIdArr.remove("");
+                    }
+                    stringBuilder.append(catIdArr.get(0));
+                    catIdInteger.add(Integer.parseInt(catIdArr.get(0)));
+                    for (int i = 1; i < catIdArr.size(); i++) {
+                        stringBuilder.append("," + catIdArr.get(i));
+                        catIdInteger.add(Integer.parseInt(catIdArr.get(i)));
+                    }
+                    params.put("cat_id", stringBuilder.toString());
+                } else if (catIdArr.size() == 1) {
+                    cat = articleCategoryService.findOneById(Long.parseLong(params.get("cat_id")));
                 }
-                stringBuilder.append(catIdArr.get(0));
-                catIdInteger.add(Integer.parseInt(catIdArr.get(0)));
-                for (int i = 1; i < catIdArr.size(); i++) {
-                    stringBuilder.append("," + catIdArr.get(i));
-                    catIdInteger.add(Integer.parseInt(catIdArr.get(i)));
-                }
-                params.put("cat_id", stringBuilder.toString());
             }
-            if (catIdArr.size()==1) {
+            if (params.containsKey("tag_id") && params.get("tag_id") != "") {
+                if (tagIdArr.size() == 1) {
+                    tagIdInteger.add(Integer.parseInt(tagIdArr.get(0)));
+                    params.put("tag_id", tagIdArr.get(0));
+                    tag = tagsService.findById(Long.parseLong(params.get("tag_id")));
+                }
+            }
+
+            if (catIdArr != null && catIdArr.size() == 1) {
                 cat = articleCategoryService.findOneById(Long.parseLong(params.get("cat_id")));
             }
-        }
-        if (params.containsKey("tag_id")) {
-            search = "tags";
-            if (tagIdArr.size()>0) {
-                StringBuilder stringBuilder = new StringBuilder();
-                if (tagIdArr.contains("") && tagIdArr.size()>1){
-                    tagIdArr.remove("");
-                }
-                stringBuilder.append(tagIdArr.get(0));
-                tagIdInteger.add(Integer.parseInt(tagIdArr.get(0)));
-                for (int i = 1; i < tagIdArr.size(); i++) {
-                    stringBuilder.append("," + tagIdArr.get(i));
-                    tagIdInteger.add(Integer.parseInt(tagIdArr.get(i)));
-                }
-                params.put("tag_id", stringBuilder.toString());
-            }
-            if (tagIdArr.size()==1) {
+
+            if (tagIdArr != null && tagIdArr.size() == 1) {
                 tag = tagsService.findById(Long.parseLong(params.get("tag_id")));
             }
-        }
-        if (params.containsKey("search")) {
-            if (params.get("search").contains("all")) {
-                catIdInteger.add(0);
-                if (params.get("word").length()==0) {
-                    params.put("cat_id", "0");
+
+            if (params.containsKey("search")) {
+                if (params.get("search").contains("all")) {
+                    catIdInteger.add(0);
+                    if (params.get("word") != null && params.get("word").length() == 0) {
+                        params.put("cat_id", "0");
+                    }
                 }
+                params.put("search", search);
             }
-            if (params.get("search").contains("category")) {
 
+            ArticleFilter articleFilter = new ArticleFilter(params);
+            List<ArticleDto> articlesDto = articleService.findAllDtoArticles();
+            Pageable pageRequest = PageRequest.of(pageNumber, pageLimit, Sort.Direction.ASC, "id");
+            if (page == null) {
+                page = articleService.findAllByPagingAndFiltering(articleFilter.getSpecification(), pageRequest);
             }
-            if (params.get("search").contains("tags")) {
-
-            }
-            params.put("search", search);
+            model.addAttribute("filtersDef", articleFilter.getFilterDefinition());
+            model.addAttribute("filtersDefCat", articleFilter.getFilterDefinitionCat());
+            model.addAttribute("catIdInteger", catIdInteger);
+            model.addAttribute("search", search);
+            model.addAttribute("pageNumber", pageNumber);
+            model.addAttribute("pageLimit", pageLimit);
+            model.addAttribute("tag", tag);
+            model.addAttribute("cat", cat);
+            model.addAttribute("page", page);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "ui/404";
         }
-
-        ArticleFilter articleFilter = new ArticleFilter(params);
-        List<ArticleDto> articlesDto = articleService.findAllDtoArticles();
-        Pageable pageRequest = PageRequest.of(pageNumber, pageLimit, Sort.Direction.ASC, "id");
-        if (page==null) {
-            page = articleService.findAllByPagingAndFiltering(articleFilter.getSpecification(), pageRequest);
-        }
-        model.addAttribute("filtersDef", articleFilter.getFilterDefinition());
-        model.addAttribute("filtersDefCat", articleFilter.getFilterDefinitionCat());
-        model.addAttribute("catIdInteger", catIdInteger);
-        model.addAttribute("search", search);
-        model.addAttribute("pageNumber", pageNumber);
-        model.addAttribute("pageLimit", pageLimit);
-        model.addAttribute("tag", tag);
-        model.addAttribute("cat", cat);
-        model.addAttribute("page", page);
-        if (params.containsKey("search")) {
+        if (params.containsKey("search") && params.get("search").contains("all")) {
             return "ui/search";
         } else {
             return "ui/category";

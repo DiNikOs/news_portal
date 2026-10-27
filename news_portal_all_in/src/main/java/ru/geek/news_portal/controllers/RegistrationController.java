@@ -75,23 +75,4 @@ public class RegistrationController {
         userService.save(systemUser);
         return "redirect:/login";
     }
-
-//  @PostMapping("/forgot")
-//  public String processForgotUser(@ModelAttribute("systemUser")
-//                                        @Valid SystemUser systemUser,
-//                                        BindingResult bindingResult,
-//                                        Model model,
-//                                        final RedirectAttributes redirectAttributes) {
-//    String username = systemUser.getEmail();
-//    if (bindingResult.hasErrors()) {
-//      return "ui/forgot";
-//    }
-//    User existing = userService.findByUsername(username);
-//    if (existing != null) {
-//      model.addAttribute("systemUser", systemUser);
-//      model.addAttribute("forgotMessage", "Email Post");
-//      return "ui/forgot";
-//    }
-//    return "redirect:/login";
-//  }
 }

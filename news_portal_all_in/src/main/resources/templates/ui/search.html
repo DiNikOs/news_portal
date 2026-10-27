@@ -11,7 +11,7 @@
 	<nav th:replace="fragments/header :: nav"></nav>
 </header>
 <!-- /HEADER -->
-<br>
+<br><br>
 		<section class="search">
 			<div class="container">
 				<div class="row">
@@ -21,10 +21,9 @@
 							<h2 class="aside-title">Search</h2>
 							<div class="aside-body">
 								<p>Search with other keywords or use filters for more accurate results.</p>
-<!--								<form th:action="@{/search}" method="get">-->
 									<div class="form-group">
 										<div class="input-group">
-<!--											<input type="text" name="q" class="form-control" placeholder="Type something ..." value="hello">-->
+
 											<input class="form-control" value="hello" type="text"  placeholder="Type something ..."
 												   th:value="${param.word != null} ? ${param.word}" th:name="word" required="">
 											<input class="form-control" value="search" type="text"  placeholder="search ..."
@@ -212,7 +211,5 @@
 					window.location.href = '/search?pageSize=' + select;
 				}
 			</script>
-
-
 	</body>
 </html>

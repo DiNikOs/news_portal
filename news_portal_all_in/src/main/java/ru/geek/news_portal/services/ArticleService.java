@@ -186,10 +186,7 @@ public class ArticleService implements ArticleServiceInterfase{
     @Transactional
     public void save(Article article) {
         article.setCreated(LocalDateTime.now());
-        article.setTitle(article.getTitle());
-        article.setText(article.getText());
         article.setPublished(LocalDateTime.now());
-        article.setCategory(article.getCategory());
         article.setTotalViews(0L);
         article.setLastViewDate(LocalDateTime.now());
         article.setStatus(Article.Status.EDIT);
